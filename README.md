@@ -1,6 +1,6 @@
 # JIN4_Project
 
-Contains two directories:
+Contains two directories:  
 HitboxParser, which contains a python program used to parse anim hit and hurt boxes  
 Game, which contains everything else needed for the actual game  
 
