@@ -4,14 +4,15 @@ from xml.etree import ElementTree
 import sys
 
 class Rect:
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h, t):
         self.x = x
         self.y = y
         self.w = w
         self.h = h
+        self.t = t
 
-    def contains(self, x, y):
-        return self.x <= x and x < self.x + self.w and self.y <= y and y < self.y + self.h
+    def contains(self, x, y, t):
+        return self.x <= x and x < self.x + self.w and self.y <= y and y < self.y + self.h and self.t == t
 
 def main():
     if len(sys.argv) <= 2:
@@ -40,9 +41,14 @@ def main():
                 x_off = f * width
                 #if not transparent
                 if (pix[x + x_off, y][3] > 0):
+                    color = pix[x + x_off, y]
+                    t = ""
+                    if (color[0] > 0): t = "hurt"       #red : atk box
+                    elif (color[1] > 0): t = "hit"   #green : hp box
+
                     contained = False
                     for rect in rectangles:
-                        if rect.contains(x, y):
+                        if rect.contains(x, y, t):
                             contained = True
                             break
 
@@ -66,7 +72,9 @@ def main():
                         h = y2
                         break
 
-                    rectangles.append(Rect(x, y, w, h))
+                    rectXML.set("type", t)
+
+                    rectangles.append(Rect(x, y, w, h, t))
 
     data = ElementTree.tostring(root, encoding='unicode', method='xml')
     path = sys.argv[1].split(".")[0]
