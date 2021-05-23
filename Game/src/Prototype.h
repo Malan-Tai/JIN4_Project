@@ -1,7 +1,8 @@
 #pragma once
 
-class IPrototype
+class Prototype
 {
 public:
-	virtual IPrototype clone() = 0;
+	virtual ~Prototype() = default;
+	virtual Prototype clone() = 0;
 };
