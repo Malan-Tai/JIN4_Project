@@ -11,7 +11,7 @@ public:
 	void update(sf::Time const& elapsed);
 
 	void jump();
-	void addVelocity(sf::Vector2f unitVelocity);
+	void setVelocity(sf::Vector2f unitVelocity);
 
 	void draw(sf::RenderWindow& window) const;
 

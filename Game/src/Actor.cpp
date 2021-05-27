@@ -19,9 +19,9 @@ void Actor::jump()
 	velocity = sf::Vector2f{ vx, -500 };
 }
 
-void Actor::addVelocity(sf::Vector2f unitVelocity)
+void Actor::setVelocity(sf::Vector2f unitVelocity)
 {
-	velocity += speed * unitVelocity;
+	velocity = speed * unitVelocity;
 }
 
 void Actor::draw(sf::RenderWindow& window) const
