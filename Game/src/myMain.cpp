@@ -33,8 +33,9 @@ int myMain()
             if (event.type == sf::Event::Closed) window.close();
             else if (event.type == sf::Event::KeyPressed)
             {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) keyboardCmds.at(sf::Keyboard::Space)->execute(controlled);
+                if (event.key.code == sf::Keyboard::Escape) window.close();
+
+                if (keyboardCmds.find(event.key.code) != keyboardCmds.end()) keyboardCmds.at(event.key.code)->execute(controlled);
             }
         }
 
