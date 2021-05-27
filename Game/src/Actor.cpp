@@ -10,6 +10,7 @@ Actor::Actor(TextureHolder const& holder) : holder(holder)
 		// from state     , to state      , trigger,    guard   , action
 		{ States::Ground, States::Fall, Triggers::Jump, nullptr, nullptr },
 		{ States::Ground, States::Roll, Triggers::PressRoll, nullptr, [] { std::cout << "roll\n"; }},
+		{ States::Fall, States::Roll, Triggers::PressRoll, nullptr, [this] { std::cout << "air roll\n"; this->setVelocity(sf::Vector2f{0, 0}); }},
 		{ States::Roll, States::Ground, Triggers::EndRoll, nullptr, [] { std::cout << "end roll\n"; }},
 		{ States::Ground, States::Sprint, Triggers::HoldSprint, nullptr, nullptr },
 		{ States::Sprint, States::Ground, Triggers::ReleaseSprint, nullptr, nullptr },
