@@ -13,7 +13,10 @@ int myMain()
     sf::Clock gameClock;
 
     TextureHolder textureHolder;
-    textureHolder.load(texture::ID::mainCharacter_idle, "resources/MC_idle.png");
+    textureHolder.load(texture::ID::MC_idle, "resources/MC_idle.png");
+
+    AnimHolder animHolder;
+    animHolder.load(animation::ID::MC_idle, "resources/MC_idle");
 
     auto actors = std::vector<std::unique_ptr<Actor>>{};
     actors.push_back(std::make_unique<ControllableActor>(textureHolder));

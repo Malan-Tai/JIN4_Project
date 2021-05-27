@@ -3,7 +3,7 @@
 
 Actor::Actor(TextureHolder const& holder) : holder(holder)
 {
-	sprite.setTexture(holder.get(texture::ID::mainCharacter_idle), true);
+	sprite.setTexture(holder.get(texture::ID::MC_idle), true);
 
 	std::vector<M::Trans> transitions
 	{

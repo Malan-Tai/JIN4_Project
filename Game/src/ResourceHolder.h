@@ -1,13 +1,22 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
+#include "Animation.h"
 
 namespace texture
 {
 	enum class ID
 	{
 		background,
-		mainCharacter_idle,
+		MC_idle,
+	};
+}
+
+namespace animation
+{
+	enum class ID
+	{
+		MC_idle
 	};
 }
 
@@ -24,6 +33,7 @@ private:
 };
 
 using TextureHolder = ResourceHolder<texture::ID, sf::Texture>;
+using AnimHolder = ResourceHolder<animation::ID, class Animation>;
 
 template <typename Identifier, typename Resource>
 void ResourceHolder<Identifier, Resource>::load(Identifier id, std::string const& filename)
