@@ -7,9 +7,21 @@ Actor::Actor(TextureHolder const& holder) : holder(holder)
 
 void Actor::update(sf::Time const& elapsed)
 {
-	coords += elapsed.asSeconds() * speed;
+	velocity += 200 * elapsed.asSeconds() * sf::Vector2f(0, 1); // gravity
+	coords += elapsed.asSeconds() * velocity;
 
 	sprite.setPosition(coords);
+}
+
+void Actor::jump()
+{
+	float vx = velocity.x / 2;
+	velocity = sf::Vector2f{ vx, -500 };
+}
+
+void Actor::addVelocity(sf::Vector2f unitVelocity)
+{
+	velocity += speed * unitVelocity;
 }
 
 void Actor::draw(sf::RenderWindow& window) const

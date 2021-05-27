@@ -26,6 +26,7 @@ int myMain()
             else if (event.type == sf::Event::KeyPressed)
             {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) actors[0]->jump();
             }
         }
 
