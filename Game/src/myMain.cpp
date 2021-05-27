@@ -4,6 +4,7 @@
 #include "Command.h"
 #include <unordered_map>
 
+// enum class ControllerBtn { A, B, X, Y, LB, RB, Select, Start, LJ, RJ, };
 
 int myMain()
 {
@@ -19,9 +20,20 @@ int myMain()
 
     Actor* controlled = actors[0].get();
 
-    std::unordered_map<sf::Keyboard::Key, Command*> keyboardCmds{};
+    // INPUTS
     JumpCmd jcmd{};
+
+    // keyboard
+    std::unordered_map<sf::Keyboard::Key, Command*> keyboardCmds{};
+
     keyboardCmds.insert(std::make_pair<sf::Keyboard::Key, Command*>(sf::Keyboard::Space, &jcmd));
+
+
+    // controller
+    std::vector<Command*> controllerCmds
+    {
+        &jcmd, nullptr,  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+    };
 
     while (window.isOpen())
     {
@@ -38,7 +50,15 @@ int myMain()
                 auto found = keyboardCmds.find(event.key.code);
                 if (found != keyboardCmds.end()) found->second->execute(controlled);
             }
+            else if (event.type == sf::Event::JoystickButtonPressed)
+            {
+                if (event.joystickButton.button == 7) window.close();
+
+                Command* cmd = controllerCmds[event.joystickButton.button];
+                if (cmd != nullptr) cmd->execute(controlled);
+            }
         }
+
 
         for (int i = 0; i < actors.size(); i++)
         {
