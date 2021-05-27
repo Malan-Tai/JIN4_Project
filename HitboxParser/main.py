@@ -54,8 +54,8 @@ def main():
 
                     if contained: continue
 
-                    i += 1
                     rectXML = ElementTree.SubElement(frameXML, "Rect_" + str(i))
+                    i += 1
                     rectXML.set("x", str(x))
                     rectXML.set("y", str(y))
                     w, h = 0, 0
