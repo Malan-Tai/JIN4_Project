@@ -9,7 +9,7 @@ public:
 
 	void update(sf::Time const& elapsed);
 
-	void draw(sf::RenderWindow* window) const;
+	void draw(sf::RenderWindow& window) const;
 
 private:
 	int frame = 0;
@@ -18,5 +18,5 @@ private:
 	sf::Sprite spritesheet;
 	pugi::xml_document hitboxes;
 
-	TextureHolder const* textureHolder;
+	TextureHolder& textureHolder;
 };

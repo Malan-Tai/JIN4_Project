@@ -4,5 +4,5 @@ class Prototype
 {
 public:
 	virtual ~Prototype() = default;
-	virtual Prototype clone() = 0;
+	virtual Prototype* clone() const = 0;
 };
