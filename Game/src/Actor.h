@@ -25,6 +25,8 @@ enum class Triggers
 	ReleaseDown,
 	PressRoll,
 	EndRoll,
+	HoldSprint,
+	ReleaseSprint,
 	LightAttack,
 	EndLightAttack,
 	HeavyAttack,
@@ -38,7 +40,7 @@ public:
 	explicit Actor(TextureHolder const& holder);
 	Prototype* clone() const override;
 
-	void update(sf::Time const& elapsed);
+	virtual void update(sf::Time const& elapsed);
 
 	void jump();
 	void setVelocity(sf::Vector2f unitVelocity);
@@ -46,7 +48,7 @@ public:
 
 	void draw(sf::RenderWindow& window) const;
 
-private:
+protected:
 	float speed = 300;
 	float moveControl = 1;
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "Actor.h"
+#include "ControllableActor.h"
 
 class Command
 {
@@ -9,6 +9,18 @@ public:
 };
 
 class JumpCmd : public Command
+{
+public:
+	void execute(Actor* actor) override;
+};
+
+class PressRollCmd : public Command
+{
+public:
+	void execute(Actor* actor) override;
+};
+
+class ReleaseRollCmd : public Command
 {
 public:
 	void execute(Actor* actor) override;

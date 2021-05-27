@@ -1,6 +1,6 @@
 #include "myMain.h"
 #include <iostream>
-#include "Actor.h"
+#include "ControllableActor.h"
 #include "Command.h"
 #include <unordered_map>
 
@@ -16,12 +16,14 @@ int myMain()
     textureHolder.load(texture::ID::mainCharacter_idle, "resources/MC_idle.png");
 
     auto actors = std::vector<std::unique_ptr<Actor>>{};
-    actors.push_back(std::make_unique<Actor>(textureHolder));
+    actors.push_back(std::make_unique<ControllableActor>(textureHolder));
 
-    Actor* controlled = actors[0].get();
+    auto controlled = actors[0].get();
 
     // INPUTS
     JumpCmd jcmd{};
+    PressRollCmd prcmd{};
+    ReleaseRollCmd rrcmd{};
 
     // keyboard
     std::unordered_map<sf::Keyboard::Key, Command*> keyboardCmds{};
@@ -30,9 +32,13 @@ int myMain()
 
 
     // controller
-    std::vector<Command*> controllerCmds
+    std::vector<Command*> controllerPressCmds
     {
-        &jcmd, nullptr,  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+        &jcmd, &prcmd,  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+    };
+    std::vector<Command*> controllerReleaseCmds
+    {
+        nullptr, &rrcmd,  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
     };
 
     while (window.isOpen())
@@ -54,7 +60,12 @@ int myMain()
             {
                 if (event.joystickButton.button == 7) window.close();
 
-                Command* cmd = controllerCmds[event.joystickButton.button];
+                Command* cmd = controllerPressCmds[event.joystickButton.button];
+                if (cmd != nullptr) cmd->execute(controlled);
+            }
+            else if (event.type == sf::Event::JoystickButtonReleased)
+            {
+                Command* cmd = controllerReleaseCmds[event.joystickButton.button];
                 if (cmd != nullptr) cmd->execute(controlled);
             }
         }

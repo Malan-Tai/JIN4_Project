@@ -1,4 +1,5 @@
 #include "Actor.h"
+#include <iostream>
 
 Actor::Actor(TextureHolder const& holder) : holder(holder)
 {
@@ -8,6 +9,10 @@ Actor::Actor(TextureHolder const& holder) : holder(holder)
 	{
 		// from state     , to state      , trigger,    guard   , action
 		{ States::Ground, States::Fall, Triggers::Jump, nullptr, nullptr },
+		{ States::Ground, States::Roll, Triggers::PressRoll, nullptr, [] { std::cout << "roll\n"; }},
+		{ States::Roll, States::Ground, Triggers::EndRoll, nullptr, [] { std::cout << "end roll\n"; }},
+		{ States::Ground, States::Sprint, Triggers::HoldSprint, nullptr, nullptr },
+		{ States::Sprint, States::Ground, Triggers::ReleaseSprint, nullptr, nullptr },
 	};
 
 	machine.add_transitions(transitions);
@@ -51,8 +56,11 @@ void Actor::setVelocity(sf::Vector2f unitVelocity)
 
 void Actor::setHorizontalVelocity(float dx)
 {
+	float speedBoost = 1;
+	if (machine.state() == States::Sprint) speedBoost = 2;
+
 	float dy = velocity.y;
-	velocity = sf::Vector2f(dx * speed * moveControl, dy);
+	velocity = sf::Vector2f(dx * speed * moveControl * speedBoost, dy);
 }
 
 void Actor::draw(sf::RenderWindow& window) const
