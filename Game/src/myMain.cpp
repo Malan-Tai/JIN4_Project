@@ -59,6 +59,16 @@ int myMain()
             }
         }
 
+        if (sf::Joystick::isConnected(0))
+        {
+            float dx = 0;
+            float controllerDx = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX);
+
+            if (controllerDx >= 50) dx = 1;
+            if (controllerDx <= -50) dx = -1;
+
+            controlled->setHorizontalVelocity(dx);
+        }
 
         for (int i = 0; i < actors.size(); i++)
         {

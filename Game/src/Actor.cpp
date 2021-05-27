@@ -24,6 +24,12 @@ void Actor::setVelocity(sf::Vector2f unitVelocity)
 	velocity = speed * unitVelocity;
 }
 
+void Actor::setHorizontalVelocity(float dx)
+{
+	float dy = velocity.y;
+	velocity = sf::Vector2f(dx * speed, dy);
+}
+
 void Actor::draw(sf::RenderWindow& window) const
 {
 	window.draw(sprite);

@@ -12,11 +12,12 @@ public:
 
 	void jump();
 	void setVelocity(sf::Vector2f unitVelocity);
+	void setHorizontalVelocity(float dx);
 
 	void draw(sf::RenderWindow& window) const;
 
 private:
-	float speed = 50;
+	float speed = 300;
 
 	sf::Vector2f velocity{ 0, 0 };
 	sf::Vector2f coords{ 500, 500 };
