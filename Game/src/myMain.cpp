@@ -35,7 +35,8 @@ int myMain()
             {
                 if (event.key.code == sf::Keyboard::Escape) window.close();
 
-                if (keyboardCmds.find(event.key.code) != keyboardCmds.end()) keyboardCmds.at(event.key.code)->execute(controlled);
+                auto found = keyboardCmds.find(event.key.code);
+                if (found != keyboardCmds.end()) found->second->execute(controlled);
             }
         }
 
