@@ -1,6 +1,8 @@
 #include "myMain.h"
 #include <iostream>
 #include "Actor.h"
+#include "Command.h"
+#include <unordered_map>
 
 
 int myMain()
@@ -15,6 +17,12 @@ int myMain()
     auto actors = std::vector<std::unique_ptr<Actor>>{};
     actors.push_back(std::make_unique<Actor>(textureHolder));
 
+    Actor* controlled = actors[0].get();
+
+    std::unordered_map<sf::Keyboard::Key, Command*> keyboardCmds{};
+    JumpCmd jcmd{};
+    keyboardCmds.insert(std::make_pair<sf::Keyboard::Key, Command*>(sf::Keyboard::Space, &jcmd));
+
     while (window.isOpen())
     {
         sf::Time elapsed = gameClock.restart();
@@ -26,7 +34,7 @@ int myMain()
             else if (event.type == sf::Event::KeyPressed)
             {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) actors[0]->jump();
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) keyboardCmds.at(sf::Keyboard::Space)->execute(controlled);
             }
         }
 
