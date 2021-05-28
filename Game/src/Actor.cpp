@@ -1,9 +1,9 @@
 #include "Actor.h"
 #include <iostream>
 
-Actor::Actor(TextureHolder const& holder) : holder(holder)
+Actor::Actor(AnimHolder const& holder) : handler(holder, animation::ID::MC_idle)
 {
-	sprite.setTexture(holder.get(texture::ID::MC_idle), true);
+	//sprite.setTexture(holder.get(texture::ID::MC_idle), true);
 
 	std::vector<M::Trans> transitions
 	{
@@ -39,7 +39,8 @@ void Actor::update(sf::Time const& elapsed)
 
 	coords += elapsed.asSeconds() * velocity;
 
-	sprite.setPosition(coords);
+	handler.setPosition(coords);
+	handler.update(elapsed);
 }
 
 void Actor::jump()
@@ -66,10 +67,11 @@ void Actor::setHorizontalVelocity(float dx)
 
 void Actor::draw(sf::RenderWindow& window) const
 {
-	window.draw(sprite);
+	handler.draw(window);
+	//window.draw(sprite);
 }
 
 Prototype* Actor::clone() const
 {
-	return new Actor(holder);
+	return new Actor(handler.getHolder());
 }

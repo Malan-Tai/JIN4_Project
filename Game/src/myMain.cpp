@@ -19,7 +19,7 @@ int myMain()
     animHolder.load(animation::ID::MC_idle, "resources/MC_idle");
 
     auto actors = std::vector<std::unique_ptr<Actor>>{};
-    actors.push_back(std::make_unique<ControllableActor>(textureHolder));
+    actors.push_back(std::make_unique<ControllableActor>(animHolder));
 
     auto controlled = actors[0].get();
 

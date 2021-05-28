@@ -13,7 +13,7 @@ public:
 	void setSprite(sf::Sprite& sprite, int frame, bool inv = false) const;
 
 	int nbFrames;
-	float timePerFrame;
+	float timePerFrame = 500;
 
 private:
 	sf::Texture spritesheet;

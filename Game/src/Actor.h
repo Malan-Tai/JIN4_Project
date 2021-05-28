@@ -37,7 +37,7 @@ enum class Triggers
 class Actor : public Prototype
 {
 public:
-	explicit Actor(TextureHolder const& holder);
+	explicit Actor(AnimHolder const& holder);
 	Prototype* clone() const override;
 
 	virtual void update(sf::Time const& elapsed);
@@ -55,9 +55,8 @@ protected:
 	sf::Vector2f velocity{ 0, 0 };
 	sf::Vector2f coords{ 500, 500 };
 
-	sf::Sprite sprite;
-
-	TextureHolder const& holder;
+	//sf::Sprite sprite;
+	AnimHandler handler;
 
 	FSM::Fsm<States, States::Ground, Triggers> machine;
 };

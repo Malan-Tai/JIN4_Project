@@ -1,6 +1,6 @@
 #include "ControllableActor.h"
 
-ControllableActor::ControllableActor(TextureHolder const& holder) : Actor(holder)
+ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder)
 {
 }
 

@@ -4,7 +4,7 @@
 class ControllableActor : public Actor
 {
 public:
-	explicit ControllableActor(TextureHolder const& holder);
+	explicit ControllableActor(AnimHolder const& holder);
 
 	void update(sf::Time const& elapsed) override;
 
