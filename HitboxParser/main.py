@@ -12,7 +12,7 @@ class Rect:
         self.t = t
 
     def contains(self, x, y, t):
-        return self.x <= x and x < self.x + self.w and self.y <= y and y < self.y + self.h and self.t == t
+        return self.x <= x and x <= self.x + self.w and self.y <= y and y <= self.y + self.h and self.t == t
 
 def main():
     if len(sys.argv) <= 2:
@@ -54,11 +54,12 @@ def main():
 
                     if contained: continue
 
-                    i += 1
                     rectXML = ElementTree.SubElement(frameXML, "Rect_" + str(i))
                     rectXML.set("x", str(x))
                     rectXML.set("y", str(y))
                     w, h = 0, 0
+
+                    i += 1
 
                     for x2 in range(width - x):
                         if (pix[x + x_off + x2, y][3] > 0): continue
@@ -67,7 +68,7 @@ def main():
                         break
 
                     for y2 in range(height - y):
-                        if (pix[x + x_off, y + y2][3] > 0): continue
+                        if (y + y2 < height - 1 and pix[x + x_off, y + y2][3] > 0): continue
                         rectXML.set("height", str(y2))
                         h = y2
                         break
@@ -77,7 +78,7 @@ def main():
                     rectangles.append(Rect(x, y, w, h, t))
 
     data = ElementTree.tostring(root, encoding='unicode', method='xml')
-    path = sys.argv[1].split(".")[0]
+    path = sys.argv[1].split(".")[-2]
     file = open(path + ".xml", "w")
     file.write(data)
 

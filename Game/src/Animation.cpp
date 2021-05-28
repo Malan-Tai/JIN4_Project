@@ -2,7 +2,7 @@
 
 bool Animation::loadFromFile(std::string const& basename)
 {
-	auto xml = basename + ".xml";
+	auto xml = basename + "_boxes.xml";
 	auto png = basename + ".png";
 
 	if (!spritesheet.loadFromFile(png)) return false;
