@@ -8,7 +8,7 @@ Actor::Actor(AnimHolder const& holder) : handler(holder, animation::ID::MC_idle)
 	std::vector<M::Trans> transitions
 	{
 		// from state     , to state      , trigger,    guard   , action
-		{ States::Ground, States::Fall, Triggers::Jump, nullptr, nullptr },
+		{ States::Ground, States::Fall, Triggers::Jump, nullptr, [this] { this->doJump(); }},
 		{ States::Ground, States::Roll, Triggers::PressRoll, nullptr, [] { std::cout << "roll\n"; }},
 		{ States::Fall, States::Roll, Triggers::PressRoll, nullptr, [this] { std::cout << "air roll\n"; this->setVelocity(sf::Vector2f{0, 0}); }},
 		{ States::Roll, States::Ground, Triggers::EndRoll, nullptr, [] { std::cout << "end roll\n"; }},
@@ -40,14 +40,17 @@ void Actor::update(sf::Time const& elapsed)
 	coords += elapsed.asSeconds() * velocity;
 
 	handler.setPosition(coords);
-	handler.update(elapsed);
+	handler.update(elapsed, velocity.x);
+}
+
+void Actor::doJump()
+{
+	float vx = velocity.x / 2;
+	velocity = sf::Vector2f{ vx, -500 };
 }
 
 void Actor::jump()
 {
-	float vx = velocity.x / 2;
-	velocity = sf::Vector2f{ vx, -500 };
-
 	machine.execute(Triggers::Jump);
 }
 

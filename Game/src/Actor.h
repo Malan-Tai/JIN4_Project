@@ -42,7 +42,8 @@ public:
 
 	virtual void update(sf::Time const& elapsed);
 
-	void jump();
+	void doJump(); // actually jump
+	void jump(); // execute jump trigger
 	void setVelocity(sf::Vector2f unitVelocity);
 	void setHorizontalVelocity(float dx);
 
