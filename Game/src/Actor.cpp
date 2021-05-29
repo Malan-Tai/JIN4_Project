@@ -66,6 +66,12 @@ void Actor::setHorizontalVelocity(float dx)
 
 	float dy = velocity.y;
 	velocity = sf::Vector2f(dx * speed * moveControl * speedBoost, dy);
+	if (machine.state() == States::Roll)
+	{ 
+		int xDir = handler.getXDir();
+		xDir = xDir / abs(xDir);
+		velocity = sf::Vector2f(xDir * speed * 3, 0);
+	}
 }
 
 void Actor::draw(sf::RenderWindow& window) const

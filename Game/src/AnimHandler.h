@@ -7,6 +7,8 @@ public:
 	explicit AnimHandler(AnimHolder const& holder, animation::ID id);
 	AnimHolder const& getHolder() const;
 
+	int getXDir() const;
+
 	animation::ID update(sf::Time const& elapsed, int xDir);
 	void setPosition(sf::Vector2f const pos);
 	void changeAnim(animation::ID id);

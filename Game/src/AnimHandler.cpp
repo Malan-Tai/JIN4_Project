@@ -10,6 +10,11 @@ AnimHolder const& AnimHandler::getHolder() const
 	return holder;
 }
 
+int AnimHandler::getXDir() const
+{
+	return prevXDir;
+}
+
 animation::ID AnimHandler::update(sf::Time const& elapsed, int xDir)
 {
 	frameTime += elapsed;
