@@ -8,15 +8,15 @@ ActorHitbox::ActorHitbox(Hitbox const* hitbox, sf::Vector2f pos, bool inv, float
 	else rect = sf::FloatRect(pos.x + width - rect.left - rect.width, pos.y + rect.top, rect.width, rect.height);
 }
 
-bool ActorHitbox::intersect(ActorHitbox const& other) const
+bool ActorHitbox::intersect(ActorHitbox const* other) const
 {
-	bool canIntersect = other.type != type &&
-		other.type != hitboxes::Type::None && type != hitboxes::Type::None &&
-		other.layer != hitboxes::Layers::None && layer != hitboxes::Layers::None &&
-		(layer == hitboxes::Layers::All || other.layer == hitboxes::Layers::All ||
-			layer != other.layer);
+	bool canIntersect = other->type != type &&
+		other->type != hitboxes::Type::None && type != hitboxes::Type::None &&
+		other->layer != hitboxes::Layers::None && layer != hitboxes::Layers::None &&
+		(layer == hitboxes::Layers::All || other->layer == hitboxes::Layers::All ||
+			layer != other->layer);
 
-	return canIntersect && rect.intersects(other.rect);
+	return canIntersect && rect.intersects(other->rect);
 }
 
 void ActorHitbox::setPosition(sf::Vector2f pos, bool inv)

@@ -53,6 +53,11 @@ void Actor::update(sf::Time const& elapsed)
 	}
 }
 
+void Actor::hits(Actor* other)
+{
+	handler.hits(other->handler);
+}
+
 //void Actor::addHitboxes(std::vector<Hitbox>& hitboxes, std::vector<Hitbox>& hurtboxes) const
 //{
 //	handler.addHitboxes(hitboxes, hurtboxes);

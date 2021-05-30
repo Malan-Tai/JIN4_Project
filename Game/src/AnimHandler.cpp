@@ -73,6 +73,29 @@ void AnimHandler::updateHitboxes()
 	}
 }
 
+bool AnimHandler::hits(AnimHandler& other)
+{
+	auto n = hitboxes.size();
+	auto m = other.hitboxes.size();
+	for (int i = 0; i < n; i++)
+	{
+		auto box = hitboxes[i].get();
+		for (int j = 0; j < m; j++)
+		{
+			auto otherBox = other.hitboxes[j].get();
+			if (box->getType() == hitboxes::Type::Hurt && box->intersect(otherBox))
+			{
+				// "replay" the same frame to add some impact
+				if (reverseLoop) frame++;
+				else frame--;
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 //void AnimHandler::addHitboxes(std::vector<Hitbox>& hitboxes, std::vector<Hitbox>& hurtboxes) const
 //{
 //	anim->addHitboxes(frame, hitboxes, hurtboxes);

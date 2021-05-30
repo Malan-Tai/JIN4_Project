@@ -41,6 +41,7 @@ public:
 	Prototype* clone() const override;
 
 	virtual void update(sf::Time const& elapsed);
+	void hits(Actor* other);
 	//void addHitboxes(std::vector<Hitbox>& hitboxes, std::vector<Hitbox>& hurtboxes) const;
 
 	void doJump(); // actually jump

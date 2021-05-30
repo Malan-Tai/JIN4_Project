@@ -11,6 +11,7 @@ public:
 
 	animation::ID update(sf::Time const& elapsed, int xDir);
 	void updateHitboxes();
+	bool hits(AnimHandler& other);
 	//void addHitboxes(std::vector<Hitbox>& hitboxes, std::vector<Hitbox>& hurtboxes) const;
 
 	void setPosition(sf::Vector2f const pos);
