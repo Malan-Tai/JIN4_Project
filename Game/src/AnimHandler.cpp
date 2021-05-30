@@ -1,9 +1,12 @@
 #include "AnimHandler.h"
 #include <iostream>
 
+#define DEBUG 1
+
 AnimHandler::AnimHandler(AnimHolder const& holder, animation::ID id) : holder(holder), anim(&holder.get(id)), animID(id)
 {
 	anim->setSprite(sprite, frame);
+	updateHitboxes();
 }
 
 AnimHolder const& AnimHandler::getHolder() const
@@ -58,9 +61,30 @@ animation::ID AnimHandler::update(sf::Time const& elapsed, int xDir)
 	return animation::ID::None;
 }
 
+void AnimHandler::updateHitboxes()
+{
+	hitboxes.clear();
+	auto boxes = anim->getHitboxes(frame);
+	for (auto box : boxes)
+	{
+		hitboxes.push_back(std::make_unique<ActorHitbox>(box, sprite.getPosition(), (prevXDir < 0), sprite.getLocalBounds().width));
+	}
+}
+
+//void AnimHandler::addHitboxes(std::vector<Hitbox>& hitboxes, std::vector<Hitbox>& hurtboxes) const
+//{
+//	anim->addHitboxes(frame, hitboxes, hurtboxes);
+//}
+
 void AnimHandler::setPosition(sf::Vector2f const pos)
 {
 	sprite.setPosition(pos);
+
+	auto n = hitboxes.size();
+	for (int i = 0; i < n; i++)
+	{
+		hitboxes[i]->setPosition(pos, (prevXDir < 0));
+	}
 }
 
 void AnimHandler::changeAnim(animation::ID id)
@@ -71,9 +95,23 @@ void AnimHandler::changeAnim(animation::ID id)
 	frameTime = sf::Time::Zero;
 	reverseLoop = false;
 	anim->setSprite(sprite, 0, (prevXDir < 0));
+	updateHitboxes();
 }
 
 void AnimHandler::draw(sf::RenderWindow& window) const
 {
+#if DEBUG
+	sf::RectangleShape s;
+	auto n = hitboxes.size();
+	for (int i = 0; i < n; i++)
+	{
+		sf::FloatRect rect = hitboxes[0]->getRect();
+		s.setPosition(rect.left, rect.top);
+		s.setSize(sf::Vector2f(rect.width, rect.height));
+		s.setFillColor(sf::Color::Green);
+		window.draw(s);
+	}
+#endif
+
 	window.draw(sprite);
 }

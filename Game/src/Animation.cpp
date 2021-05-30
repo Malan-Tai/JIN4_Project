@@ -20,7 +20,7 @@ bool Animation::loadFromFile(std::string const& basename)
 	auto tpf = root.attribute("timePerFrame");
 	if (!tpf.empty()) timePerFrame = tpf.as_float();
 
-	//std::cout << basename << " : looping=" << looping << " ; reverse=" << reverseLoop << " ; time=" << timePerFrame << std::endl;
+	hitboxes::Layers layer = hitboxes::strToLayer(root.attribute("layer").value());
 
 	auto rootChildren = root.children();
 	nbFrames = std::distance(rootChildren.begin(), rootChildren.end());
@@ -31,30 +31,28 @@ bool Animation::loadFromFile(std::string const& basename)
 	
 	for (int i = 0; i < nbFrames; i++)
 	{
-		std::string f = "frame_" + i;
+		std::string f = "frame_" + std::to_string(i);
 		auto frame = root.child(f.c_str());
 
 		auto frameChildren = frame.children();
 		int n = std::distance(frameChildren.begin(), frameChildren.end());
 
 		hitboxes.push_back({});
-		hurtboxes.push_back({});
 
 		for (int j = 0; j < n; j++)
 		{
-			std::string r = "Rect_" + j;
-			auto rect = root.child(r.c_str());
+			std::string r = "Rect_" + std::to_string(j);
+			auto rect = frame.child(r.c_str());
 
-			std::string type = rect.attribute("type").value();
-			float x = std::stof(rect.attribute("x").value());
-			float y = std::stof(rect.attribute("y").value());
-			float w = std::stof(rect.attribute("w").value());
-			float h = std::stof(rect.attribute("h").value());
+			hitboxes::Type type = hitboxes::strToType(rect.attribute("type").value());
+			float x = rect.attribute("x").as_float();
+			float y = rect.attribute("y").as_float();
+			float w = rect.attribute("width").as_float();
+			float h = rect.attribute("height").as_float();
 
 			sf::FloatRect box{ x, y, w, h };
 
-			if (type == "hurt") hurtboxes[i].push_back(box);
-			else if (type == "hit") hitboxes[i].push_back(box);
+			hitboxes[i].push_back(std::make_unique<Hitbox>(box, layer, type));
 		}
 	}
 
@@ -75,3 +73,24 @@ void Animation::setSprite(sf::Sprite& sprite, int frame, bool inv) const
 	sprite.setTexture(spritesheet);
 	sprite.setTextureRect(sf::IntRect(x, 0, w, height));
 }
+
+std::vector<Hitbox const*> Animation::getHitboxes(int frame) const
+{
+	std::vector<Hitbox const*> res{};
+	auto n = hitboxes[frame].size();
+	for (int i = 0; i < n; i++)
+	{
+		res.push_back(hitboxes[frame][i].get());
+	}
+	return res;
+}
+
+//void Animation::addHitboxes(int frame, std::vector<Hitbox>& _hitboxes, std::vector<Hitbox>& _hurtboxes) const
+//{
+//	for (auto const& box : hitboxes[frame])
+//	{
+//		auto type = box.getType();
+//		if (type == hitboxes::Type::Hit) _hitboxes.push_back(box);
+//		else if (type == hitboxes::Type::Hurt) _hurtboxes.push_back(box);
+//	}
+//}

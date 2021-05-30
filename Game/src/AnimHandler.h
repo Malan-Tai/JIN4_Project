@@ -10,6 +10,9 @@ public:
 	int getXDir() const;
 
 	animation::ID update(sf::Time const& elapsed, int xDir);
+	void updateHitboxes();
+	//void addHitboxes(std::vector<Hitbox>& hitboxes, std::vector<Hitbox>& hurtboxes) const;
+
 	void setPosition(sf::Vector2f const pos);
 	void changeAnim(animation::ID id);
 
@@ -25,6 +28,8 @@ private:
 	Animation const* anim;
 	animation::ID animID;
 	sf::Sprite sprite;
+
+	std::vector<std::unique_ptr<ActorHitbox>> hitboxes{};
 
 	AnimHolder const& holder;
 };
