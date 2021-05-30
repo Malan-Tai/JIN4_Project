@@ -52,10 +52,12 @@ animation::ID AnimHandler::update(sf::Time const& elapsed, int xDir)
 		
 		frameTime = sf::Time::Zero;
 		anim->setSprite(sprite, frame, inv);
+		updateHitboxes();
 	}
 	else if (changed)
 	{
 		anim->setSprite(sprite, frame, inv);
+		updateHitboxes();
 	}
 
 	return animation::ID::None;
@@ -105,7 +107,7 @@ void AnimHandler::draw(sf::RenderWindow& window) const
 	auto n = hitboxes.size();
 	for (int i = 0; i < n; i++)
 	{
-		sf::FloatRect rect = hitboxes[0]->getRect();
+		sf::FloatRect rect = hitboxes[i]->getRect();
 		s.setPosition(rect.left, rect.top);
 		s.setSize(sf::Vector2f(rect.width, rect.height));
 		s.setFillColor(sf::Color::Green);
