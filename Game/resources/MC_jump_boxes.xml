@@ -1,1 +1,1 @@
-<root><frame_0><Rect_0 x="37" y="4" height="30" type="hit" /><Rect_1 x="3" y="36" width="32" height="37" type="hit" /></frame_0><frame_1><Rect_0 x="0" y="4" width="36" height="30" type="hit" /></frame_1></root>
+<root timePerFrame="300" layer="ally" looping="false"><frame_0><Rect_0 x="37" y="4" height="30" type="hit" /><Rect_1 x="3" y="36" width="32" height="37" type="hit" /></frame_0><frame_1><Rect_0 x="0" y="4" width="36" height="30" type="hit" /></frame_1></root>

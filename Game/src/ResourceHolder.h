@@ -18,7 +18,9 @@ namespace animation
 	{
 		None,
 		MC_idle,
-		MC_roll
+		MC_roll,
+		MC_jump,
+		MC_fall,
 	};
 }
 

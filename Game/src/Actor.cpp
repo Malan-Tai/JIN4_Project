@@ -48,6 +48,7 @@ void Actor::update(sf::Time const& elapsed)
 	auto animEnd = handler.update(elapsed, velocity.x);
 	if (animEnd != animation::ID::None)
 	{
+		if (animEnd == animation::ID::MC_jump) handler.changeAnim(animation::ID::MC_fall);
 		auto animTrig = endAnimTriggers.find(animEnd);
 		if (animTrig != endAnimTriggers.end()) machine.execute(animTrig->second);
 	}
@@ -67,6 +68,7 @@ void Actor::doJump()
 {
 	float vx = velocity.x / 2;
 	velocity = sf::Vector2f{ vx, -500 };
+	handler.changeAnim(animation::ID::MC_jump);
 }
 
 void Actor::jump()
