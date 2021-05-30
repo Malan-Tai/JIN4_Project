@@ -17,6 +17,10 @@ Actor::Actor(AnimHolder const& holder) : handler(holder, animation::ID::MC_idle)
 	};
 
 	machine.add_transitions(transitions);
+
+	endAnimTriggers = {
+		{ animation::ID::MC_roll, Triggers::EndRoll }
+	};
 }
 
 void Actor::update(sf::Time const& elapsed)
@@ -40,7 +44,13 @@ void Actor::update(sf::Time const& elapsed)
 	coords += elapsed.asSeconds() * velocity;
 
 	handler.setPosition(coords);
-	handler.update(elapsed, velocity.x);
+
+	auto animEnd = handler.update(elapsed, velocity.x);
+	if (animEnd != animation::ID::None)
+	{
+		auto animTrig = endAnimTriggers.find(animEnd);
+		if (animTrig != endAnimTriggers.end()) machine.execute(animTrig->second);
+	}
 }
 
 void Actor::doJump()

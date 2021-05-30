@@ -17,7 +17,8 @@ namespace animation
 	enum class ID
 	{
 		None,
-		MC_idle
+		MC_idle,
+		MC_roll
 	};
 }
 

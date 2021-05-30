@@ -60,6 +60,7 @@ protected:
 	AnimHandler handler;
 
 	FSM::Fsm<States, States::Ground, Triggers> machine;
+	std::map<animation::ID, Triggers> endAnimTriggers;
 };
 
 using M = FSM::Fsm<States, States::Ground, Triggers>;
