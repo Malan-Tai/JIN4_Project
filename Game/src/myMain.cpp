@@ -12,8 +12,8 @@ int myMain()
 
     sf::Clock gameClock;
 
-    TextureHolder textureHolder;
-    textureHolder.load(texture::ID::MC_idle, "resources/MC_idle.png");
+    /*TextureHolder textureHolder;
+    textureHolder.load(texture::ID::MC_idle, "resources/MC_idle.png");*/
 
     AnimHolder animHolder;
     animHolder.load(animation::ID::MC_idle, "resources/MC_idle");
