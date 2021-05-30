@@ -1,4 +1,7 @@
 #include <gtest/gtest.h>
+#include "Actor.h"
+#include "Command.h"
 
-TEST(TestReadXML, TestCircle) {
+TEST(TestStates, TestGroundToRoll) {
+
 }
