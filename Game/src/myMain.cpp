@@ -26,8 +26,9 @@ int myMain()
 
     auto actors = std::vector<std::unique_ptr<Actor>>{};
     actors.push_back(std::make_unique<ControllableActor>(animHolder));
-
     auto controlled = actors[0].get();
+
+    actors.push_back(std::make_unique<Actor>(animHolder, animation::ID::monster_idle));
 
     // INPUTS
     JumpCmd jcmd{};
