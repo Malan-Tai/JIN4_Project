@@ -1,4 +1,5 @@
 #include "Animation.h"
+#include <iostream>
 
 bool Animation::loadFromFile(std::string const& basename)
 {
@@ -12,6 +13,15 @@ bool Animation::loadFromFile(std::string const& basename)
 	if (!result) return false;
 	
 	auto root = doc.child("root");
+	auto l = root.attribute("looping");
+	if (!l.empty()) looping = l.as_bool();
+	auto rl = root.attribute("reverseLoop");
+	if (!rl.empty()) reverseLoop = rl.as_bool();
+	auto tpf = root.attribute("timePerFrame");
+	if (!tpf.empty()) timePerFrame = tpf.as_float();
+
+	//std::cout << basename << " : looping=" << looping << " ; reverse=" << reverseLoop << " ; time=" << timePerFrame << std::endl;
+
 	auto rootChildren = root.children();
 	nbFrames = std::distance(rootChildren.begin(), rootChildren.end());
 

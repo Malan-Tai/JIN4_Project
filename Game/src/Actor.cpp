@@ -9,9 +9,9 @@ Actor::Actor(AnimHolder const& holder) : handler(holder, animation::ID::MC_idle)
 	{
 		// from state     , to state      , trigger,    guard   , action
 		{ States::Ground, States::Fall, Triggers::Jump, nullptr, [this] { this->doJump(); }},
-		{ States::Ground, States::Roll, Triggers::PressRoll, nullptr, [] { std::cout << "roll\n"; }},
-		{ States::Fall, States::Roll, Triggers::PressRoll, nullptr, [this] { std::cout << "air roll\n"; this->setVelocity(sf::Vector2f{0, 0}); }},
-		{ States::Roll, States::Ground, Triggers::EndRoll, nullptr, [] { std::cout << "end roll\n"; }},
+		{ States::Ground, States::Roll, Triggers::PressRoll, nullptr, [this] { this->changeAnim(animation::ID::MC_roll); }},
+		{ States::Fall, States::Roll, Triggers::PressRoll, nullptr, [this] { this->changeAnim(animation::ID::MC_roll); }},
+		{ States::Roll, States::Ground, Triggers::EndRoll, nullptr, [this] { this->changeAnim(animation::ID::MC_idle); }},
 		{ States::Ground, States::Sprint, Triggers::HoldSprint, nullptr, nullptr },
 		{ States::Sprint, States::Ground, Triggers::ReleaseSprint, nullptr, nullptr },
 	};
@@ -88,6 +88,11 @@ void Actor::draw(sf::RenderWindow& window) const
 {
 	handler.draw(window);
 	//window.draw(sprite);
+}
+
+void Actor::changeAnim(animation::ID id)
+{
+	handler.changeAnim(id);
 }
 
 Prototype* Actor::clone() const

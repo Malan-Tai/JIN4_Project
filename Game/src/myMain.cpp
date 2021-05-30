@@ -17,6 +17,7 @@ int myMain()
 
     AnimHolder animHolder;
     animHolder.load(animation::ID::MC_idle, "resources/MC_idle");
+    animHolder.load(animation::ID::MC_roll, "resources/MC_roll");
 
     auto actors = std::vector<std::unique_ptr<Actor>>{};
     actors.push_back(std::make_unique<ControllableActor>(animHolder));

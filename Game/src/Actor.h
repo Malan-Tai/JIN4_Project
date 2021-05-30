@@ -48,6 +48,7 @@ public:
 	void setHorizontalVelocity(float dx);
 
 	void draw(sf::RenderWindow& window) const;
+	void changeAnim(animation::ID id);
 
 protected:
 	float speed = 300;

@@ -1,4 +1,5 @@
 #include "AnimHandler.h"
+#include <iostream>
 
 AnimHandler::AnimHandler(AnimHolder const& holder, animation::ID id) : holder(holder), anim(&holder.get(id)), animID(id)
 {
@@ -68,6 +69,7 @@ void AnimHandler::changeAnim(animation::ID id)
 	animID = id;
 	frame = 0;
 	frameTime = sf::Time::Zero;
+	reverseLoop = false;
 	anim->setSprite(sprite, 0, (prevXDir < 0));
 }
 

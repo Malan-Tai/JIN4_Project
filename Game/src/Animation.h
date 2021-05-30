@@ -15,7 +15,7 @@ public:
 	int nbFrames;
 	float timePerFrame = 500;
 	bool looping = true;
-	bool reverseLoop = true; // loop from 0 to n then n to 0 etc
+	bool reverseLoop = false; // loop from 0 to n then n to 0 etc
 
 private:
 	sf::Texture spritesheet;
