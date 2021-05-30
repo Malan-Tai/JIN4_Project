@@ -96,11 +96,6 @@ bool AnimHandler::hits(AnimHandler& other)
 	return false;
 }
 
-//void AnimHandler::addHitboxes(std::vector<Hitbox>& hitboxes, std::vector<Hitbox>& hurtboxes) const
-//{
-//	anim->addHitboxes(frame, hitboxes, hurtboxes);
-//}
-
 void AnimHandler::setPosition(sf::Vector2f const pos)
 {
 	sprite.setPosition(pos);
@@ -133,7 +128,8 @@ void AnimHandler::draw(sf::RenderWindow& window) const
 		sf::FloatRect rect = hitboxes[i]->getRect();
 		s.setPosition(rect.left, rect.top);
 		s.setSize(sf::Vector2f(rect.width, rect.height));
-		s.setFillColor(sf::Color::Green);
+		if (hitboxes[i]->getType() == hitboxes::Type::Hit) s.setFillColor(sf::Color::Green);
+		else s.setFillColor(sf::Color::Red);
 		window.draw(s);
 	}
 #endif

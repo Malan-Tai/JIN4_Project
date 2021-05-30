@@ -25,3 +25,9 @@ class ReleaseRollCmd : public Command
 public:
 	void execute(Actor* actor) override;
 };
+
+class LightAttackCmd : public Command
+{
+public:
+	void execute(Actor* actor) override;
+};

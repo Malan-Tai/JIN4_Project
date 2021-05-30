@@ -8,7 +8,6 @@ namespace texture
 	enum class ID
 	{
 		background,
-		MC_idle,
 	};
 }
 
@@ -21,6 +20,8 @@ namespace animation
 		MC_roll,
 		MC_jump,
 		MC_fall,
+		MC_attack,
+		monster_idle
 	};
 }
 

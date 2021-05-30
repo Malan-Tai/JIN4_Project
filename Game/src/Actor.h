@@ -38,16 +38,18 @@ class Actor : public Prototype
 {
 public:
 	explicit Actor(AnimHolder const& holder);
+	explicit Actor(AnimHolder const& holder, animation::ID id);
 	Prototype* clone() const override;
 
-	virtual void update(sf::Time const& elapsed);
+	virtual animation::ID update(sf::Time const& elapsed);
 	void hits(Actor* other);
-	//void addHitboxes(std::vector<Hitbox>& hitboxes, std::vector<Hitbox>& hurtboxes) const;
 
-	void doJump(); // actually jump
-	void jump(); // execute jump trigger
+	void jump();
+	void lightAttack();
+
 	void setVelocity(sf::Vector2f unitVelocity);
 	void setHorizontalVelocity(float dx);
+	virtual void updateMoveControl();
 
 	void draw(sf::RenderWindow& window) const;
 	void changeAnim(animation::ID id);
@@ -59,7 +61,6 @@ protected:
 	sf::Vector2f velocity{ 0, 0 };
 	sf::Vector2f coords{ 500, 500 };
 
-	//sf::Sprite sprite;
 	AnimHandler handler;
 
 	FSM::Fsm<States, States::Ground, Triggers> machine;

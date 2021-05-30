@@ -16,3 +16,8 @@ void ReleaseRollCmd::execute(Actor* actor)
 	auto cast = (ControllableActor*)actor;
 	if (cast != nullptr) cast->releaseRoll();
 }
+
+void LightAttackCmd::execute(Actor* actor)
+{
+	actor->lightAttack();
+}

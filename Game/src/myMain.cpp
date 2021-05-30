@@ -20,6 +20,9 @@ int myMain()
     animHolder.load(animation::ID::MC_roll, "resources/MC_roll");
     animHolder.load(animation::ID::MC_jump, "resources/MC_jump");
     animHolder.load(animation::ID::MC_fall, "resources/MC_fall");
+    animHolder.load(animation::ID::MC_attack, "resources/MC_attack");
+
+    animHolder.load(animation::ID::monster_idle, "resources/monster_idle");
 
     auto actors = std::vector<std::unique_ptr<Actor>>{};
     actors.push_back(std::make_unique<ControllableActor>(animHolder));
@@ -30,6 +33,7 @@ int myMain()
     JumpCmd jcmd{};
     PressRollCmd prcmd{};
     ReleaseRollCmd rrcmd{};
+    LightAttackCmd lacmd{};
 
     // keyboard
     std::unordered_map<sf::Keyboard::Key, Command*> keyboardCmds{};
@@ -40,7 +44,7 @@ int myMain()
     // controller
     std::vector<Command*> controllerPressCmds
     {
-        &jcmd, &prcmd,  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+        &jcmd, &prcmd,  nullptr, nullptr, nullptr, &lacmd, nullptr, nullptr, nullptr, nullptr,
     };
     std::vector<Command*> controllerReleaseCmds
     {
