@@ -38,7 +38,7 @@ class Actor : public Prototype
 {
 public:
 	explicit Actor(AnimHolder const& holder);
-	explicit Actor(AnimHolder const& holder, animation::ID id);
+	explicit Actor(AnimHolder const& holder, animation::ID id, animation::ID walk);
 	Prototype* clone() const override;
 
 	virtual animation::ID update(sf::Time const& elapsed);
@@ -62,6 +62,7 @@ protected:
 	sf::Vector2f coords{ 500, 500 };
 
 	AnimHandler handler;
+	animation::ID walkAnim;
 
 	FSM::Fsm<States, States::Ground, Triggers> machine;
 	std::map<animation::ID, Triggers> endAnimTriggers;

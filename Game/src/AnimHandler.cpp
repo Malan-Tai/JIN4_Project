@@ -116,6 +116,8 @@ void AnimHandler::setPosition(sf::Vector2f const pos)
 
 void AnimHandler::changeAnim(animation::ID id)
 {
+	if (id == animID) return;
+
 	anim = &holder.get(id);
 	animID = id;
 	frame = 0;

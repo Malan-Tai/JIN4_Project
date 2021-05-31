@@ -21,6 +21,7 @@ namespace animation
 		MC_jump,
 		MC_fall,
 		MC_attack,
+		MC_walk,
 		monster_idle
 	};
 }
