@@ -27,7 +27,7 @@ int myMain()
 
     auto actors = std::vector<std::unique_ptr<Actor>>{};
     actors.push_back(std::make_unique<ControllableActor>(animHolder));
-    auto controlled = actors[0].get();
+    auto controlled = (ControllableActor*)actors[0].get();
 
     actors.push_back(std::make_unique<Actor>(animHolder, animation::ID::monster_idle, animation::ID::monster_idle));
 
@@ -91,6 +91,9 @@ int myMain()
             if (controllerDx <= -50) dx = -1;
 
             controlled->setHorizontalVelocity(dx);
+
+            bool pressedDown = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) < -50;
+            controlled->pressDown(pressedDown);
         }
 
         auto n = actors.size();

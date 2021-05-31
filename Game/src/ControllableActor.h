@@ -10,6 +10,7 @@ public:
 
 	void pressRoll();
 	void releaseRoll();
+	void pressDown(bool pressed);
 
 private:
 	int const rollTime = 200;
