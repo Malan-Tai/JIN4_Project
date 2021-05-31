@@ -18,6 +18,7 @@ enum class States
 
 enum class Triggers
 {
+	None,
 	Jump,
 	Land,
 	Fall,
@@ -44,6 +45,7 @@ public:
 	virtual animation::ID update(sf::Time const& elapsed);
 	void hits(Actor* other);
 
+	void execute(Triggers trigger);
 	void jump();
 	void lightAttack();
 
@@ -67,6 +69,7 @@ protected:
 
 	FSM::Fsm<States, States::Ground, Triggers> machine;
 	std::map<animation::ID, Triggers> endAnimTriggers;
+	Triggers bufferedTrigger = Triggers::None;
 };
 
 using M = FSM::Fsm<States, States::Ground, Triggers>;

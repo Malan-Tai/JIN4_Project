@@ -48,13 +48,13 @@ void ControllableActor::releaseRoll()
 
 	if (machine.state() == States::Sprint)
 	{
-		machine.execute(Triggers::ReleaseSprint);
+		execute(Triggers::ReleaseSprint);
 		holdRoll = sf::Time::Zero;
 		return;
 	}
 
 	if (holdRoll.asMilliseconds() < rollTime)
 	{
-		machine.execute(Triggers::PressRoll);
+		execute(Triggers::PressRoll);
 	}
 }

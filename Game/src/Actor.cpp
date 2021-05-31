@@ -40,6 +40,7 @@ animation::ID Actor::update(sf::Time const& elapsed)
 	{
 		auto animTrig = endAnimTriggers.find(animEnd);
 		if (animTrig != endAnimTriggers.end()) machine.execute(animTrig->second);
+		if (bufferedTrigger != Triggers::None) execute(bufferedTrigger);
 	}
 	return animEnd;
 }
@@ -49,14 +50,23 @@ void Actor::hits(Actor* other)
 	if (handler.hits(other->handler)) std::cout << "oof\n";
 }
 
+void Actor::execute(Triggers trigger)
+{
+	if (machine.execute(trigger) == FSM::Fsm_NoMatchingTrigger)
+	{
+		bufferedTrigger = trigger;
+	}
+	else bufferedTrigger = Triggers::None;
+}
+
 void Actor::jump()
 {
-	machine.execute(Triggers::Jump);
+	execute(Triggers::Jump);
 }
 
 void Actor::lightAttack()
 {
-	machine.execute(Triggers::LightAttack);
+	execute(Triggers::LightAttack);
 }
 
 void Actor::setVelocity(sf::Vector2f unitVelocity)
