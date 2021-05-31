@@ -5,14 +5,16 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder)
 	std::vector<M::Trans> transitions
 	{
 		// from state     , to state      , trigger,    guard   , action
-		{ States::Ground, States::Fall, Triggers::Jump, nullptr, [this] { velocity = sf::Vector2f{ 0, -500 }; handler.changeAnim(animation::ID::MC_jump); }},
-		{ States::Ground, States::Roll, Triggers::PressRoll, nullptr, [this] { this->changeAnim(animation::ID::MC_roll); }},
-		{ States::Fall, States::Roll, Triggers::PressRoll, nullptr, [this] { this->changeAnim(animation::ID::MC_roll); }},
-		{ States::Roll, States::Ground, Triggers::EndRoll, nullptr, [this] { this->changeAnim(animation::ID::MC_idle); }},
+		{ States::Ground, States::Fall, Triggers::Jump, nullptr, [this] { velocity = sf::Vector2f{ 0, -300 }; handler.changeAnim(animation::ID::MC_jump); jumps++; }},
+		{ States::Fall, States::Fall, Triggers::Jump, [this] {return jumps < 2; }, [this] { velocity = sf::Vector2f{ 0, -300 }; handler.changeAnim(animation::ID::MC_jump); jumps++; }},
+		{ States::Fall, States::Ground, Triggers::Land, nullptr, [this] { velocity = sf::Vector2f{ 0, 0 }; handler.changeAnim(animation::ID::MC_idle); jumps = 0; }},
+		{ States::Ground, States::Roll, Triggers::PressRoll, nullptr, [this] { changeAnim(animation::ID::MC_roll); }},
+		{ States::Fall, States::Roll, Triggers::PressRoll, nullptr, [this] { changeAnim(animation::ID::MC_roll); }},
+		{ States::Roll, States::Ground, Triggers::EndRoll, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
 		{ States::Ground, States::Sprint, Triggers::HoldSprint, nullptr, nullptr },
 		{ States::Sprint, States::Ground, Triggers::ReleaseSprint, nullptr, nullptr },
-		{ States::Ground, States::LightAttack, Triggers::LightAttack, nullptr, [this] { this->changeAnim(animation::ID::MC_attack); }},
-		{ States::LightAttack, States::Ground, Triggers::EndLightAttack, nullptr, [this] { this->changeAnim(animation::ID::MC_idle); }},
+		{ States::Ground, States::LightAttack, Triggers::LightAttack, nullptr, [this] { changeAnim(animation::ID::MC_attack); }},
+		{ States::LightAttack, States::Ground, Triggers::EndLightAttack, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
 	};
 
 	machine.add_transitions(transitions);

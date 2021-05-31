@@ -15,4 +15,6 @@ private:
 	int const rollTime = 200;
 	bool holdingRoll = false;
 	sf::Time holdRoll = sf::Time::Zero;
+
+	int jumps = 0;
 };
