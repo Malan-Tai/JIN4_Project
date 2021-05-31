@@ -63,6 +63,7 @@ protected:
 
 	AnimHandler handler;
 	animation::ID walkAnim;
+	animation::ID idleAnim;
 
 	FSM::Fsm<States, States::Ground, Triggers> machine;
 	std::map<animation::ID, Triggers> endAnimTriggers;

@@ -1,11 +1,11 @@
 #include "Actor.h"
 #include <iostream>
 
-Actor::Actor(AnimHolder const& holder) : handler(holder, animation::ID::MC_idle), walkAnim(animation::ID::MC_walk)
+Actor::Actor(AnimHolder const& holder) : handler(holder, animation::ID::MC_idle), walkAnim(animation::ID::MC_walk), idleAnim(animation::ID::MC_idle)
 {
 }
 
-Actor::Actor(AnimHolder const& holder, animation::ID id, animation::ID walk) : handler(holder, id), walkAnim(walk)
+Actor::Actor(AnimHolder const& holder, animation::ID id, animation::ID walk) : handler(holder, id), walkAnim(walk), idleAnim(id)
 {
 }
 
@@ -14,7 +14,11 @@ animation::ID Actor::update(sf::Time const& elapsed)
 	updateMoveControl();
 
 	States state = machine.state();
-	if (velocity.x != 0 && (state == States::Ground || state == States::Sprint)) handler.changeAnim(walkAnim);
+	if (state == States::Ground || state == States::Sprint)
+	{
+		if (velocity.x != 0) handler.changeAnim(walkAnim);
+		else handler.changeAnim(idleAnim);
+	}
 
 	float gravity = 0;
 	if (state == States::Fall)
