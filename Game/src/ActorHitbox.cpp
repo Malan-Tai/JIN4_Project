@@ -19,6 +19,14 @@ bool ActorHitbox::intersect(ActorHitbox const* other) const
 	return canIntersect && rect.intersects(other->rect);
 }
 
+float ActorHitbox::collides(sf::FloatRect const& _rect) const
+{
+	if (!rect.intersects(_rect)) return 0;											// if doesn't collide, do not move actor
+	if (_rect.top <= rect.top && rect.top <= _rect.top + _rect.height)				// if actor's top is inside the platform, move downwards
+		return _rect.top + _rect.height - rect.top;
+	return _rect.top - rect.top - rect.height;										// else move upwards
+}
+
 void ActorHitbox::setPosition(sf::Vector2f pos, bool inv)
 {
 	auto ogRect = original->getRect();

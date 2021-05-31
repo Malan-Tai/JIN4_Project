@@ -103,6 +103,28 @@ bool AnimHandler::hits(AnimHandler& other)
 	return false;
 }
 
+float AnimHandler::collides(Level const& level) const
+{
+	float maxAbs = 0;
+	float res = 0;
+
+	auto n = hitboxes.size();
+	for (int i = 0; i < n; i++)
+	{
+		if (hitboxes[i]->getType() == hitboxes::Type::Hit)
+		{
+			float dy = level.collides(hitboxes[i].get());
+			float ady = abs(dy);
+			if (ady > maxAbs)
+			{
+				maxAbs = ady;
+				res = dy;
+			}
+		}
+	}
+	return res;
+}
+
 void AnimHandler::setPosition(sf::Vector2f const pos)
 {
 	sprite.setPosition(pos);

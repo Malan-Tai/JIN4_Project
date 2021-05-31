@@ -3,6 +3,7 @@
 #include "ControllableActor.h"
 #include "Command.h"
 #include <unordered_map>
+#include "Level.h"
 
 // enum class ControllerBtn { A, B, X, Y, LB, RB, Select, Start, LJ, RJ, };
 
@@ -11,9 +12,6 @@ int myMain()
     sf::RenderWindow window { sf::VideoMode(1000, 1000), "Hollow Lens" };
 
     sf::Clock gameClock;
-
-    /*TextureHolder textureHolder;
-    textureHolder.load(texture::ID::MC_idle, "resources/MC_idle.png");*/
 
     AnimHolder animHolder;
     animHolder.load(animation::ID::MC_idle, "resources/MC_idle");
@@ -24,6 +22,8 @@ int myMain()
     animHolder.load(animation::ID::MC_walk, "resources/MC_walk");
 
     animHolder.load(animation::ID::monster_idle, "resources/monster_idle");
+
+    Level level{};
 
     auto actors = std::vector<std::unique_ptr<Actor>>{};
     actors.push_back(std::make_unique<ControllableActor>(animHolder));
@@ -100,7 +100,7 @@ int myMain()
         for (int i = 0; i < n; i++)
         {
             auto actor = actors[i].get();
-            actor->update(elapsed);
+            actor->update(elapsed, level);
         }
 
         for (int i = 0; i < n; i++)
@@ -115,6 +115,8 @@ int myMain()
         }
 
         window.clear(sf::Color::White);
+
+        level.draw(window);
 
         for (int i = 0; i < actors.size(); i++)
         {

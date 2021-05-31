@@ -7,6 +7,7 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder)
 		// from state     , to state      , trigger,    guard   , action
 		// air
 		{ States::Ground, States::Fall, Triggers::Jump, nullptr, [this] { velocity = sf::Vector2f{ 0, -300 }; handler.changeAnim(animation::ID::MC_jump); jumps++; }},
+		{ States::Ground, States::Fall, Triggers::Fall, nullptr, [this] { handler.changeAnim(animation::ID::MC_fall); jumps++; }},
 		{ States::Fall, States::Fall, Triggers::Jump, [this] {return jumps < 2; }, [this] { velocity = sf::Vector2f{ 0, -300 }; handler.changeAnim(animation::ID::MC_jump); jumps++; }},
 		{ States::Fall, States::Ground, Triggers::Land, nullptr, [this] { velocity = sf::Vector2f{ 0, 0 }; handler.changeAnim(animation::ID::MC_idle); jumps = 0; }},
 		{ States::Fall, States::FastFall, Triggers::PressDown, nullptr, nullptr },
@@ -21,6 +22,7 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder)
 		// sprint
 		{ States::Ground, States::Sprint, Triggers::HoldSprint, nullptr, nullptr },
 		{ States::Sprint, States::Ground, Triggers::ReleaseSprint, nullptr, nullptr },
+		{ States::Sprint, States::Fall, Triggers::Fall, nullptr, [this] { handler.changeAnim(animation::ID::MC_fall); jumps++; }},
 
 		// attacks
 		{ States::Ground, States::LightAttack, Triggers::LightAttack, nullptr, [this] { changeAnim(animation::ID::MC_attack); }},
@@ -35,13 +37,13 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder)
 	};
 }
 
-animation::ID ControllableActor::update(sf::Time const& elapsed)
+animation::ID ControllableActor::update(sf::Time const& elapsed, Level const& level)
 {
 	if (holdingRoll) holdRoll += elapsed;
 
 	if (holdRoll.asMilliseconds() > rollTime) machine.execute(Triggers::HoldSprint);
 
-	auto animEnd = Actor::update(elapsed);
+	auto animEnd = Actor::update(elapsed, level);
 	if (animEnd == animation::ID::MC_jump) handler.changeAnim(animation::ID::MC_fall);
 	return animEnd;
 }

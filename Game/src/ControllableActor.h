@@ -6,7 +6,7 @@ class ControllableActor : public Actor
 public:
 	explicit ControllableActor(AnimHolder const& holder);
 
-	animation::ID update(sf::Time const& elapsed) override;
+	animation::ID update(sf::Time const& elapsed, Level const& level) override;
 
 	void pressRoll();
 	void releaseRoll();

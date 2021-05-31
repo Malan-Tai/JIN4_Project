@@ -1,5 +1,6 @@
 #pragma once
 #include "Animation.h"
+#include "Level.h"
 
 class AnimHandler
 {
@@ -12,6 +13,7 @@ public:
 	animation::ID update(sf::Time const& elapsed, int xDir);
 	void updateHitboxes();
 	bool hits(AnimHandler& other);
+	float collides(Level const& level) const;
 
 	void setPosition(sf::Vector2f const pos);
 	void changeAnim(animation::ID id);

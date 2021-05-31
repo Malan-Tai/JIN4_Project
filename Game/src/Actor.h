@@ -42,7 +42,7 @@ public:
 	explicit Actor(AnimHolder const& holder, animation::ID id, animation::ID walk);
 	Prototype* clone() const override;
 
-	virtual animation::ID update(sf::Time const& elapsed);
+	virtual animation::ID update(sf::Time const& elapsed, Level const& level);
 	void hits(Actor* other);
 
 	void execute(Triggers trigger);

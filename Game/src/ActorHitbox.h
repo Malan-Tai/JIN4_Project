@@ -7,6 +7,7 @@ public:
 	explicit ActorHitbox(Hitbox const* hitbox, sf::Vector2f pos, bool inv, float width);
 
 	bool intersect(ActorHitbox const* other) const;
+	float collides(sf::FloatRect const& _rect) const;
 
 	void setPosition(sf::Vector2f pos, bool inv);
 
