@@ -40,7 +40,7 @@ animation::ID Actor::update(sf::Time const& elapsed)
 
 void Actor::hits(Actor* other)
 {
-	handler.hits(other->handler);
+	if (handler.hits(other->handler)) std::cout << "oof\n";
 }
 
 void Actor::jump()

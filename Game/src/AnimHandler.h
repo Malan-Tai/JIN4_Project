@@ -30,6 +30,7 @@ private:
 	sf::Sprite sprite;
 
 	std::vector<std::unique_ptr<ActorHitbox>> hitboxes{};
+	std::vector<AnimHandler const*> hitEnemies{};
 
 	AnimHolder const& holder;
 };

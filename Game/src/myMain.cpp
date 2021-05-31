@@ -92,19 +92,23 @@ int myMain()
             controlled->setHorizontalVelocity(dx);
         }
 
-        /*std::vector<Hitbox> hitboxes{};
-        std::vector<Hitbox> hurtboxes{};*/
-        for (int i = 0; i < actors.size(); i++)
+        auto n = actors.size();
+        for (int i = 0; i < n; i++)
         {
             auto actor = actors[i].get();
             actor->update(elapsed);
-            //actor->addHitboxes(hitboxes, hurtboxes);
         }
 
-        /*for (auto const& atkbox : hurtboxes)
+        for (int i = 0; i < n; i++)
         {
-            for (auto)
-        }*/
+            auto actor = actors[i].get();
+            for (int j = 0; j < n; j++)
+            {
+                if (i == j) continue;
+                auto other = actors[j].get();
+                actor->hits(other);
+            }
+        }
 
         window.clear(sf::Color::White);
 

@@ -85,6 +85,13 @@ bool AnimHandler::hits(AnimHandler& other)
 			auto otherBox = other.hitboxes[j].get();
 			if (box->getType() == hitboxes::Type::Hurt && box->intersect(otherBox))
 			{
+				for (auto hit : hitEnemies)
+				{
+					if (hit == &other) return false;
+				}
+
+				hitEnemies.push_back(&other);
+
 				// "replay" the same frame to add some impact
 				if (reverseLoop) frame++;
 				else frame--;
@@ -116,6 +123,7 @@ void AnimHandler::changeAnim(animation::ID id)
 	reverseLoop = false;
 	anim->setSprite(sprite, 0, (prevXDir < 0));
 	updateHitboxes();
+	hitEnemies.clear();
 }
 
 void AnimHandler::draw(sf::RenderWindow& window) const
