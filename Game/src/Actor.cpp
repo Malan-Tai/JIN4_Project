@@ -19,7 +19,6 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 	{
 		if (velocity.x != 0) handler.changeAnim(walkAnim);
 		else handler.changeAnim(idleAnim);
-		//gravity = 10;
 	}
 	else if (state == States::Fall)
 	{
@@ -33,10 +32,12 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 	velocity += gravity * elapsed.asSeconds() * sf::Vector2f(0, 1); // gravity
 	coords += elapsed.asSeconds() * velocity;
 
-	float dy = handler.collides(level);
-	coords += dy * sf::Vector2f(0, 1);
+	bool isOnGround = (state == States::Ground || state == States::Sprint);
+	float dy = handler.collides(level, isOnGround);
+	if (!isOnGround) coords += dy * sf::Vector2f(0, 1);
+	else if (dy < 0) coords += (dy + 10) * sf::Vector2f(0, 1);
 
-	if (dy == 0 && state == States::Ground) machine.execute(Triggers::Fall);
+	if (dy == 0 && isOnGround) machine.execute(Triggers::Fall);
 	else if (dy > 0) velocity.y = 0;
 	else if (dy < 0) machine.execute(Triggers::Land);
 

@@ -6,7 +6,7 @@ Level::Level()
 	platforms.push_back(std::make_unique<Platform>(0, 200, 100, 10));
 }
 
-float Level::collides(ActorHitbox const* hitbox) const
+float Level::collides(ActorHitbox const* hitbox, bool isOnGround) const
 {
 	float maxAbs = 0;
 	float res = 0;
@@ -14,7 +14,7 @@ float Level::collides(ActorHitbox const* hitbox) const
 	auto n = platforms.size();
 	for (int i = 0; i < n; i++)
 	{
-		float dy = platforms[i]->collides(hitbox);
+		float dy = platforms[i]->collides(hitbox, isOnGround);
 		float ady = abs(dy);
 		if (ady > maxAbs)
 		{

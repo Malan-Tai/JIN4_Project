@@ -103,7 +103,7 @@ bool AnimHandler::hits(AnimHandler& other)
 	return false;
 }
 
-float AnimHandler::collides(Level const& level) const
+float AnimHandler::collides(Level const& level, bool isOnGround) const
 {
 	float maxAbs = 0;
 	float res = 0;
@@ -113,7 +113,7 @@ float AnimHandler::collides(Level const& level) const
 	{
 		if (hitboxes[i]->getType() == hitboxes::Type::Hit)
 		{
-			float dy = level.collides(hitboxes[i].get());
+			float dy = level.collides(hitboxes[i].get(), isOnGround);
 			float ady = abs(dy);
 			if (ady > maxAbs)
 			{

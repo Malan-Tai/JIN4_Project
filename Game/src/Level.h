@@ -6,7 +6,7 @@ class Level
 public:
 	explicit Level();
 
-	float collides(ActorHitbox const* hitbox) const;
+	float collides(ActorHitbox const* hitbox, bool isOnGround = false) const;
 
 	void draw(sf::RenderWindow& window) const;
 

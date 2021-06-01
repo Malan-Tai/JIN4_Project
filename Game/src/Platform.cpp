@@ -6,9 +6,15 @@ Platform::Platform(float x, float y, float w, float h) : shape(sf::Vector2f(w, h
 	shape.setFillColor(sf::Color::Black);
 }
 
-float Platform::collides(ActorHitbox const* hitbox) const
+float Platform::collides(ActorHitbox const* hitbox, bool isOnGround) const
 {
-	return hitbox->collides(rect);
+	sf::FloatRect sentRect{ rect };
+	if (isOnGround)
+	{
+		sentRect.top -= 10;
+		sentRect.height += 10;
+	}
+	return hitbox->collides(sentRect);
 }
 
 void Platform::draw(sf::RenderWindow& window) const
