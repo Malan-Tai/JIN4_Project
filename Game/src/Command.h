@@ -1,5 +1,6 @@
 #pragma once
 #include "ControllableActor.h"
+#include "myMain.h"
 
 class Command
 {

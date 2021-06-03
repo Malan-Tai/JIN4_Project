@@ -13,7 +13,8 @@ enum class States
 	Sprint,
 	LightAttack,
 	HeavyAttack,
-	Dead
+	Dead,
+	ToBeRemoved
 };
 
 enum class Triggers
@@ -40,7 +41,7 @@ class Actor : public Prototype
 public:
 	explicit Actor(AnimHolder const& holder);
 	explicit Actor(AnimHolder const& holder, animation::ID id, animation::ID walk);
-	Prototype* clone() const override;
+	virtual Prototype* clone() const override;
 
 	virtual animation::ID update(sf::Time const& elapsed, Level const& level);
 	void hits(Actor* other);
@@ -56,12 +57,13 @@ public:
 	void draw(sf::RenderWindow& window) const;
 	void changeAnim(animation::ID id);
 
+	bool toRemove() const;
 protected:
 	float speed = 300;
 	float moveControl = 1;
 
 	sf::Vector2f velocity{ 0, 0 };
-	sf::Vector2f coords{ 500, 500 };
+	sf::Vector2f coords{ 500, 700 };
 
 	AnimHandler handler;
 	animation::ID walkAnim;

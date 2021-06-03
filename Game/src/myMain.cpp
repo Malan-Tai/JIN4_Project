@@ -1,9 +1,6 @@
 #include "myMain.h"
 #include <iostream>
-#include "ControllableActor.h"
-#include "Command.h"
 #include <unordered_map>
-#include "Level.h"
 
 // enum class ControllerBtn { A, B, X, Y, LB, RB, Select, Start, LJ, RJ, };
 
@@ -30,6 +27,8 @@ int myMain()
     auto controlled = (ControllableActor*)actors[0].get();
 
     actors.push_back(std::make_unique<Actor>(animHolder, animation::ID::monster_idle, animation::ID::monster_idle));
+
+    auto actorToBeRemoved = [](const std::unique_ptr<Actor>& a) { return a->toRemove(); };
 
     // INPUTS
     JumpCmd jcmd{};
@@ -113,6 +112,8 @@ int myMain()
                 actor->hits(other);
             }
         }
+
+        actors.erase(std::remove_if(actors.begin(), actors.end(), actorToBeRemoved), actors.end());
 
         window.clear(sf::Color::White);
 

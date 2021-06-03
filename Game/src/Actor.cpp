@@ -134,6 +134,11 @@ void Actor::changeAnim(animation::ID id)
 	handler.changeAnim(id);
 }
 
+bool Actor::toRemove() const
+{
+	return machine.state() == States::ToBeRemoved;
+}
+
 Prototype* Actor::clone() const
 {
 	return new Actor(handler.getHolder());

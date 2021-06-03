@@ -95,6 +95,7 @@ bool AnimHandler::hits(AnimHandler& other)
 				// "replay" the same frame to add some impact
 				if (reverseLoop) frame++;
 				else frame--;
+				frameTime = sf::Time::Zero;
 				return true;
 			}
 		}
