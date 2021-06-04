@@ -60,10 +60,8 @@ def main():
                     rectXML.set("y", str(y))
                     w, h = 0, 0
 
-                    i += 1
-
                     for x2 in range(width - x):
-                        if (pix[x + x_off + x2, y][3] > 0): continue
+                        if (x + x2 < width - 1 and pix[x + x_off + x2, y][3] > 0): continue
                         rectXML.set("width", str(x2))
                         w = x2
                         break
