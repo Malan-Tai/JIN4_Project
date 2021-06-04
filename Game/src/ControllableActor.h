@@ -29,6 +29,7 @@ private:
 	sf::Time holdRoll = sf::Time::Zero;
 
 	int jumps = 0;
+	int airRolls = 0;
 
 	// weapons
 	bool meleeWeapon = true;

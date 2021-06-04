@@ -37,6 +37,8 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 	velocity += gravity * elapsed.asSeconds() * sf::Vector2f(0, 1); // gravity
 	coords += elapsed.asSeconds() * velocity;
 
+	handler.setPosition(coords);
+
 	bool isOnGround = (state == States::Ground || state == States::Sprint);
 	float dy = handler.collides(level, isOnGround);
 	if (!isOnGround) coords += dy * sf::Vector2f(0, 1);
@@ -45,8 +47,6 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 	if (dy == 0 && isOnGround) machine.execute(Triggers::Fall);
 	else if (dy > 0) velocity.y = 0;
 	else if (dy < 0) machine.execute(Triggers::Land);
-
-	handler.setPosition(coords);
 
 	previousState = state;
 	auto animEnd = handler.update(elapsed, velocity.x);
