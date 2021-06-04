@@ -69,7 +69,7 @@ void AnimHandler::updateHitboxes()
 	auto boxes = anim->getHitboxes(frame);
 	for (auto box : boxes)
 	{
-		hitboxes.push_back(std::make_unique<ActorHitbox>(box, sprite.getPosition(), (prevXDir < 0), sprite.getLocalBounds().width));
+		hitboxes.emplace_back(box, sprite.getPosition(), (prevXDir < 0), sprite.getLocalBounds().width);
 	}
 }
 
@@ -79,11 +79,11 @@ bool AnimHandler::hits(AnimHandler& other)
 	auto m = other.hitboxes.size();
 	for (int i = 0; i < n; i++)
 	{
-		auto box = hitboxes[i].get();
+		auto box = hitboxes[i];
 		for (int j = 0; j < m; j++)
 		{
-			auto otherBox = other.hitboxes[j].get();
-			if (box->getType() == hitboxes::Type::Hurt && box->intersect(otherBox))
+			auto const& otherBox = other.hitboxes[j];
+			if (box.getType() == hitboxes::Type::Hurt && box.intersect(&otherBox))
 			{
 				for (auto hit : hitEnemies)
 				{
@@ -112,9 +112,9 @@ float AnimHandler::collides(Level const& level, bool isOnGround) const
 	auto n = hitboxes.size();
 	for (int i = 0; i < n; i++)
 	{
-		if (hitboxes[i]->getType() == hitboxes::Type::Hit)
+		if (hitboxes[i].getType() == hitboxes::Type::Hit)
 		{
-			float dy = level.collides(hitboxes[i].get(), isOnGround);
+			float dy = level.collides(&hitboxes[i], isOnGround);
 			float ady = abs(dy);
 			if (ady > maxAbs)
 			{
@@ -133,7 +133,7 @@ void AnimHandler::setPosition(sf::Vector2f const pos)
 	auto n = hitboxes.size();
 	for (int i = 0; i < n; i++)
 	{
-		hitboxes[i]->setPosition(pos, (prevXDir < 0));
+		hitboxes[i].setPosition(pos, (prevXDir < 0));
 	}
 }
 
@@ -158,10 +158,10 @@ void AnimHandler::draw(sf::RenderWindow& window) const
 	auto n = hitboxes.size();
 	for (int i = 0; i < n; i++)
 	{
-		sf::FloatRect rect = hitboxes[i]->getRect();
+		sf::FloatRect rect = hitboxes[i].getRect();
 		s.setPosition(rect.left, rect.top);
 		s.setSize(sf::Vector2f(rect.width, rect.height));
-		if (hitboxes[i]->getType() == hitboxes::Type::Hit) s.setFillColor(sf::Color::Green);
+		if (hitboxes[i].getType() == hitboxes::Type::Hit) s.setFillColor(sf::Color::Green);
 		else s.setFillColor(sf::Color::Red);
 		window.draw(s);
 	}

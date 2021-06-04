@@ -31,7 +31,7 @@ private:
 	animation::ID animID;
 	sf::Sprite sprite;
 
-	std::vector<std::unique_ptr<ActorHitbox>> hitboxes{};
+	std::vector<ActorHitbox> hitboxes{};
 	std::vector<AnimHandler const*> hitEnemies{};
 
 	AnimHolder const& holder;
