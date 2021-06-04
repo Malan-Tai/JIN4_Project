@@ -22,7 +22,14 @@ void LightAttackCmd::execute(Actor* actor)
 	actor->lightAttack();
 }
 
-void ShootCmd::execute(Actor* actor)
+void SwitchWeaponSizeCmd::execute(Actor* actor)
 {
-	actor->shoot();
+	auto cast = (ControllableActor*)actor;
+	if (cast != nullptr) cast->switchWeaponSize();
+}
+
+void SwitchWeaponRangeCmd::execute(Actor* actor)
+{
+	auto cast = (ControllableActor*)actor;
+	if (cast != nullptr) cast->switchWeaponRange();
 }

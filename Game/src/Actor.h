@@ -31,6 +31,8 @@ enum class Triggers
 	EndRoll,
 	HoldSprint,
 	ReleaseSprint,
+	SwitchWeaponSize,
+	SwitchWeaponRange,
 	LightAttack,
 	EndLightAttack,
 	HeavyAttack,
@@ -52,10 +54,8 @@ public:
 	virtual animation::ID update(sf::Time const& elapsed, Level const& level);
 	virtual void hits(Actor* other);
 
-	void execute(Triggers trigger); // use this if you want the trigger to be buffered in case it is not triggered
 	void jump();
 	void lightAttack();
-	void shoot();
 
 	void setCoords(sf::Vector2f c);
 	void setVelocity(sf::Vector2f unitVelocity);
@@ -67,6 +67,8 @@ public:
 
 	bool toRemove() const;
 protected:
+	void execute(Triggers trigger); // use this if you want the trigger to be buffered in case it is not triggered
+
 	float speed = 300;
 	float moveControl = 1;
 

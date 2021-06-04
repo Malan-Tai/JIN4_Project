@@ -41,7 +41,8 @@ int myMain()
     PressRollCmd prcmd{};
     ReleaseRollCmd rrcmd{};
     LightAttackCmd lacmd{};
-    ShootCmd scmd{};
+    SwitchWeaponRangeCmd rangecmd{};
+    SwitchWeaponSizeCmd sizecmd{};
 
     // keyboard
     std::unordered_map<sf::Keyboard::Key, Command*> keyboardCmds{};
@@ -52,7 +53,7 @@ int myMain()
     // controller
     std::vector<Command*> controllerPressCmds
     {
-        &jcmd, &prcmd,  nullptr, &scmd, nullptr, &lacmd, nullptr, nullptr, nullptr, nullptr,
+        &jcmd, &prcmd,  nullptr, &sizecmd, &rangecmd, &lacmd, nullptr, nullptr, nullptr, nullptr,
     };
     std::vector<Command*> controllerReleaseCmds
     {

@@ -87,14 +87,6 @@ void Actor::lightAttack()
 	execute(Triggers::LightAttack);
 }
 
-void Actor::shoot()
-{
-	execute(Triggers::LightAttack);
-	float xDir = handler.getXDir();
-	xDir = xDir / abs(xDir);
-	ActorPipe::instance().writeActor(PrototypesID::PlayerProjectile, coords, xDir * sf::Vector2f{ 1, 0 });
-}
-
 void Actor::setCoords(sf::Vector2f c)
 {
 	coords = c;

@@ -1,4 +1,5 @@
 #include "ControllableActor.h"
+#include "ActorPipe.h"
 
 ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder)
 {
@@ -25,8 +26,14 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder)
 		{ States::Sprint, States::Fall, Triggers::Fall, nullptr, [this] { handler.changeAnim(animation::ID::MC_fall); jumps++; }},
 
 		// attacks
-		{ States::Ground, States::LightAttack, Triggers::LightAttack, nullptr, [this] { changeAnim(animation::ID::MC_attack); }},
+		{ States::Ground, States::LightAttack, Triggers::LightAttack, nullptr, [this] { changeAnim(getAttackAnim(false)); if (!meleeWeapon) shoot(false); }},
 		{ States::LightAttack, States::Ground, Triggers::EndLightAttack, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
+
+		// weapons
+		{ States::Ground, States::Ground, Triggers::SwitchWeaponRange, nullptr, [this] { meleeWeapon = !meleeWeapon; }},
+		{ States::Ground, States::Ground, Triggers::SwitchWeaponSize, nullptr, [this] { bigWeapon = !bigWeapon; }},
+		{ States::Fall, States::Fall, Triggers::SwitchWeaponRange, nullptr, [this] { meleeWeapon = !meleeWeapon; }},
+		{ States::Fall, States::Fall, Triggers::SwitchWeaponSize, nullptr, [this] { bigWeapon = !bigWeapon; }},
 	};
 
 	machine.add_transitions(transitions);
@@ -75,4 +82,34 @@ void ControllableActor::pressDown(bool pressed)
 {
 	if (pressed) machine.execute(Triggers::PressDown);
 	else machine.execute(Triggers::ReleaseDown);
+}
+
+void ControllableActor::switchWeaponSize()
+{
+	execute(Triggers::SwitchWeaponSize);
+}
+
+void ControllableActor::switchWeaponRange()
+{
+	execute(Triggers::SwitchWeaponRange);
+}
+
+animation::ID ControllableActor::getAttackAnim(bool heavy) const
+{
+	if (meleeWeapon && bigWeapon && heavy) return animation::ID::MC_attack;
+	if (meleeWeapon && bigWeapon && !heavy) return animation::ID::MC_attack;
+	if (meleeWeapon && !bigWeapon && heavy) return animation::ID::MC_attack;
+	if (meleeWeapon && !bigWeapon && !heavy) return animation::ID::MC_attack;
+	if (!meleeWeapon && bigWeapon && heavy) return animation::ID::MC_attack;
+	if (!meleeWeapon && bigWeapon && !heavy) return animation::ID::MC_attack;
+	if (!meleeWeapon && !bigWeapon && heavy) return animation::ID::MC_attack;
+	//if (!meleeWeapon && !bigWeapon && !heavy)
+	return animation::ID::MC_attack;
+}
+
+void ControllableActor::shoot(bool heavy) const
+{
+	float xDir = handler.getXDir();
+	xDir = xDir / abs(xDir);
+	ActorPipe::instance().writeActor(PrototypesID::PlayerProjectile, coords, xDir * sf::Vector2f{ 1, 0 });
 }

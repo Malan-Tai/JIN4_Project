@@ -33,7 +33,13 @@ public:
 	void execute(Actor* actor) override;
 };
 
-class ShootCmd : public Command
+class SwitchWeaponSizeCmd : public Command
+{
+public:
+	void execute(Actor* actor) override;
+};
+
+class SwitchWeaponRangeCmd : public Command
 {
 public:
 	void execute(Actor* actor) override;
