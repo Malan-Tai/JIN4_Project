@@ -9,9 +9,8 @@ ActorPipe& ActorPipe::instance()
 
 void ActorPipe::init(AnimHolder const& holder)
 {
-	prototypes = {
-		{ PrototypesID::PlayerProjectile, Projectile{ holder, animation::ID::MC_walk, 600, 100 }}
-	};
+	prototypes.emplace(PrototypesID::PlayerProjectile, std::make_unique<Projectile>(holder, animation::ID::MC_walk, 600.f));
+
 }
 
 void ActorPipe::writeActor(PrototypesID id, sf::Vector2f coords, sf::Vector2f velocity)
@@ -19,20 +18,20 @@ void ActorPipe::writeActor(PrototypesID id, sf::Vector2f coords, sf::Vector2f ve
 	auto found = prototypes.find(id);
 	if (found == prototypes.end()) return;
 
-	auto clone = (Actor*)found->second.clone();
+	auto clone = found->second->clone();
 	clone->setVelocity(normalize(velocity));
 	clone->setCoords(coords);
 
-	pipe.push(clone);
+	pipe.push(std::move(clone));
 }
 
 std::unique_ptr<Actor> ActorPipe::readActor()
 {
 	if (pipe.size() <= 0) return nullptr;
 	
-	auto res = pipe.front();
+	auto res = std::move(pipe.front());
 	pipe.pop();
-	return std::unique_ptr<Actor>(res);
+	return res;
 }
 
 sf::Vector2f ActorPipe::normalize(sf::Vector2f v) const

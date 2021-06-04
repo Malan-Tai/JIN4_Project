@@ -1,11 +1,10 @@
 #pragma once
 #include "Actor.h"
 #include <queue>
+#include <unordered_map>
 
 enum class PrototypesID
 {
-	Player,
-	Monster,
 	PlayerProjectile
 };
 
@@ -24,6 +23,6 @@ private:
 
 	sf::Vector2f normalize(sf::Vector2f v) const;
 
-	std::map<PrototypesID, Actor> prototypes;
-	std::queue<Actor*> pipe;
+	std::unordered_map<PrototypesID, std::unique_ptr<Actor>> prototypes;
+	std::queue<std::unique_ptr<Actor>> pipe;
 };

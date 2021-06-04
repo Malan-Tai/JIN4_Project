@@ -5,7 +5,7 @@ class Projectile : public Actor
 {
 public:
 	explicit Projectile(AnimHolder const& holder, animation::ID moveAnim, float speed, float maxDistance = 300, bool piercing = false);
-	Prototype* clone() const override;
+	std::unique_ptr<Actor> clone() const override;
 
 	animation::ID update(sf::Time const& elapsed, Level const& level) override;
 

@@ -47,7 +47,7 @@ public:
 	explicit Actor(AnimHolder const& holder);
 	explicit Actor(AnimHolder const& holder, animation::ID id, animation::ID walk);
 	explicit Actor(AnimHolder const& holder, animation::ID id, animation::ID walk, float speed);
-	Prototype* clone() const override;
+	std::unique_ptr<Actor> clone() const override;
 
 	virtual animation::ID update(sf::Time const& elapsed, Level const& level);
 	virtual void hits(Actor* other);

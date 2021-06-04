@@ -162,7 +162,7 @@ bool Actor::toRemove() const
 	return machine.state() == States::ToBeRemoved;
 }
 
-Prototype* Actor::clone() const
+std::unique_ptr<Actor> Actor::clone() const
 {
-	return new Actor(handler.getHolder(), idleAnim, walkAnim, speed);
+	return std::make_unique<Actor>(handler.getHolder(), idleAnim, walkAnim, speed);
 }

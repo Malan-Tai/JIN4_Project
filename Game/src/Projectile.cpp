@@ -18,15 +18,14 @@ Projectile::Projectile(AnimHolder const& holder, animation::ID moveAnim, float s
 	};
 }
 
-Prototype* Projectile::clone() const
+std::unique_ptr<Actor> Projectile::clone() const
 {
-	return new Projectile(handler.getHolder(), walkAnim, speed, maxDist, piercing);
+	return std::make_unique<Projectile>(handler.getHolder(), walkAnim, speed, maxDist, piercing);
 }
 
 animation::ID Projectile::update(sf::Time const& elapsed, Level const& level)
 {
 	curDist += speed * elapsed.asSeconds();
-	std::cout << "curdist = " << curDist << std::endl;
 	if (curDist >= maxDist) machine.execute(Triggers::Remove);
 
 	return Actor::update(elapsed, level);

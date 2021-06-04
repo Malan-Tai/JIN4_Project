@@ -1,8 +1,11 @@
 #pragma once
+#include <memory>
+
+class Actor;
 
 class Prototype
 {
 public:
 	virtual ~Prototype() = default;
-	virtual Prototype* clone() const = 0;
+	virtual std::unique_ptr<Actor> clone() const = 0;
 };
