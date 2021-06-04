@@ -21,6 +21,7 @@ int myMain()
     animHolder.load(animation::ID::MC_fall, "resources/MC_fall");
     animHolder.load(animation::ID::MC_attack, "resources/MC_attack");
     animHolder.load(animation::ID::MC_walk, "resources/MC_walk");
+    animHolder.load(animation::ID::MC_roll_attack, "resources/MC_roll_attack");
 
     animHolder.load(animation::ID::monster_idle, "resources/monster_idle");
 
