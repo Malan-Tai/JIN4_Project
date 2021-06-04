@@ -11,5 +11,5 @@ public:
 	void draw(sf::RenderWindow& window) const;
 
 private:
-	std::vector<std::unique_ptr<Platform>> platforms{};
+	std::vector<Platform> platforms{};
 };

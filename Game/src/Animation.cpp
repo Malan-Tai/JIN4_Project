@@ -52,7 +52,7 @@ bool Animation::loadFromFile(std::string const& basename)
 
 			sf::FloatRect box{ x, y, w, h };
 
-			hitboxes[i].push_back(std::make_unique<Hitbox>(box, layer, type));
+			hitboxes[i].push_back(new Hitbox{ box, layer, type });
 		}
 	}
 
@@ -80,7 +80,7 @@ std::vector<Hitbox const*> Animation::getHitboxes(int frame) const
 	auto n = hitboxes[frame].size();
 	for (int i = 0; i < n; i++)
 	{
-		res.push_back(hitboxes[frame][i].get());
+		res.push_back(hitboxes[frame][i]);
 	}
 	return res;
 }

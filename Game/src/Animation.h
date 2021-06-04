@@ -23,7 +23,7 @@ public:
 
 private:
 	sf::Texture spritesheet;
-	std::vector<std::vector<std::unique_ptr<Hitbox>>> hitboxes;
+	std::vector<std::vector<Hitbox const*>> hitboxes;
 
 	int frameWidth;
 	int height;

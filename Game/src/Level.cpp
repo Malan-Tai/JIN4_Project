@@ -2,8 +2,8 @@
 
 Level::Level()
 {
-	platforms.push_back(std::make_unique<Platform>(0, 800, 1000, 20));
-	platforms.push_back(std::make_unique<Platform>(0, 200, 100, 10));
+	platforms.emplace_back(0, 800, 1000, 20);
+	platforms.emplace_back(0, 200, 100, 10);
 }
 
 float Level::collides(ActorHitbox const* hitbox, bool isOnGround) const
@@ -14,7 +14,7 @@ float Level::collides(ActorHitbox const* hitbox, bool isOnGround) const
 	auto n = platforms.size();
 	for (int i = 0; i < n; i++)
 	{
-		float dy = platforms[i]->collides(hitbox, isOnGround);
+		float dy = platforms[i].collides(hitbox, isOnGround);
 		float ady = abs(dy);
 		if (ady > maxAbs)
 		{
@@ -30,6 +30,6 @@ void Level::draw(sf::RenderWindow& window) const
 	auto n = platforms.size();
 	for (int i = 0; i < n; i++)
 	{
-		platforms[i]->draw(window);
+		platforms[i].draw(window);
 	}
 }
