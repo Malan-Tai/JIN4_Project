@@ -82,6 +82,7 @@ protected:
 	FSM::Fsm<States, States::Ground, Triggers> machine;
 	std::map<animation::ID, Triggers> endAnimTriggers;
 	Triggers bufferedTrigger = Triggers::None;
+	States previousState = States::Ground; // used for chain anim ie roll attack if roll -> ground -> attack
 };
 
 using M = FSM::Fsm<States, States::Ground, Triggers>;

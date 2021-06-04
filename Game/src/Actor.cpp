@@ -48,6 +48,7 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 
 	handler.setPosition(coords);
 
+	previousState = state;
 	auto animEnd = handler.update(elapsed, velocity.x);
 	if (animEnd != animation::ID::None)
 	{
