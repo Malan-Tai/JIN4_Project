@@ -117,12 +117,13 @@ void ControllableActor::pressClone()
 
 void ControllableActor::releaseClone()
 {
-	holdingClone = false;
-
-	if (holdClone.asMilliseconds() < switchCloneTime)
+	if (holdingClone && holdClone.asMilliseconds() < switchCloneTime)
 	{
 		ActorPipe::instance().switchControlled(this);
 	}
+
+	holdingClone = false;
+	holdClone = sf::Time::Zero;
 }
 
 void ControllableActor::updateControllableChain(ControllableActor* newActor)
