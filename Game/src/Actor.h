@@ -41,15 +41,18 @@ class Actor : public Prototype
 public:
 	explicit Actor(AnimHolder const& holder);
 	explicit Actor(AnimHolder const& holder, animation::ID id, animation::ID walk);
-	virtual Prototype* clone() const override;
+	explicit Actor(AnimHolder const& holder, animation::ID id, animation::ID walk, float speed);
+	Prototype* clone() const override;
 
 	virtual animation::ID update(sf::Time const& elapsed, Level const& level);
-	void hits(Actor* other);
+	virtual void hits(Actor* other);
 
 	void execute(Triggers trigger);
 	void jump();
 	void lightAttack();
+	void shoot();
 
+	void setCoords(sf::Vector2f c);
 	void setVelocity(sf::Vector2f unitVelocity);
 	void setHorizontalVelocity(float dx);
 	virtual void updateMoveControl();
@@ -66,8 +69,8 @@ protected:
 	sf::Vector2f coords{ 500, 700 };
 
 	AnimHandler handler;
-	animation::ID walkAnim;
 	animation::ID idleAnim;
+	animation::ID walkAnim;
 
 	FSM::Fsm<States, States::Ground, Triggers> machine;
 	std::map<animation::ID, Triggers> endAnimTriggers;

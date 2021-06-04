@@ -14,12 +14,12 @@ AnimHolder const& AnimHandler::getHolder() const
 	return holder;
 }
 
-int AnimHandler::getXDir() const
+float AnimHandler::getXDir() const
 {
 	return prevXDir;
 }
 
-animation::ID AnimHandler::update(sf::Time const& elapsed, int xDir)
+animation::ID AnimHandler::update(sf::Time const& elapsed, float xDir)
 {
 	frameTime += elapsed;
 	if (xDir == 0) xDir = prevXDir; // xDir cannot be 0 anymore

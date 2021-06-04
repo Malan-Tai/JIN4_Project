@@ -21,3 +21,8 @@ void LightAttackCmd::execute(Actor* actor)
 {
 	actor->lightAttack();
 }
+
+void ShootCmd::execute(Actor* actor)
+{
+	actor->shoot();
+}

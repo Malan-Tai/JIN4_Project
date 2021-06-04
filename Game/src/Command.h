@@ -32,3 +32,9 @@ class LightAttackCmd : public Command
 public:
 	void execute(Actor* actor) override;
 };
+
+class ShootCmd : public Command
+{
+public:
+	void execute(Actor* actor) override;
+};

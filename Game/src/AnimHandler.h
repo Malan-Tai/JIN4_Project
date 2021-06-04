@@ -8,9 +8,9 @@ public:
 	explicit AnimHandler(AnimHolder const& holder, animation::ID id);
 	AnimHolder const& getHolder() const;
 
-	int getXDir() const;
+	float getXDir() const;
 
-	animation::ID update(sf::Time const& elapsed, int xDir);
+	animation::ID update(sf::Time const& elapsed, float xDir);
 	void updateHitboxes();
 	bool hits(AnimHandler& other);
 	float collides(Level const& level, bool isOnGround = false) const;
@@ -25,7 +25,7 @@ private:
 	bool reverseLoop = false;
 	sf::Time frameTime = sf::Time::Zero;
 
-	int prevXDir = 1;
+	float prevXDir = 1;
 	
 	Animation const* anim;
 	animation::ID animID;

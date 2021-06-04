@@ -1,6 +1,10 @@
 #include "myMain.h"
 #include <iostream>
 #include <unordered_map>
+#include "Level.h"
+#include "ControllableActor.h"
+#include "Command.h"
+#include "ActorPipe.h"
 
 // enum class ControllerBtn { A, B, X, Y, LB, RB, Select, Start, LJ, RJ, };
 
@@ -93,6 +97,12 @@ int myMain()
 
             bool pressedDown = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) < -50;
             controlled->pressDown(pressedDown);
+        }
+
+        std::unique_ptr<Actor> added = ActorPipe::instance().readActor();
+        while (added != nullptr)
+        {
+            actors.push_back(std::move(added));
         }
 
         auto n = actors.size();

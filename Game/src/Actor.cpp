@@ -1,11 +1,16 @@
 #include "Actor.h"
 #include <iostream>
+#include "ActorPipe.h"
 
-Actor::Actor(AnimHolder const& holder) : handler(holder, animation::ID::MC_idle), walkAnim(animation::ID::MC_walk), idleAnim(animation::ID::MC_idle)
+Actor::Actor(AnimHolder const& holder) : handler(holder, animation::ID::MC_idle), idleAnim(animation::ID::MC_idle), walkAnim(animation::ID::MC_walk)
 {
 }
 
-Actor::Actor(AnimHolder const& holder, animation::ID id, animation::ID walk) : handler(holder, id), walkAnim(walk), idleAnim(id)
+Actor::Actor(AnimHolder const& holder, animation::ID id, animation::ID walk) : handler(holder, id), idleAnim(id), walkAnim(walk)
+{
+}
+
+Actor::Actor(AnimHolder const& holder, animation::ID id, animation::ID walk, float speed) : handler(holder, id), idleAnim(id), walkAnim(walk), speed(speed)
 {
 }
 
@@ -77,6 +82,19 @@ void Actor::lightAttack()
 	execute(Triggers::LightAttack);
 }
 
+void Actor::shoot()
+{
+	execute(Triggers::LightAttack);
+	float xDir = handler.getXDir();
+	xDir = xDir / abs(xDir);
+	ActorPipe::instance().writeActor(PrototypesID::PlayerProjectile, coords, xDir * sf::Vector2f{ 0, 1 });
+}
+
+void Actor::setCoords(sf::Vector2f c)
+{
+	coords = c;
+}
+
 void Actor::setVelocity(sf::Vector2f unitVelocity)
 {
 	velocity = speed * unitVelocity;
@@ -87,8 +105,8 @@ void Actor::setHorizontalVelocity(float dx)
 	float dy = velocity.y;
 	velocity = sf::Vector2f(dx * speed * moveControl, dy);
 	if (machine.state() == States::Roll)
-	{ 
-		int xDir = handler.getXDir();
+	{
+		float xDir = handler.getXDir();
 		xDir = xDir / abs(xDir);
 		velocity = sf::Vector2f(xDir * speed * 3, 0);
 	}
@@ -141,5 +159,5 @@ bool Actor::toRemove() const
 
 Prototype* Actor::clone() const
 {
-	return new Actor(handler.getHolder());
+	return new Actor(handler.getHolder(), idleAnim, walkAnim, speed);
 }
