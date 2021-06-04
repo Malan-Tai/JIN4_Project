@@ -102,11 +102,12 @@ void Actor::setHorizontalVelocity(float dx)
 {
 	float dy = velocity.y;
 	velocity = sf::Vector2f(dx * speed * moveControl, dy);
-	if (machine.state() == States::Roll)
+	auto state = machine.state();
+	if (state == States::Roll || state == States::RollLightAttack)
 	{
 		float xDir = handler.getXDir();
 		xDir = xDir / abs(xDir);
-		velocity = sf::Vector2f(xDir * speed * 3, 0);
+		velocity = sf::Vector2f(xDir * speed * 1.5f, 0);
 	}
 }
 

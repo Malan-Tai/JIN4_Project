@@ -26,8 +26,10 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 		{ States::Sprint, States::Fall, Triggers::Fall, nullptr, [this] { handler.changeAnim(animation::ID::MC_fall); jumps++; holdingRoll = false; }},
 
 		// attacks
-		{ States::Ground, States::LightAttack, Triggers::LightAttack, nullptr, [this] { changeAnim(getAttackAnim(false)); if (!meleeWeapon) shoot(false); }},
+		{ States::Ground, States::LightAttack, Triggers::LightAttack, [this] { return previousState != States::Roll; }, [this] { changeAnim(getAttackAnim(false)); if (!meleeWeapon) shoot(false); }},
+		{ States::Ground, States::RollLightAttack, Triggers::LightAttack, [this] { return previousState == States::Roll; }, [this] { changeAnim(animation::ID::MC_roll_attack); }},
 		{ States::LightAttack, States::Ground, Triggers::EndLightAttack, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
+		{ States::RollLightAttack, States::Ground, Triggers::EndLightAttack, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
 
 		// weapons (useful because of buffer)
 		{ States::Ground, States::Ground, Triggers::SwitchWeaponRange, nullptr, [this] { meleeWeapon = !meleeWeapon; }},
@@ -42,7 +44,8 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 
 	endAnimTriggers = {
 		{ animation::ID::MC_roll, Triggers::EndRoll },
-		{ animation::ID::MC_attack, Triggers::EndLightAttack }
+		{ animation::ID::MC_attack, Triggers::EndLightAttack },
+		{ animation::ID::MC_roll_attack, Triggers::EndLightAttack }
 	};
 }
 

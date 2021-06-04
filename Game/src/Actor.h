@@ -10,6 +10,7 @@ enum class States
 	FastFall,
 	FallAttack,
 	Roll,
+	RollLightAttack,
 	Sprint,
 	LightAttack,
 	HeavyAttack,
