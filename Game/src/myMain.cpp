@@ -24,6 +24,8 @@ int myMain()
 
     animHolder.load(animation::ID::monster_idle, "resources/monster_idle");
 
+    ActorPipe::instance().init(animHolder);
+
     Level level{};
 
     auto actors = std::vector<std::unique_ptr<Actor>>{};
@@ -39,6 +41,7 @@ int myMain()
     PressRollCmd prcmd{};
     ReleaseRollCmd rrcmd{};
     LightAttackCmd lacmd{};
+    ShootCmd scmd{};
 
     // keyboard
     std::unordered_map<sf::Keyboard::Key, Command*> keyboardCmds{};
@@ -49,7 +52,7 @@ int myMain()
     // controller
     std::vector<Command*> controllerPressCmds
     {
-        &jcmd, &prcmd,  nullptr, nullptr, nullptr, &lacmd, nullptr, nullptr, nullptr, nullptr,
+        &jcmd, &prcmd,  nullptr, &scmd, nullptr, &lacmd, nullptr, nullptr, nullptr, nullptr,
     };
     std::vector<Command*> controllerReleaseCmds
     {
@@ -103,6 +106,7 @@ int myMain()
         while (added != nullptr)
         {
             actors.push_back(std::move(added));
+            added = ActorPipe::instance().readActor();
         }
 
         auto n = actors.size();

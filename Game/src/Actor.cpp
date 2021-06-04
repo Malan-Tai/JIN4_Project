@@ -60,7 +60,12 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 
 void Actor::hits(Actor* other)
 {
-	if (handler.hits(other->handler)) std::cout << "oof\n";
+	if (handler.hits(other->handler))
+	{
+		std::cout << "oof\n";
+		machine.execute(Triggers::DoHit);
+		other->machine.execute(Triggers::GetHit);
+	}
 }
 
 void Actor::execute(Triggers trigger)
@@ -87,7 +92,7 @@ void Actor::shoot()
 	execute(Triggers::LightAttack);
 	float xDir = handler.getXDir();
 	xDir = xDir / abs(xDir);
-	ActorPipe::instance().writeActor(PrototypesID::PlayerProjectile, coords, xDir * sf::Vector2f{ 0, 1 });
+	ActorPipe::instance().writeActor(PrototypesID::PlayerProjectile, coords, xDir * sf::Vector2f{ 1, 0 });
 }
 
 void Actor::setCoords(sf::Vector2f c)

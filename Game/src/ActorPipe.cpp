@@ -1,11 +1,5 @@
 #include "ActorPipe.h"
-
-ActorPipe::ActorPipe()
-{
-	prototypes = {
-		
-	};
-}
+#include "Projectile.h"
 
 ActorPipe& ActorPipe::instance()
 {
@@ -13,12 +7,19 @@ ActorPipe& ActorPipe::instance()
 	return *instance;
 }
 
+void ActorPipe::init(AnimHolder const& holder)
+{
+	prototypes = {
+		{ PrototypesID::PlayerProjectile, Projectile{ holder, animation::ID::MC_walk, 600, 100 }}
+	};
+}
+
 void ActorPipe::writeActor(PrototypesID id, sf::Vector2f coords, sf::Vector2f velocity)
 {
 	auto found = prototypes.find(id);
 	if (found == prototypes.end()) return;
 
-	auto clone = (Actor*)found->second->clone();
+	auto clone = (Actor*)found->second.clone();
 	clone->setVelocity(normalize(velocity));
 	clone->setCoords(coords);
 
@@ -34,7 +35,7 @@ std::unique_ptr<Actor> ActorPipe::readActor()
 	return std::unique_ptr<Actor>(res);
 }
 
-sf::Vector2f ActorPipe::normalize(sf::Vector2f v)
+sf::Vector2f ActorPipe::normalize(sf::Vector2f v) const
 {
 	if (v.x == 0 && v.y == 0) return v;
 	float len = sqrt(v.x * v.x + v.y * v.y);

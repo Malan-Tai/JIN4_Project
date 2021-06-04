@@ -13,6 +13,8 @@ enum class States
 	Sprint,
 	LightAttack,
 	HeavyAttack,
+	GotHit,
+	Staggered,
 	Dead,
 	ToBeRemoved
 };
@@ -33,7 +35,10 @@ enum class Triggers
 	EndLightAttack,
 	HeavyAttack,
 	EndHeavyAttack,
-	Die
+	DoHit,
+	GetHit,
+	Die,
+	Remove
 };
 
 class Actor : public Prototype
@@ -47,7 +52,7 @@ public:
 	virtual animation::ID update(sf::Time const& elapsed, Level const& level);
 	virtual void hits(Actor* other);
 
-	void execute(Triggers trigger);
+	void execute(Triggers trigger); // use this if you want the trigger to be buffered in case it is not triggered
 	void jump();
 	void lightAttack();
 	void shoot();
