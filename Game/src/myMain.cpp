@@ -43,6 +43,8 @@ int myMain()
     LightAttackCmd lacmd{};
     SwitchWeaponRangeCmd rangecmd{};
     SwitchWeaponSizeCmd sizecmd{};
+    PressCloneCmd pccmd{};
+    ReleaseCloneCmd rccmd{};
 
     // keyboard
     std::unordered_map<sf::Keyboard::Key, Command*> keyboardCmds{};
@@ -53,11 +55,11 @@ int myMain()
     // controller
     std::vector<Command*> controllerPressCmds
     {
-        &jcmd, &prcmd,  nullptr, &sizecmd, &rangecmd, &lacmd, nullptr, nullptr, nullptr, nullptr,
+        &jcmd, &prcmd,  &pccmd, &sizecmd, &rangecmd, &lacmd, nullptr, nullptr, nullptr, nullptr,
     };
     std::vector<Command*> controllerReleaseCmds
     {
-        nullptr, &rrcmd,  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+        nullptr, &rrcmd,  &rccmd, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
     };
 
     while (window.isOpen())
@@ -109,6 +111,9 @@ int myMain()
             actors.push_back(std::move(added));
             added = ActorPipe::instance().readActor();
         }
+
+        auto newControlled = ActorPipe::instance().getNewControlled();
+        if (newControlled != nullptr) controlled = newControlled;
 
         auto n = actors.size();
         for (int i = 0; i < n; i++)

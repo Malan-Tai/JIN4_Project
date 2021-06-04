@@ -34,6 +34,27 @@ std::unique_ptr<Actor> ActorPipe::readActor()
 	return res;
 }
 
+void ActorPipe::clonePlayer(ControllableActor* player, sf::Vector2f coords)
+{
+	auto clone = player->clone();
+	player->updateControllableChain((ControllableActor*)clone.get());
+	clone->setCoords(coords);
+
+	pipe.push(std::move(clone));
+}
+
+void ActorPipe::switchControlled(ControllableActor* player)
+{
+	newControlled = player->getNextControllable();
+}
+
+ControllableActor* ActorPipe::getNewControlled()
+{
+	auto ptr = newControlled;
+	if (ptr != nullptr) newControlled = nullptr;
+	return ptr;
+}
+
 sf::Vector2f ActorPipe::normalize(sf::Vector2f v) const
 {
 	if (v.x == 0 && v.y == 0) return v;

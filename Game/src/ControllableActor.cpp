@@ -1,7 +1,7 @@
 #include "ControllableActor.h"
 #include "ActorPipe.h"
 
-ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder)
+ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), prev(this), next(this)
 {
 	std::vector<M::Trans> transitions
 	{
@@ -23,17 +23,19 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder)
 		// sprint
 		{ States::Ground, States::Sprint, Triggers::HoldSprint, nullptr, nullptr },
 		{ States::Sprint, States::Ground, Triggers::ReleaseSprint, nullptr, nullptr },
-		{ States::Sprint, States::Fall, Triggers::Fall, nullptr, [this] { handler.changeAnim(animation::ID::MC_fall); jumps++; }},
+		{ States::Sprint, States::Fall, Triggers::Fall, nullptr, [this] { handler.changeAnim(animation::ID::MC_fall); jumps++; holdingRoll = false; }},
 
 		// attacks
 		{ States::Ground, States::LightAttack, Triggers::LightAttack, nullptr, [this] { changeAnim(getAttackAnim(false)); if (!meleeWeapon) shoot(false); }},
 		{ States::LightAttack, States::Ground, Triggers::EndLightAttack, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
 
-		// weapons
+		// weapons (useful because of buffer)
 		{ States::Ground, States::Ground, Triggers::SwitchWeaponRange, nullptr, [this] { meleeWeapon = !meleeWeapon; }},
 		{ States::Ground, States::Ground, Triggers::SwitchWeaponSize, nullptr, [this] { bigWeapon = !bigWeapon; }},
 		{ States::Fall, States::Fall, Triggers::SwitchWeaponRange, nullptr, [this] { meleeWeapon = !meleeWeapon; }},
 		{ States::Fall, States::Fall, Triggers::SwitchWeaponSize, nullptr, [this] { bigWeapon = !bigWeapon; }},
+		{ States::Sprint, States::Sprint, Triggers::SwitchWeaponRange, nullptr, [this] { meleeWeapon = !meleeWeapon; }},
+		{ States::Sprint, States::Sprint, Triggers::SwitchWeaponSize, nullptr, [this] { bigWeapon = !bigWeapon; }},
 	};
 
 	machine.add_transitions(transitions);
@@ -44,11 +46,23 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder)
 	};
 }
 
+std::unique_ptr<Actor> ControllableActor::clone() const
+{
+	return std::make_unique<ControllableActor>(handler.getHolder());
+}
+
 animation::ID ControllableActor::update(sf::Time const& elapsed, Level const& level)
 {
 	if (holdingRoll) holdRoll += elapsed;
+	if (holdingClone) holdClone += elapsed;
 
 	if (holdRoll.asMilliseconds() > rollTime) machine.execute(Triggers::HoldSprint);
+	if (holdClone.asMilliseconds() > cloneTime)
+	{
+		holdClone = sf::Time::Zero;
+		holdingClone = false;
+		if (machine.state() == States::Ground) ActorPipe::instance().clonePlayer(this, coords);
+	}
 
 	auto animEnd = Actor::update(elapsed, level);
 	if (animEnd == animation::ID::MC_jump) handler.changeAnim(animation::ID::MC_fall);
@@ -92,6 +106,35 @@ void ControllableActor::switchWeaponSize()
 void ControllableActor::switchWeaponRange()
 {
 	execute(Triggers::SwitchWeaponRange);
+}
+
+void ControllableActor::pressClone()
+{
+	if (machine.state() != States::Ground) return;
+	holdClone = sf::Time::Zero;
+	holdingClone = true;
+}
+
+void ControllableActor::releaseClone()
+{
+	holdingClone = false;
+
+	if (holdClone.asMilliseconds() < switchCloneTime)
+	{
+		ActorPipe::instance().switchControlled(this);
+	}
+}
+
+void ControllableActor::updateControllableChain(ControllableActor* newActor)
+{
+	newActor->next = next;
+	newActor->prev = this;
+	next = newActor;
+}
+
+ControllableActor* ControllableActor::getNextControllable()
+{
+	return next;
 }
 
 animation::ID ControllableActor::getAttackAnim(bool heavy) const

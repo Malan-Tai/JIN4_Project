@@ -1,5 +1,5 @@
 #pragma once
-#include "Actor.h"
+#include "ControllableActor.h"
 #include <queue>
 #include <unordered_map>
 
@@ -18,6 +18,10 @@ public:
 	void writeActor(PrototypesID id, sf::Vector2f coords = sf::Vector2f{ 0, 0 }, sf::Vector2f velocity = sf::Vector2f{ 0, 0 });
 	std::unique_ptr<Actor> readActor();
 
+	void clonePlayer(ControllableActor* player, sf::Vector2f coords = sf::Vector2f{ 0, 0 });
+	void switchControlled(ControllableActor* player);
+	ControllableActor* getNewControlled();
+
 private:
 	explicit ActorPipe() = default;
 
@@ -25,4 +29,6 @@ private:
 
 	std::unordered_map<PrototypesID, std::unique_ptr<Actor>> prototypes;
 	std::queue<std::unique_ptr<Actor>> pipe;
+
+	ControllableActor* newControlled = nullptr;
 };

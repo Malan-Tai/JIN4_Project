@@ -44,3 +44,15 @@ class SwitchWeaponRangeCmd : public Command
 public:
 	void execute(Actor* actor) override;
 };
+
+class PressCloneCmd : public Command
+{
+public:
+	void execute(Actor* actor) override;
+};
+
+class ReleaseCloneCmd : public Command
+{
+public:
+	void execute(Actor* actor) override;
+};
