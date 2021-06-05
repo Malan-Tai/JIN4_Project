@@ -27,11 +27,11 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 	}
 	else if (state == States::Fall)
 	{
-		gravity = 200;
+		gravity = 500;
 	}
 	else if (state == States::FastFall)
 	{
-		gravity = 400;
+		gravity = 1000;
 	}
 
 	velocity += gravity * elapsed.asSeconds() * sf::Vector2f(0, 1); // gravity
@@ -103,11 +103,17 @@ void Actor::setHorizontalVelocity(float dx)
 	float dy = velocity.y;
 	velocity = sf::Vector2f(dx * speed * moveControl, dy);
 	auto state = machine.state();
-	if (state == States::Roll || state == States::RollLightAttack)
+	if (state == States::Roll)
 	{
 		float xDir = handler.getXDir();
 		xDir = xDir / abs(xDir);
 		velocity = sf::Vector2f(xDir * speed * 1.5f, 0);
+	}
+	else if (state == States::RollLightAttack)
+	{
+		float xDir = handler.getXDir();
+		xDir = xDir / abs(xDir);
+		velocity = sf::Vector2f(xDir * speed * 0.75f, 0);
 	}
 }
 

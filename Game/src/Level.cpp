@@ -3,7 +3,7 @@
 Level::Level()
 {
 	platforms.emplace_back(0, 800, 1000, 20);
-	platforms.emplace_back(0, 200, 100, 10);
+	platforms.emplace_back(0, 700, 300, 10);
 }
 
 float Level::collides(ActorHitbox const* hitbox, bool isOnGround) const
