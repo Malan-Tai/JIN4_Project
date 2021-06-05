@@ -53,6 +53,9 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 		{ animation::ID::MC_heavy_attack, Triggers::EndHeavyAttack },
 		{ animation::ID::MC_roll_attack, Triggers::EndLightAttack }
 	};
+
+	coords = sf::Vector2f(0, 0);
+	AI = ArtificialIntelligence{ hitboxes::Layers::Ally };
 }
 
 std::unique_ptr<Actor> ControllableActor::clone() const
@@ -150,6 +153,12 @@ void ControllableActor::updateControllableChain(ControllableActor* newActor)
 ControllableActor* ControllableActor::getNextControllable()
 {
 	return next;
+}
+
+void ControllableActor::takeDecision()
+{
+	if (controlled) return;
+	Actor::takeDecision();
 }
 
 animation::ID ControllableActor::getAttackAnim(bool heavy) const

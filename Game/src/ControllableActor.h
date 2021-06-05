@@ -21,6 +21,8 @@ public:
 	void updateControllableChain(ControllableActor* newActor);
 	ControllableActor* getNextControllable();
 
+	void takeDecision() override;
+
 private:
 	animation::ID getAttackAnim(bool heavy) const;
 	void shoot(bool heavy) const;

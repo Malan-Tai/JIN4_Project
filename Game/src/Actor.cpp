@@ -2,15 +2,15 @@
 #include <iostream>
 #include "ActorPipe.h"
 
-Actor::Actor(AnimHolder const& holder) : handler(holder, animation::ID::MC_idle), idleAnim(animation::ID::MC_idle), walkAnim(animation::ID::MC_walk)
+Actor::Actor(AnimHolder const& holder) : handler(holder, animation::ID::MC_idle), idleAnim(animation::ID::MC_idle), walkAnim(animation::ID::MC_walk), AI(ArtificialIntelligence{ hitboxes::Layers::Enemy })
 {
 }
 
-Actor::Actor(AnimHolder const& holder, animation::ID id, animation::ID walk) : handler(holder, id), idleAnim(id), walkAnim(walk)
+Actor::Actor(AnimHolder const& holder, animation::ID id, animation::ID walk) : handler(holder, id), idleAnim(id), walkAnim(walk), AI(ArtificialIntelligence{ hitboxes::Layers::Enemy })
 {
 }
 
-Actor::Actor(AnimHolder const& holder, animation::ID id, animation::ID walk, float speed) : handler(holder, id), idleAnim(id), walkAnim(walk), speed(speed)
+Actor::Actor(AnimHolder const& holder, animation::ID id, animation::ID walk, float speed) : handler(holder, id), idleAnim(id), walkAnim(walk), speed(speed), AI(ArtificialIntelligence{ hitboxes::Layers::Enemy })
 {
 }
 
@@ -33,6 +33,8 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 	{
 		gravity = 1000;
 	}
+
+	takeDecision();
 
 	velocity += gravity * elapsed.asSeconds() * sf::Vector2f(0, 1); // gravity
 	coords += elapsed.asSeconds() * velocity;
@@ -82,6 +84,11 @@ void Actor::execute(Triggers trigger)
 		bufferedTrigger = trigger;
 	}
 	else bufferedTrigger = Triggers::None;
+}
+
+hitboxes::Layers Actor::getLayer() const
+{
+	return AI.getLayer();
 }
 
 void Actor::jump()
@@ -171,6 +178,31 @@ void Actor::changeAnim(animation::ID id)
 bool Actor::toRemove() const
 {
 	return machine.state() == States::ToBeRemoved;
+}
+
+float Actor::distanceTo(sf::Vector2f point) const
+{
+	float dx = point.x - coords.x;
+	float dy = point.y - coords.y;
+	return sqrt(dx * dx + dy * dy);
+}
+
+sf::Vector2f const& Actor::getCoords() const
+{
+	return coords;
+}
+
+void Actor::chooseTarget(std::vector<Actor const*>& actors)
+{
+	AI.chooseTarget(actors, coords);
+}
+
+void Actor::takeDecision()
+{
+	AI_decision decision = AI.makeDecision(coords);
+	if (decision.trigger == Triggers::None && decision.xDir == 0) return;
+
+	setHorizontalVelocity(decision.xDir);
 }
 
 std::unique_ptr<Actor> Actor::clone() const

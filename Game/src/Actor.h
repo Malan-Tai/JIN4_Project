@@ -44,6 +44,31 @@ enum class Triggers
 	Remove
 };
 
+// ----------- AI ------------------
+struct AI_decision
+{
+	Triggers trigger;
+	float xDir;
+};
+
+class ArtificialIntelligence
+{
+public:
+	explicit ArtificialIntelligence(hitboxes::Layers l);
+	virtual ~ArtificialIntelligence() = default;
+
+	virtual void chooseTarget(std::vector<Actor const*>& actors, sf::Vector2f coords);
+
+	virtual AI_decision makeDecision(sf::Vector2f coords) const;
+
+	hitboxes::Layers getLayer() const;
+
+private:
+	Actor const* target = nullptr;
+	hitboxes::Layers layer;
+};
+// ------------------------------------
+
 class Actor : public Prototype
 {
 public:
@@ -68,6 +93,14 @@ public:
 	void changeAnim(animation::ID id);
 
 	bool toRemove() const;
+
+	float distanceTo(sf::Vector2f point) const;
+	sf::Vector2f const& getCoords() const;
+
+	void chooseTarget(std::vector<Actor const*>& actors);
+	virtual void takeDecision();
+	hitboxes::Layers getLayer() const;
+
 protected:
 	void execute(Triggers trigger); // use this if you want the trigger to be buffered in case it is not triggered
 
@@ -87,6 +120,8 @@ protected:
 	States previousState = States::Ground; // used for chain anim ie roll attack if roll -> ground -> attack
 	int const forgetPrevStateTime = 500;
 	sf::Time forgetPrevState = sf::Time::Zero;
+
+	ArtificialIntelligence AI;
 };
 
 using M = FSM::Fsm<States, States::Ground, Triggers>;

@@ -37,6 +37,10 @@ int myMain()
 
     auto actorToBeRemoved = [](const std::unique_ptr<Actor>& a) { return a->toRemove(); };
 
+    // AI
+    int const checkTargetTime = 2;
+    sf::Time lastCheckedTarget = sf::Time::Zero;
+
     // INPUTS
     JumpCmd jcmd{};
     PressRollCmd prcmd{};
@@ -150,6 +154,24 @@ int myMain()
         }
 
         actors.erase(std::remove_if(actors.begin(), actors.end(), actorToBeRemoved), actors.end());
+
+        lastCheckedTarget -= elapsed;
+        if (lastCheckedTarget.asSeconds() <= 0)
+        {
+            lastCheckedTarget = sf::seconds(checkTargetTime);
+
+            std::vector<Actor const*> actorsPtr{};
+            for (int i = 0; i < n; i++)
+            {
+                actorsPtr.push_back(actors[i].get());
+            }
+
+            for (int i = 0; i < n; i++)
+            {
+                actors[i]->chooseTarget(actorsPtr);
+            }
+        }
+
 
         window.clear(sf::Color::White);
 
