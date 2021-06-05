@@ -16,6 +16,7 @@ public:
 	void switchWeaponRange();
 	void pressClone();
 	void releaseClone();
+	void setControlled(bool c);
 
 	void updateControllableChain(ControllableActor* newActor);
 	ControllableActor* getNextControllable();
@@ -43,4 +44,5 @@ private:
 	int const switchCloneTime = 200;
 	bool holdingClone = false;
 	sf::Time holdClone = sf::Time::Zero;
+	bool controlled = true;
 };

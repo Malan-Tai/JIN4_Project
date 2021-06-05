@@ -39,6 +39,7 @@ void ActorPipe::clonePlayer(ControllableActor* player, sf::Vector2f coords)
 	auto clone = player->clone();
 	player->updateControllableChain((ControllableActor*)clone.get());
 	clone->setCoords(coords);
+	((ControllableActor*)clone.get())->setControlled(false);
 
 	pipe.push(std::move(clone));
 }
@@ -51,6 +52,7 @@ void ActorPipe::switchControlled(ControllableActor* player)
 ControllableActor* ActorPipe::getNewControlled()
 {
 	auto ptr = newControlled;
+	newControlled->setControlled(true);
 	if (ptr != nullptr) newControlled = nullptr;
 	return ptr;
 }

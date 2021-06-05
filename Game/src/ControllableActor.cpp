@@ -135,6 +135,11 @@ void ControllableActor::releaseClone()
 	holdClone = sf::Time::Zero;
 }
 
+void ControllableActor::setControlled(bool c)
+{
+	controlled = c;
+}
+
 void ControllableActor::updateControllableChain(ControllableActor* newActor)
 {
 	newActor->next = next;
