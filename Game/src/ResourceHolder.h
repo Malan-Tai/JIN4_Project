@@ -20,10 +20,12 @@ namespace animation
 		MC_roll,
 		MC_jump,
 		MC_fall,
-		MC_attack,
+		MC_light_attack,
+		MC_heavy_attack,
 		MC_walk,
 		MC_roll_attack,
-		monster_idle
+		monster_idle,
+		fireball
 	};
 }
 

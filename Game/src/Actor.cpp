@@ -88,6 +88,12 @@ void Actor::lightAttack()
 	execute(Triggers::LightAttack);
 }
 
+void Actor::heavyAttack()
+{
+	std::cout << "heavy\n";
+	execute(Triggers::HeavyAttack);
+}
+
 void Actor::setCoords(sf::Vector2f c)
 {
 	coords = c;

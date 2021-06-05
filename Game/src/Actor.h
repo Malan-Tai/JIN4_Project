@@ -57,6 +57,7 @@ public:
 
 	void jump();
 	void lightAttack();
+	void heavyAttack();
 
 	void setCoords(sf::Vector2f c);
 	void setVelocity(sf::Vector2f unitVelocity);

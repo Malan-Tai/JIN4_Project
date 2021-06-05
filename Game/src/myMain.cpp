@@ -6,8 +6,6 @@
 #include "Command.h"
 #include "ActorPipe.h"
 
-// enum class ControllerBtn { A, B, X, Y, LB, RB, Select, Start, LJ, RJ, };
-
 int myMain()
 {
     sf::RenderWindow window { sf::VideoMode(1000, 1000), "Hollow Lens" };
@@ -19,11 +17,13 @@ int myMain()
     animHolder.load(animation::ID::MC_roll, "resources/MC_roll");
     animHolder.load(animation::ID::MC_jump, "resources/MC_jump");
     animHolder.load(animation::ID::MC_fall, "resources/MC_fall");
-    animHolder.load(animation::ID::MC_attack, "resources/MC_attack");
+    animHolder.load(animation::ID::MC_light_attack, "resources/MC_light_attack");
+    animHolder.load(animation::ID::MC_heavy_attack, "resources/MC_heavy_attack");
     animHolder.load(animation::ID::MC_walk, "resources/MC_walk");
     animHolder.load(animation::ID::MC_roll_attack, "resources/MC_roll_attack");
 
     animHolder.load(animation::ID::monster_idle, "resources/monster_idle");
+    animHolder.load(animation::ID::fireball, "resources/fireball");
 
     ActorPipe::instance().init(animHolder);
 
@@ -42,6 +42,7 @@ int myMain()
     PressRollCmd prcmd{};
     ReleaseRollCmd rrcmd{};
     LightAttackCmd lacmd{};
+    HeavyAttackCmd hacmd{};
     SwitchWeaponRangeCmd rangecmd{};
     SwitchWeaponSizeCmd sizecmd{};
     PressCloneCmd pccmd{};
@@ -53,15 +54,16 @@ int myMain()
     keyboardCmds.insert(std::make_pair<sf::Keyboard::Key, Command*>(sf::Keyboard::Space, &jcmd));
 
 
-    // controller
+    // controller : A, B, X, Y, LB, RB, Select, Start, LJ, RJ + artificial LT, RT
     std::vector<Command*> controllerPressCmds
     {
-        &jcmd, &prcmd,  &pccmd, &sizecmd, &rangecmd, &lacmd, nullptr, nullptr, nullptr, nullptr,
+        &jcmd, &prcmd,  &pccmd, &sizecmd, &rangecmd, &lacmd, nullptr, nullptr, nullptr, nullptr, nullptr, &hacmd
     };
     std::vector<Command*> controllerReleaseCmds
     {
-        nullptr, &rrcmd,  &rccmd, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+        nullptr, &rrcmd,  &rccmd, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
     };
+    float prevZ = 0;
 
     while (window.isOpen())
     {
@@ -104,6 +106,19 @@ int myMain()
 
             bool pressedDown = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) < -50;
             controlled->pressDown(pressedDown);
+
+            float z = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z); // triggers ( + for left, - for right)
+            if (prevZ < 50 && z > 50) // left trigger
+            {
+                Command* cmd = controllerReleaseCmds[10];
+                if (cmd != nullptr) cmd->execute(controlled);
+            }
+            if (prevZ > -50 && z < -50) // right trigger
+            {
+                Command* cmd = controllerPressCmds[11];
+                if (cmd != nullptr) cmd->execute(controlled);
+            }
+            prevZ = z;
         }
 
         std::unique_ptr<Actor> added = ActorPipe::instance().readActor();

@@ -9,7 +9,7 @@ ActorPipe& ActorPipe::instance()
 
 void ActorPipe::init(AnimHolder const& holder)
 {
-	prototypes.emplace(PrototypesID::PlayerProjectile, std::make_unique<Projectile>(holder, animation::ID::MC_walk, 600.f));
+	prototypes.emplace(PrototypesID::PlayerProjectile, std::make_unique<Projectile>(holder, animation::ID::fireball, 600.f));
 
 }
 

@@ -143,15 +143,15 @@ ControllableActor* ControllableActor::getNextControllable()
 
 animation::ID ControllableActor::getAttackAnim(bool heavy) const
 {
-	if (meleeWeapon && bigWeapon && heavy) return animation::ID::MC_attack;
-	if (meleeWeapon && bigWeapon && !heavy) return animation::ID::MC_attack;
-	if (meleeWeapon && !bigWeapon && heavy) return animation::ID::MC_attack;
-	if (meleeWeapon && !bigWeapon && !heavy) return animation::ID::MC_attack;
-	if (!meleeWeapon && bigWeapon && heavy) return animation::ID::MC_attack;
-	if (!meleeWeapon && bigWeapon && !heavy) return animation::ID::MC_attack;
-	if (!meleeWeapon && !bigWeapon && heavy) return animation::ID::MC_attack;
+	if (meleeWeapon && bigWeapon && heavy) return animation::ID::MC_heavy_attack;
+	if (meleeWeapon && bigWeapon && !heavy) return animation::ID::MC_light_attack;
+	if (meleeWeapon && !bigWeapon && heavy) return animation::ID::MC_heavy_attack;
+	if (meleeWeapon && !bigWeapon && !heavy) return animation::ID::MC_light_attack;
+	if (!meleeWeapon && bigWeapon && heavy) return animation::ID::MC_heavy_attack;
+	if (!meleeWeapon && bigWeapon && !heavy) return animation::ID::MC_light_attack;
+	if (!meleeWeapon && !bigWeapon && heavy) return animation::ID::MC_heavy_attack;
 	//if (!meleeWeapon && !bigWeapon && !heavy)
-	return animation::ID::MC_attack;
+	return animation::ID::MC_light_attack;
 }
 
 void ControllableActor::shoot(bool heavy) const

@@ -33,6 +33,12 @@ public:
 	void execute(Actor* actor) override;
 };
 
+class HeavyAttackCmd : public Command
+{
+public:
+	void execute(Actor* actor) override;
+};
+
 class SwitchWeaponSizeCmd : public Command
 {
 public:

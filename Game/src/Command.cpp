@@ -1,4 +1,5 @@
 #include "Command.h"
+#include <iostream>
 
 void JumpCmd::execute(Actor* actor)
 {
@@ -44,4 +45,9 @@ void ReleaseCloneCmd::execute(Actor* actor)
 {
 	auto cast = (ControllableActor*)actor;
 	if (cast != nullptr) cast->releaseClone();
+}
+
+void HeavyAttackCmd::execute(Actor* actor)
+{
+	actor->heavyAttack();
 }
