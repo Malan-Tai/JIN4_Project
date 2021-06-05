@@ -21,8 +21,11 @@ int myMain()
     animHolder.load(animation::ID::MC_heavy_attack, "resources/MC_heavy_attack");
     animHolder.load(animation::ID::MC_walk, "resources/MC_walk");
     animHolder.load(animation::ID::MC_roll_attack, "resources/MC_roll_attack");
+    animHolder.load(animation::ID::MC_hurt, "resources/MC_hurt");
 
     animHolder.load(animation::ID::monster_idle, "resources/monster_idle");
+    animHolder.load(animation::ID::monster_hurt, "resources/monster_hurt");
+    animHolder.load(animation::ID::monster_walk, "resources/monster_walk");
     animHolder.load(animation::ID::fireball, "resources/fireball");
 
     ActorPipe::instance().init(animHolder);
@@ -33,7 +36,7 @@ int myMain()
     actors.push_back(std::make_unique<ControllableActor>(animHolder));
     auto controlled = (ControllableActor*)actors[0].get();
 
-    actors.push_back(std::make_unique<Actor>(animHolder, animation::ID::monster_idle, animation::ID::monster_idle));
+    actors.push_back(std::make_unique<Actor>(animHolder, animation::ID::monster_idle, animation::ID::monster_walk));
 
     auto actorToBeRemoved = [](const std::unique_ptr<Actor>& a) { return a->toRemove(); };
 

@@ -1,1 +1,1 @@
-<root><frame_0><Rect_0 x="0" y="0" width="1" height="1" type="" /></frame_0><frame_1 /></root>
+<root looping="false" layer="enemy" timePerFrame="100"><frame_0 /><frame_1 /></root>

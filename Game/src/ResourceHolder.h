@@ -24,7 +24,10 @@ namespace animation
 		MC_heavy_attack,
 		MC_walk,
 		MC_roll_attack,
+		MC_hurt,
 		monster_idle,
+		monster_walk,
+		monster_hurt,
 		fireball
 	};
 }
