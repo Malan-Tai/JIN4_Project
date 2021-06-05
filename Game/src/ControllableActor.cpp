@@ -31,6 +31,9 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 		{ States::LightAttack, States::Ground, Triggers::EndLightAttack, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
 		{ States::RollLightAttack, States::Ground, Triggers::EndLightAttack, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
 
+		{ States::Ground, States::HeavyAttack, Triggers::HeavyAttack, nullptr, [this] { changeAnim(getAttackAnim(true)); if (!meleeWeapon) shoot(true); }},
+		{ States::HeavyAttack, States::Ground, Triggers::EndHeavyAttack, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
+
 		// weapons (useful because of buffer)
 		{ States::Ground, States::Ground, Triggers::SwitchWeaponRange, nullptr, [this] { meleeWeapon = !meleeWeapon; }},
 		{ States::Ground, States::Ground, Triggers::SwitchWeaponSize, nullptr, [this] { bigWeapon = !bigWeapon; }},
@@ -44,7 +47,8 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 
 	endAnimTriggers = {
 		{ animation::ID::MC_roll, Triggers::EndRoll },
-		{ animation::ID::MC_attack, Triggers::EndLightAttack },
+		{ animation::ID::MC_light_attack, Triggers::EndLightAttack },
+		{ animation::ID::MC_heavy_attack, Triggers::EndHeavyAttack },
 		{ animation::ID::MC_roll_attack, Triggers::EndLightAttack }
 	};
 }

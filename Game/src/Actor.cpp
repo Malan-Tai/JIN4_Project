@@ -90,7 +90,6 @@ void Actor::lightAttack()
 
 void Actor::heavyAttack()
 {
-	std::cout << "heavy\n";
 	execute(Triggers::HeavyAttack);
 }
 
