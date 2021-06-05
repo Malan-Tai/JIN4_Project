@@ -133,7 +133,11 @@ int myMain()
         }
 
         auto newControlled = ActorPipe::instance().getNewControlled();
-        if (newControlled != nullptr) controlled = newControlled;
+        if (newControlled != nullptr)
+        {
+            controlled->setControlled(false);
+            controlled = newControlled;
+        }
 
         auto n = actors.size();
         for (int i = 0; i < n; i++)
