@@ -1,5 +1,6 @@
 #include "ControllableActor.h"
 #include "ActorPipe.h"
+#include <iostream>
 
 ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), prev(this), next(this)
 {
@@ -35,7 +36,8 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 		{ States::HeavyAttack, States::Ground, Triggers::EndHeavyAttack, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
 
 		// weapons (useful because of buffer)
-		{ States::Ground, States::Ground, Triggers::SwitchWeaponRange, nullptr, [this] { meleeWeapon = !meleeWeapon; }},
+		{ States::Ground, States::Ground, Triggers::SwitchWeaponRange, [this] { return previousState != States::LightAttack; }, [this] { meleeWeapon = !meleeWeapon; }},
+		{ States::Ground, States::LightAttack, Triggers::SwitchWeaponRange, [this] { return previousState == States::LightAttack; }, [this] { meleeWeapon = !meleeWeapon; changeAnim(getAttackAnim(false)); if (!meleeWeapon) shoot(false); }},
 		{ States::Ground, States::Ground, Triggers::SwitchWeaponSize, nullptr, [this] { bigWeapon = !bigWeapon; }},
 		{ States::Fall, States::Fall, Triggers::SwitchWeaponRange, nullptr, [this] { meleeWeapon = !meleeWeapon; }},
 		{ States::Fall, States::Fall, Triggers::SwitchWeaponSize, nullptr, [this] { bigWeapon = !bigWeapon; }},

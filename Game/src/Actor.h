@@ -85,6 +85,8 @@ protected:
 	std::map<animation::ID, Triggers> endAnimTriggers;
 	Triggers bufferedTrigger = Triggers::None;
 	States previousState = States::Ground; // used for chain anim ie roll attack if roll -> ground -> attack
+	int const forgetPrevStateTime = 500;
+	sf::Time forgetPrevState = sf::Time::Zero;
 };
 
 using M = FSM::Fsm<States, States::Ground, Triggers>;

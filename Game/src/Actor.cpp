@@ -48,7 +48,13 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 	else if (dy > 0) velocity.y = 0;
 	else if (dy < 0) machine.execute(Triggers::Land);
 
-	previousState = state;
+	forgetPrevState += elapsed;
+	if (state != States::Ground || (state == States::Ground && forgetPrevState.asMilliseconds() > forgetPrevStateTime))
+	{
+		previousState = state;
+		forgetPrevState = sf::Time::Zero;
+	}
+
 	auto animEnd = handler.update(elapsed, velocity.x);
 	if (animEnd != animation::ID::None)
 	{
