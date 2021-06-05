@@ -52,8 +52,11 @@ void ActorPipe::switchControlled(ControllableActor* player)
 ControllableActor* ActorPipe::getNewControlled()
 {
 	auto ptr = newControlled;
-	newControlled->setControlled(true);
-	if (ptr != nullptr) newControlled = nullptr;
+	if (ptr != nullptr)
+	{
+		newControlled->setControlled(true);
+		newControlled = nullptr;
+	}
 	return ptr;
 }
 
