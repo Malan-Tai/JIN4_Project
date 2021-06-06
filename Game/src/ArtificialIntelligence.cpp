@@ -29,7 +29,7 @@ AI_decision ArtificialIntelligence::makeDecision(sf::Vector2f coords) const
 	if (target == nullptr) return decision;
 
 	float d = target->distanceTo(coords);
-	if (d < 100)
+	if (d < 50)
 	{
 		decision.trigger = Triggers::LightAttack;
 		decision.xDir = 0;

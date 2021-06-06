@@ -211,9 +211,8 @@ void Actor::chooseTarget(std::vector<Actor const*>& actors)
 void Actor::takeDecision()
 {
 	AI_decision decision = AI.makeDecision(coords);
-	if (decision.trigger == Triggers::None && decision.xDir == 0) return;
-
 	setHorizontalVelocity(decision.xDir);
+	execute(decision.trigger);
 }
 
 std::unique_ptr<Actor> Actor::clone() const

@@ -9,7 +9,7 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 		// from state     , to state      , trigger,    guard   , action
 		// air
 		{ States::Ground, States::Fall, Triggers::Jump, nullptr, [this] { velocity = sf::Vector2f{ 0, -300 }; handler.changeAnim(animation::ID::MC_jump); jumps++;  coords += sf::Vector2f{0, -20}; airRolls = 0; }},
-		{ States::Ground, States::Fall, Triggers::Fall, nullptr, [this] { handler.changeAnim(animation::ID::MC_fall); }},
+		{ States::Ground, States::Fall, Triggers::Fall, nullptr, [this] { handler.changeAnim(animation::ID::MC_fall); jumps++; }},
 		{ States::Fall, States::Fall, Triggers::Jump, [this] {return jumps < 2; }, [this] { velocity = sf::Vector2f{ 0, -300 }; handler.changeAnim(animation::ID::MC_jump); jumps++; airRolls = 0; }},
 		{ States::Fall, States::Ground, Triggers::Land, nullptr, [this] { velocity = sf::Vector2f{ 0, 0 }; handler.changeAnim(animation::ID::MC_idle); jumps = 0; airRolls = 0; }},
 		{ States::Fall, States::FastFall, Triggers::PressDown, nullptr, nullptr },
@@ -24,7 +24,7 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 		// sprint
 		{ States::Ground, States::Sprint, Triggers::HoldSprint, nullptr, nullptr },
 		{ States::Sprint, States::Ground, Triggers::ReleaseSprint, nullptr, nullptr },
-		{ States::Sprint, States::Fall, Triggers::Fall, nullptr, [this] { handler.changeAnim(animation::ID::MC_fall); jumps++; holdingRoll = false; }},
+		{ States::Sprint, States::Fall, Triggers::Fall, nullptr, [this] { handler.changeAnim(animation::ID::MC_fall); jumps++; }},
 
 		// attacks
 		{ States::Ground, States::LightAttack, Triggers::LightAttack, [this] { return previousState != States::Roll; }, [this] { changeAnim(getAttackAnim(false)); if (!meleeWeapon) shoot(false); }},
@@ -46,6 +46,9 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 
 		// hits
 		{ States::Ground, States::GotHit, Triggers::GetHit, nullptr, [this] { velocity = sf::Vector2f{ 0, 0 }; handler.changeAnim(animation::ID::MC_hurt); }},
+		{ States::GotHit, States::Ground, Triggers::Recover, [this] { return hp > 0; }, [this] { handler.changeAnim(idleAnim); }},
+		{ States::GotHit, States::ToBeRemoved, Triggers::Recover, [this] { return hp <= 0 && next != this; }, [this] { handler.changeAnim(idleAnim); ActorPipe::instance().switchControlled(this); std::cout << "dead, switch clone\n"; }},
+		{ States::GotHit, States::Ground, Triggers::Recover, [this] { return hp <= 0 && next == this; }, [this] { handler.changeAnim(idleAnim); std::cout << "dead, game over, not implemented yet\n"; }},
 	};
 
 	machine.add_transitions(transitions);
@@ -72,7 +75,7 @@ animation::ID ControllableActor::update(sf::Time const& elapsed, Level const& le
 	if (holdingRoll) holdRoll += elapsed;
 	if (holdingClone) holdClone += elapsed;
 
-	if (holdRoll.asMilliseconds() > rollTime) machine.execute(Triggers::HoldSprint);
+	if (holdingRoll && holdRoll.asMilliseconds() > rollTime) machine.execute(Triggers::HoldSprint);
 	if (holdClone.asMilliseconds() > cloneTime)
 	{
 		holdClone = sf::Time::Zero;
@@ -95,17 +98,14 @@ void ControllableActor::releaseRoll()
 {
 	holdingRoll = false;
 
-	if (machine.state() == States::Sprint)
+	if (holdRoll.asMilliseconds() > rollTime)
 	{
 		execute(Triggers::ReleaseSprint);
 		holdRoll = sf::Time::Zero;
 		return;
 	}
 
-	if (holdRoll.asMilliseconds() < rollTime)
-	{
-		execute(Triggers::PressRoll);
-	}
+	execute(Triggers::PressRoll);
 }
 
 void ControllableActor::pressDown(bool pressed)
