@@ -1,7 +1,7 @@
 #include "AnimHandler.h"
 #include <iostream>
 
-#define DEBUG 1
+#define DEBUG 0
 
 AnimHandler::AnimHandler(AnimHolder const& holder, animation::ID id) : holder(holder), anim(&holder.get(id)), animID(id)
 {
@@ -151,7 +151,7 @@ void AnimHandler::changeAnim(animation::ID id)
 	hitEnemies.clear();
 }
 
-void AnimHandler::draw(sf::RenderWindow& window) const
+void AnimHandler::draw(sf::RenderWindow& window, int hp, int maxHP) const
 {
 #if DEBUG
 	sf::RectangleShape s;
@@ -168,4 +168,25 @@ void AnimHandler::draw(sf::RenderWindow& window) const
 #endif
 
 	window.draw(sprite);
+
+	if (maxHP != 0 && hp < maxHP)
+	{
+		auto size = sprite.getLocalBounds();
+		auto global = sprite.getGlobalBounds();
+
+		float totalWidth = size.width;
+		float hpWidth = (hp / (float)maxHP) * totalWidth;
+
+		sf::RectangleShape fullBar;
+		fullBar.setSize(sf::Vector2f{ totalWidth, 10 });
+		fullBar.setPosition(sf::Vector2f{ global.left, global.top + size.height + 20 });
+		fullBar.setFillColor(sf::Color{ 127, 127, 127 });
+		window.draw(fullBar);
+
+		sf::RectangleShape hpBar;
+		hpBar.setSize(sf::Vector2f{ hpWidth, 10 });
+		hpBar.setPosition(sf::Vector2f{ global.left, global.top + size.height + 20 });
+		hpBar.setFillColor(sf::Color::Red);
+		window.draw(hpBar);
+	}
 }

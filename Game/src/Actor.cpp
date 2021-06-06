@@ -199,7 +199,7 @@ void Actor::updateMoveControl()
 
 void Actor::draw(sf::RenderWindow& window) const
 {
-	handler.draw(window);
+	handler.draw(window, hp, maxHP);
 	//window.draw(sprite);
 }
 

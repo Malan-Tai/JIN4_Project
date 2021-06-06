@@ -18,7 +18,7 @@ public:
 	void setPosition(sf::Vector2f const pos);
 	void changeAnim(animation::ID id);
 
-	void draw(sf::RenderWindow& window) const;
+	void draw(sf::RenderWindow& window, int hp = 0, int maxHP = 0) const;
 
 private:
 	int frame = 0;
