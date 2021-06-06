@@ -14,13 +14,15 @@ EnemyActor::EnemyActor(AnimHolder const& holder, animation::ID id, animation::ID
 		{ States::Ground, States::GotHit, Triggers::GetHit, nullptr, [this, hurt] { velocity = sf::Vector2f{ 0, 0 }; handler.changeAnim(hurt); }},
 		{ States::GotHit, States::Ground, Triggers::Recover, [this] { return hp > 0; }, [this] { handler.changeAnim(idleAnim); }},
 		{ States::GotHit, States::ToBeRemoved, Triggers::Recover, [this] { return hp <= 0; }, [this] { handler.changeAnim(idleAnim); }},
-		{ States::Ground, States::Staggered, Triggers::Stagger, nullptr, [this] { handler.changeAnim(walkAnim); std::cout << "staggered\n"; }},
-		{ States::Staggered, States::Ground, Triggers::Recover, nullptr, [this] { handler.changeAnim(idleAnim); std::cout << "end stagger\n"; }},
+		{ States::Ground, States::Staggered, Triggers::Stagger, nullptr, [this] { handler.changeAnim(walkAnim); }},
+		{ States::Staggered, States::Ground, Triggers::Recover, nullptr, [this] { handler.changeAnim(idleAnim); }},
 		{ States::Staggered, States::ToBeRemoved, Triggers::GetHit, [this] { return hp <= 0; }, nullptr },
 
 		// grabs
-		{ States::Staggered, States::Grabbed, Triggers::Grab, nullptr, [this] { std::cout << "get grabbed\n"; }},
-		{ States::Grabbed, States::Ground, Triggers::EndGrab, nullptr, [this] { std::cout << "released from grab\n"; }},
+		{ States::Staggered, States::Grabbed, Triggers::Grab, nullptr, [this] { handler.changeAnim(idleAnim); }},
+		{ States::Grabbed, States::Ground, Triggers::EndGrab, nullptr, [this] { handler.changeAnim(idleAnim); }},
+		{ States::Grabbed, States::Thrown, Triggers::Throw, nullptr, [this] { handler.changeAnim(idleAnim); }},
+		{ States::Thrown, States::Ground, Triggers::Land, nullptr, [this] { handler.changeAnim(idleAnim); }},
 	};
 
 	machine.add_transitions(transitions);

@@ -51,11 +51,11 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 		{ States::GotHit, States::Ground, Triggers::Recover, [this] { return hp <= 0 && next == this; }, [this] { handler.changeAnim(idleAnim); std::cout << "dead, game over, not implemented yet\n"; }},
 
 		// grab
-		{ States::Ground, States::TryGrabbing, Triggers::Grab, nullptr, [this] { handler.changeAnim(animation::ID::MC_grab); std::cout << "start grab\n"; }},
-		{ States::TryGrabbing, States::Ground, Triggers::EndGrab, nullptr, [this] { handler.changeAnim(animation::ID::MC_idle); std::cout << "didn't grab\n"; }},
-		{ States::TryGrabbing, States::Grabbing, Triggers::Grab, nullptr, [this] { handler.changeAnim(animation::ID::MC_idle); std::cout << "did grab\n"; }},
-		{ States::Grabbing, States::Ground, Triggers::Throw, nullptr, [this] { handler.changeAnim(animation::ID::MC_idle); grabbed = nullptr; std::cout << "did grab, threw\n"; }},
-		{ States::Grabbing, States::Ground, Triggers::EndGrab, nullptr, [this] { handler.changeAnim(animation::ID::MC_idle); std::cout << "didn't throw\n"; }},
+		{ States::Ground, States::TryGrabbing, Triggers::Grab, nullptr, [this] { handler.changeAnim(animation::ID::MC_grab); }},
+		{ States::TryGrabbing, States::Ground, Triggers::EndGrab, nullptr, [this] { handler.changeAnim(animation::ID::MC_idle); }},
+		{ States::TryGrabbing, States::Grabbing, Triggers::Grab, nullptr, [this] { handler.changeAnim(animation::ID::MC_idle); }},
+		{ States::Grabbing, States::Ground, Triggers::Throw, nullptr, [this] { handler.changeAnim(animation::ID::MC_idle); }},
+		{ States::Grabbing, States::Ground, Triggers::EndGrab, nullptr, [this] { handler.changeAnim(animation::ID::MC_idle); }},
 	};
 
 	machine.add_transitions(transitions);
@@ -116,9 +116,12 @@ void ControllableActor::releaseRoll()
 	execute(Triggers::PressRoll);
 }
 
-void ControllableActor::pressDown(bool pressed)
+void ControllableActor::directionalInput(int dx, int dy)
 {
-	if (pressed) machine.execute(Triggers::PressDown);
+	if (machine.state() == States::Grabbing) doThrow(dx, dy);
+	else setHorizontalVelocity(dx);
+
+	if (dy < 0) machine.execute(Triggers::PressDown);
 	else machine.execute(Triggers::ReleaseDown);
 }
 

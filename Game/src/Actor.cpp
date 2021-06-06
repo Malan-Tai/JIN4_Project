@@ -165,11 +165,25 @@ void Actor::getHit(int dmg)
 	else machine.execute(Triggers::GetHit);
 }
 
+void Actor::getThrown(int dx, int dy)
+{
+	float vx = 0.f;
+	float vy = 0.f;
+	vx = dx * 700;
+	if (dy > 0) vy = -800.f;
+	if (dy == 0) vy = -400.f; // left or rigth throw
+	velocity = sf::Vector2f{ vx, vy };
+
+	machine.execute(Triggers::Throw);
+}
+
 void Actor::setHorizontalVelocity(float dx)
 {
+	auto state = machine.state();
+	if (state == States::Thrown) return;
+
 	float dy = velocity.y;
 	velocity = sf::Vector2f(dx * speed * moveControl, dy);
-	auto state = machine.state();
 	if (state == States::Roll)
 	{
 		float xDir = handler.getXDir();
@@ -259,6 +273,16 @@ float Actor::distanceTo(sf::Vector2f point) const
 sf::Vector2f const& Actor::getCoords() const
 {
 	return coords;
+}
+
+void Actor::doThrow(int dx, int dy)
+{
+	if (dx == 0 && dy == 0) return;
+	if (machine.state() != States::Grabbing || grabbed == nullptr) return;
+
+	grabbed->getThrown(dx, dy);
+	grabbed = nullptr;
+	machine.execute(Triggers::Throw);
 }
 
 void Actor::chooseTarget(std::vector<Actor const*>& actors)

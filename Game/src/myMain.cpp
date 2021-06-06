@@ -106,16 +106,17 @@ int myMain()
 
         if (sf::Joystick::isConnected(0))
         {
-            float dx = 0;
+            int dx = 0;
+            int dy = 0;
             float controllerDx = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX);
+            float controllerDy = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY);
 
             if (controllerDx >= 50) dx = 1;
             if (controllerDx <= -50) dx = -1;
+            if (controllerDy >= 50) dy = 1;
+            if (controllerDy <= -50) dy = -1;
 
-            controlled->setHorizontalVelocity(dx);
-
-            bool pressedDown = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) < -50;
-            controlled->pressDown(pressedDown);
+            controlled->directionalInput(dx, dy);
 
             float z = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z); // triggers ( + for left, - for right)
             if (prevZ < 50 && z > 50) // left trigger

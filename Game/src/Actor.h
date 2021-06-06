@@ -93,6 +93,8 @@ public:
 	void lightAttack();
 	void heavyAttack();
 	void grab();
+	void doThrow(int dx, int dy);
+	void getThrown(int dx, int dy);
 	void getHit(int dmg);
 
 	void setCoords(sf::Vector2f c);

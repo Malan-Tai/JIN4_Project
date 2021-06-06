@@ -11,7 +11,7 @@ public:
 
 	void pressRoll();
 	void releaseRoll();
-	void pressDown(bool pressed);
+	void directionalInput(int dx, int dy);
 	void switchWeaponSize();
 	void switchWeaponRange();
 	void pressClone();
