@@ -17,6 +17,10 @@ EnemyActor::EnemyActor(AnimHolder const& holder, animation::ID id, animation::ID
 		{ States::Ground, States::Staggered, Triggers::Stagger, nullptr, [this] { handler.changeAnim(walkAnim); std::cout << "staggered\n"; }},
 		{ States::Staggered, States::Ground, Triggers::Recover, nullptr, [this] { handler.changeAnim(idleAnim); std::cout << "end stagger\n"; }},
 		{ States::Staggered, States::ToBeRemoved, Triggers::GetHit, [this] { return hp <= 0; }, nullptr },
+
+		// grabs
+		{ States::Staggered, States::Grabbed, Triggers::Grab, nullptr, [this] { std::cout << "get grabbed\n"; }},
+		{ States::Grabbed, States::Ground, Triggers::EndGrab, nullptr, [this] { std::cout << "released from grab\n"; }},
 	};
 
 	machine.add_transitions(transitions);

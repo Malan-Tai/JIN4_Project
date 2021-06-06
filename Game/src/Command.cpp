@@ -51,3 +51,8 @@ void HeavyAttackCmd::execute(Actor* actor)
 {
 	actor->heavyAttack();
 }
+
+void GrabCmd::execute(Actor* actor)
+{
+	actor->grab();
+}

@@ -49,6 +49,13 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 		{ States::GotHit, States::Ground, Triggers::Recover, [this] { return hp > 0; }, [this] { handler.changeAnim(idleAnim); }},
 		{ States::GotHit, States::ToBeRemoved, Triggers::Recover, [this] { return hp <= 0 && next != this; }, [this] { handler.changeAnim(idleAnim); ActorPipe::instance().switchControlled(this); std::cout << "dead, switch clone\n"; }},
 		{ States::GotHit, States::Ground, Triggers::Recover, [this] { return hp <= 0 && next == this; }, [this] { handler.changeAnim(idleAnim); std::cout << "dead, game over, not implemented yet\n"; }},
+
+		// grab
+		{ States::Ground, States::TryGrabbing, Triggers::Grab, nullptr, [this] { handler.changeAnim(animation::ID::MC_grab); std::cout << "start grab\n"; }},
+		{ States::TryGrabbing, States::Ground, Triggers::EndGrab, nullptr, [this] { handler.changeAnim(animation::ID::MC_idle); std::cout << "didn't grab\n"; }},
+		{ States::TryGrabbing, States::Grabbing, Triggers::Grab, nullptr, [this] { handler.changeAnim(animation::ID::MC_idle); std::cout << "did grab\n"; }},
+		{ States::Grabbing, States::Ground, Triggers::Throw, nullptr, [this] { handler.changeAnim(animation::ID::MC_idle); grabbed = nullptr; std::cout << "did grab, threw\n"; }},
+		{ States::Grabbing, States::Ground, Triggers::EndGrab, nullptr, [this] { handler.changeAnim(animation::ID::MC_idle); std::cout << "didn't throw\n"; }},
 	};
 
 	machine.add_transitions(transitions);
@@ -57,6 +64,7 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 		{ animation::ID::MC_roll, Triggers::EndRoll },
 		{ animation::ID::MC_light_attack, Triggers::EndLightAttack },
 		{ animation::ID::MC_heavy_attack, Triggers::EndHeavyAttack },
+		{ animation::ID::MC_grab, Triggers::EndGrab },
 		{ animation::ID::MC_roll_attack, Triggers::EndLightAttack },
 		{ animation::ID::MC_hurt, Triggers::Recover }
 	};

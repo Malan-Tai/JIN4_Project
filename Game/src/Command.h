@@ -62,3 +62,9 @@ class ReleaseCloneCmd : public Command
 public:
 	void execute(Actor* actor) override;
 };
+
+class GrabCmd : public Command
+{
+public:
+	void execute(Actor* actor) override;
+};

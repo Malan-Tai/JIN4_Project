@@ -20,6 +20,7 @@ int myMain()
     animHolder.load(animation::ID::MC_fall, "resources/MC_fall");
     animHolder.load(animation::ID::MC_light_attack, "resources/MC_light_attack");
     animHolder.load(animation::ID::MC_heavy_attack, "resources/MC_heavy_attack");
+    animHolder.load(animation::ID::MC_grab, "resources/MC_heavy_attack");
     animHolder.load(animation::ID::MC_walk, "resources/MC_walk");
     animHolder.load(animation::ID::MC_roll_attack, "resources/MC_roll_attack");
     animHolder.load(animation::ID::MC_hurt, "resources/MC_hurt");
@@ -51,6 +52,7 @@ int myMain()
     ReleaseRollCmd rrcmd{};
     LightAttackCmd lacmd{};
     HeavyAttackCmd hacmd{};
+    GrabCmd grabcmd{};
     SwitchWeaponRangeCmd rangecmd{};
     SwitchWeaponSizeCmd sizecmd{};
     PressCloneCmd pccmd{};
@@ -65,7 +67,7 @@ int myMain()
     // controller : A, B, X, Y, LB, RB, Select, Start, LJ, RJ + artificial LT, RT
     std::vector<Command*> controllerPressCmds
     {
-        &jcmd, &prcmd,  &pccmd, &sizecmd, &rangecmd, &lacmd, nullptr, nullptr, nullptr, nullptr, nullptr, &hacmd
+        &jcmd, &prcmd,  &pccmd, &sizecmd, &rangecmd, &lacmd, nullptr, nullptr, nullptr, nullptr, &grabcmd, &hacmd
     };
     std::vector<Command*> controllerReleaseCmds
     {
@@ -118,7 +120,7 @@ int myMain()
             float z = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z); // triggers ( + for left, - for right)
             if (prevZ < 50 && z > 50) // left trigger
             {
-                Command* cmd = controllerReleaseCmds[10];
+                Command* cmd = controllerPressCmds[10];
                 if (cmd != nullptr) cmd->execute(controlled);
             }
             if (prevZ > -50 && z < -50) // right trigger

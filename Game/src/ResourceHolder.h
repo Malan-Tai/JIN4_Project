@@ -22,6 +22,7 @@ namespace animation
 		MC_fall,
 		MC_light_attack,
 		MC_heavy_attack,
+		MC_grab,
 		MC_walk,
 		MC_roll_attack,
 		MC_hurt,

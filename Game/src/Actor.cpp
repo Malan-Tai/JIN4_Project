@@ -29,7 +29,7 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 	{
 		gravity = 500;
 	}
-	else if (state == States::FastFall)
+	else if (state == States::FastFall || state == States::Thrown)
 	{
 		gravity = 1000;
 	}
@@ -74,6 +74,18 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 		}
 	}
 
+	if (state == States::Grabbing && grabbed != nullptr)
+	{
+		grabTime += elapsed;
+		if (grabTime.asMilliseconds() > grabMaxTime)
+		{
+			grabTime = sf::Time::Zero;
+			machine.execute(Triggers::EndGrab);
+			grabbed->machine.execute(Triggers::EndGrab);
+			grabbed = nullptr;
+		}
+	}
+
 	auto animEnd = handler.update(elapsed, velocity.x);
 	if (animEnd != animation::ID::None)
 	{
@@ -88,6 +100,16 @@ void Actor::hits(Actor* other)
 {
 	if (handler.hits(other->handler))
 	{
+		if (machine.state() == States::TryGrabbing)
+		{
+			if (other->machine.state() != States::Staggered) return;
+
+			grabbed = other;
+			other->machine.execute(Triggers::Grab);
+			machine.execute(Triggers::Grab);
+			return;
+		}
+
 		machine.execute(Triggers::DoHit);
 		other->getHit(strength);
 	}
@@ -191,6 +213,15 @@ void Actor::updateMoveControl()
 	case States::Staggered:
 		moveControl = 0;
 		return;
+	case States::Grabbing:
+		moveControl = 0;
+		return;
+	case States::Grabbed:
+		moveControl = 0;
+		return;
+	case States::Thrown:
+		moveControl = 0;
+		return;
 	default:
 		moveControl = 1;
 		return;
@@ -211,6 +242,11 @@ void Actor::changeAnim(animation::ID id)
 bool Actor::toRemove() const
 {
 	return machine.state() == States::ToBeRemoved;
+}
+
+void Actor::grab()
+{
+	execute(Triggers::Grab);
 }
 
 float Actor::distanceTo(sf::Vector2f point) const

@@ -14,8 +14,12 @@ enum class States
 	Sprint,
 	LightAttack,
 	HeavyAttack,
+	TryGrabbing,
+	Grabbing,
 	GotHit,
 	Staggered,
+	Grabbed,
+	Thrown,
 	Dead,
 	ToBeRemoved
 };
@@ -39,6 +43,9 @@ enum class Triggers
 	HeavyAttack,
 	EndHeavyAttack,
 	DoHit,
+	Grab,
+	EndGrab,
+	Throw,
 	GetHit,
 	Stagger,
 	Recover,
@@ -85,6 +92,7 @@ public:
 	void jump();
 	void lightAttack();
 	void heavyAttack();
+	void grab();
 	void getHit(int dmg);
 
 	void setCoords(sf::Vector2f c);
@@ -136,6 +144,10 @@ protected:
 
 	int const staggerMaxTime = 5000;
 	sf::Time staggerTime = sf::Time::Zero;
+
+	int const grabMaxTime = 1500;
+	sf::Time grabTime = sf::Time::Zero;
+	Actor* grabbed = nullptr;
 };
 
 using M = FSM::Fsm<States, States::Ground, Triggers>;
