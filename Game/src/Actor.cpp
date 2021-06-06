@@ -57,6 +57,23 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 		forgetPrevState = sf::Time::Zero;
 	}
 
+	forgetCombo += elapsed;
+	if (forgetCombo.asMilliseconds() > forgetComboTime)
+	{
+		comboDamage = 0;
+	}
+
+	if (state == States::Staggered)
+	{
+		staggerTime += elapsed;
+		if (staggerTime.asMilliseconds() > staggerMaxTime)
+		{
+			staggerTime = sf::Time::Zero;
+			machine.execute(Triggers::Recover);
+			comboDamage = 0;
+		}
+	}
+
 	auto animEnd = handler.update(elapsed, velocity.x);
 	if (animEnd != animation::ID::None)
 	{
@@ -117,11 +134,13 @@ void Actor::setVelocity(sf::Vector2f unitVelocity)
 
 void Actor::getHit(int dmg)
 {
+	forgetCombo = sf::Time::Zero;
+	comboDamage += dmg;
 	hp -= dmg;
 	std::cout << "oofed : " << dmg << "\n";
-	//if (hp <= 0) machine.execute(Triggers::Die);
-	//else
-	machine.execute(Triggers::GetHit);
+
+	if (comboDamage >= maxHP / 3) machine.execute(Triggers::Stagger);
+	else machine.execute(Triggers::GetHit);
 }
 
 void Actor::setHorizontalVelocity(float dx)
@@ -167,6 +186,9 @@ void Actor::updateMoveControl()
 		moveControl = 0;
 		return;
 	case States::GotHit:
+		moveControl = 0;
+		return;
+	case States::Staggered:
 		moveControl = 0;
 		return;
 	default:

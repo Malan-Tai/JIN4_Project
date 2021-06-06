@@ -14,6 +14,8 @@ EnemyActor::EnemyActor(AnimHolder const& holder, animation::ID id, animation::ID
 		{ States::Ground, States::GotHit, Triggers::GetHit, nullptr, [this, hurt] { velocity = sf::Vector2f{ 0, 0 }; handler.changeAnim(hurt); }},
 		{ States::GotHit, States::Ground, Triggers::Recover, [this] { return hp > 0; }, [this] { handler.changeAnim(idleAnim); }},
 		{ States::GotHit, States::ToBeRemoved, Triggers::Recover, [this] { return hp <= 0; }, [this] { handler.changeAnim(idleAnim); std::cout << "dead\n"; }},
+		{ States::Ground, States::Staggered, Triggers::Stagger, nullptr, [this] { handler.changeAnim(walkAnim); std::cout << "staggered\n"; }},
+		{ States::Staggered, States::Ground, Triggers::Recover, nullptr, [this] { handler.changeAnim(idleAnim); std::cout << "end stagger\n"; }},
 	};
 
 	machine.add_transitions(transitions);

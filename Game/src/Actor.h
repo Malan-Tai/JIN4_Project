@@ -40,6 +40,7 @@ enum class Triggers
 	EndHeavyAttack,
 	DoHit,
 	GetHit,
+	Stagger,
 	Recover,
 	Die,
 	Remove
@@ -125,9 +126,16 @@ protected:
 
 	ArtificialIntelligence AI;
 
-	int maxHP = 10;
+	int maxHP = 21;
 	int hp = maxHP;
 	int strength = 3;
+
+	int const forgetComboTime = 1000;
+	sf::Time forgetCombo = sf::Time::Zero;
+	int comboDamage = 0;
+
+	int const staggerMaxTime = 5000;
+	sf::Time staggerTime = sf::Time::Zero;
 };
 
 using M = FSM::Fsm<States, States::Ground, Triggers>;
