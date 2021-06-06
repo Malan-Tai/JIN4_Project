@@ -5,6 +5,7 @@
 #include "ControllableActor.h"
 #include "Command.h"
 #include "ActorPipe.h"
+#include "EnemyActor.h"
 
 int myMain()
 {
@@ -36,7 +37,7 @@ int myMain()
     actors.push_back(std::make_unique<ControllableActor>(animHolder));
     auto controlled = (ControllableActor*)actors[0].get();
 
-    actors.push_back(std::make_unique<Actor>(animHolder, animation::ID::monster_idle, animation::ID::monster_walk));
+    actors.push_back(std::make_unique<EnemyActor>(animHolder, animation::ID::monster_idle, animation::ID::monster_walk, animation::ID::monster_hurt, 100));
 
     auto actorToBeRemoved = [](const std::unique_ptr<Actor>& a) { return a->toRemove(); };
 

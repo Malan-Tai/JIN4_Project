@@ -43,6 +43,9 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 		{ States::Fall, States::Fall, Triggers::SwitchWeaponSize, nullptr, [this] { bigWeapon = !bigWeapon; }},
 		{ States::Sprint, States::Sprint, Triggers::SwitchWeaponRange, nullptr, [this] { meleeWeapon = !meleeWeapon; }},
 		{ States::Sprint, States::Sprint, Triggers::SwitchWeaponSize, nullptr, [this] { bigWeapon = !bigWeapon; }},
+
+		// hits
+		{ States::Ground, States::GotHit, Triggers::GetHit, nullptr, [this] { velocity = sf::Vector2f{ 0, 0 }; handler.changeAnim(animation::ID::MC_hurt); }},
 	};
 
 	machine.add_transitions(transitions);
@@ -51,7 +54,8 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 		{ animation::ID::MC_roll, Triggers::EndRoll },
 		{ animation::ID::MC_light_attack, Triggers::EndLightAttack },
 		{ animation::ID::MC_heavy_attack, Triggers::EndHeavyAttack },
-		{ animation::ID::MC_roll_attack, Triggers::EndLightAttack }
+		{ animation::ID::MC_roll_attack, Triggers::EndLightAttack },
+		{ animation::ID::MC_hurt, Triggers::Recover }
 	};
 
 	coords = sf::Vector2f(0, 0);

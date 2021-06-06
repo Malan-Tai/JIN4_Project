@@ -40,6 +40,7 @@ enum class Triggers
 	EndHeavyAttack,
 	DoHit,
 	GetHit,
+	Recover,
 	Die,
 	Remove
 };
@@ -83,6 +84,7 @@ public:
 	void jump();
 	void lightAttack();
 	void heavyAttack();
+	void getHit(int dmg);
 
 	void setCoords(sf::Vector2f c);
 	void setVelocity(sf::Vector2f unitVelocity);
@@ -122,6 +124,10 @@ protected:
 	sf::Time forgetPrevState = sf::Time::Zero;
 
 	ArtificialIntelligence AI;
+
+	int maxHP = 10;
+	int hp = maxHP;
+	int strength = 3;
 };
 
 using M = FSM::Fsm<States, States::Ground, Triggers>;

@@ -71,9 +71,8 @@ void Actor::hits(Actor* other)
 {
 	if (handler.hits(other->handler))
 	{
-		std::cout << "oof\n";
 		machine.execute(Triggers::DoHit);
-		other->machine.execute(Triggers::GetHit);
+		other->getHit(strength);
 	}
 }
 
@@ -116,6 +115,15 @@ void Actor::setVelocity(sf::Vector2f unitVelocity)
 	velocity = speed * unitVelocity;
 }
 
+void Actor::getHit(int dmg)
+{
+	hp -= dmg;
+	std::cout << "oofed : " << dmg << "\n";
+	//if (hp <= 0) machine.execute(Triggers::Die);
+	//else
+	machine.execute(Triggers::GetHit);
+}
+
 void Actor::setHorizontalVelocity(float dx)
 {
 	float dy = velocity.y;
@@ -156,6 +164,9 @@ void Actor::updateMoveControl()
 		moveControl = 0;
 		return;
 	case States::HeavyAttack:
+		moveControl = 0;
+		return;
+	case States::GotHit:
 		moveControl = 0;
 		return;
 	default:
