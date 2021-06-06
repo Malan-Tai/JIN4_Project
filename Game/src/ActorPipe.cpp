@@ -1,5 +1,6 @@
 #include "ActorPipe.h"
 #include "Projectile.h"
+#include <iostream>
 
 ActorPipe& ActorPipe::instance()
 {

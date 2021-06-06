@@ -30,3 +30,8 @@ animation::ID Projectile::update(sf::Time const& elapsed, Level const& level)
 
 	return Actor::update(elapsed, level);
 }
+
+void Projectile::takeDecision()
+{
+	return;
+}

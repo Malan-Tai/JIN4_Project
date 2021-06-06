@@ -9,6 +9,8 @@ public:
 
 	animation::ID update(sf::Time const& elapsed, Level const& level) override;
 
+	void takeDecision() override;
+
 private:
 	float const maxDist = 300;
 	float curDist = 0;

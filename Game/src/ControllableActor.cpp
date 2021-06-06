@@ -189,6 +189,5 @@ animation::ID ControllableActor::getAttackAnim(bool heavy) const
 void ControllableActor::shoot(bool heavy) const
 {
 	float xDir = handler.getXDir();
-	xDir = xDir / abs(xDir);
 	ActorPipe::instance().writeActor(PrototypesID::PlayerProjectile, coords, xDir * sf::Vector2f{ 1, 0 });
 }
