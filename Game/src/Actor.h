@@ -2,6 +2,7 @@
 #include "Prototype.h"
 #include "AnimHandler.h"
 #include "fsm.h"
+#include "Lens.h"
 
 // states allies or enemies can be in
 enum class States
@@ -111,7 +112,7 @@ public:
 	void setHorizontalVelocity(float dx);
 	virtual void updateMoveControl();
 
-	void draw(sf::RenderWindow& window) const;
+	virtual void draw(sf::RenderWindow& window, bool force = false) const;
 	void changeAnim(animation::ID id);
 
 	bool toRemove() const;
@@ -165,4 +166,6 @@ protected:
 	int const grabMaxTime = 1500;
 	sf::Time grabTime = sf::Time::Zero;
 	Actor* grabbed = nullptr;
+
+	LensColors lensColor = LensColors::None;
 };

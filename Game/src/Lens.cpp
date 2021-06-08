@@ -44,3 +44,13 @@ void Lens::switchCurrentLens(float left, float right)
 
 	fillScreen.setFillColor(sf::Color(r, g, b, a));
 }
+
+LensColors Lens::getLeftLens() const
+{
+	return curLeftLens;
+}
+
+LensColors Lens::getRightLens() const
+{
+	return curRightLens;
+}

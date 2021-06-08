@@ -1,7 +1,7 @@
 #include "Actor.h"
-#include "Actor.h"
 #include <iostream>
 #include "ActorPipe.h"
+#include "Lens.h"
 
 Actor::Actor(AnimHolder const& holder) : handler(holder, animation::ID::MC_idle), idleAnim(animation::ID::MC_idle), walkAnim(animation::ID::MC_walk), AI(ArtificialIntelligence{ hitboxes::Layers::Enemy })
 {
@@ -260,10 +260,11 @@ void Actor::updateMoveControl()
 	}
 }
 
-void Actor::draw(sf::RenderWindow& window) const
+void Actor::draw(sf::RenderWindow& window, bool force) const
 {
-	handler.draw(window, hp, maxHP);
-	//window.draw(sprite);
+	auto const& lens = Lens::instance();
+	if (force || (lensColor == LensColors::None && lens.getLeftLens() == lensColor && lens.getRightLens() == lensColor)) handler.draw(window, hp, maxHP);
+	else if (lensColor != LensColors::None && (lens.getLeftLens() == lensColor || lens.getRightLens() == lensColor)) handler.draw(window, hp, maxHP);
 }
 
 void Actor::changeAnim(animation::ID id)

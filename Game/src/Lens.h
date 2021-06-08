@@ -1,5 +1,5 @@
 #pragma once
-#include "ControllableActor.h"
+#include <SFML/Graphics.hpp>
 
 enum class LensColors
 {
@@ -18,6 +18,9 @@ public:
 	void draw(sf::RenderWindow& window) const;
 
 	void switchCurrentLens(float left, float right);
+
+	LensColors getLeftLens() const;
+	LensColors getRightLens() const;
 
 private:
 	LensColors leftLens		= LensColors::Red;

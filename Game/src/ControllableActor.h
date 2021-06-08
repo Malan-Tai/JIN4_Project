@@ -24,6 +24,8 @@ public:
 
 	void takeDecision() override;
 
+	void draw(sf::RenderWindow& window, bool force = false) const override;
+
 private:
 	animation::ID getAttackAnim(bool heavy) const;
 	void shoot(bool heavy) const;

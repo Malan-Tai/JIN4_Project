@@ -168,6 +168,11 @@ void ControllableActor::takeDecision()
 	Actor::takeDecision();
 }
 
+void ControllableActor::draw(sf::RenderWindow& window, bool force) const
+{
+	Actor::draw(window, true);
+}
+
 // returns the attack anim ID depending on the type of attack and weapon
 animation::ID ControllableActor::getAttackAnim(bool heavy) const
 {
