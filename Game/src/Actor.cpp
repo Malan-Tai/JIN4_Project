@@ -179,7 +179,7 @@ void Actor::getHit(int dmg)
 	hp -= dmg;
 	std::cout << "oofed : " << dmg << "\n";
 
-	if (comboDamage >= maxHP / 3) machine.execute(Triggers::Stagger);
+	if (comboDamage >= maxHP / 3 && hp > 0) machine.execute(Triggers::Stagger);
 	else machine.execute(Triggers::GetHit);
 }
 
