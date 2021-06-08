@@ -112,8 +112,10 @@ public:
 	void setHorizontalVelocity(float dx);
 	virtual void updateMoveControl();
 
-	virtual void draw(sf::RenderWindow& window, bool force = false) const;
+	void draw(sf::RenderWindow& window) const;
 	void changeAnim(animation::ID id);
+
+	virtual bool seen() const;
 
 	bool toRemove() const;
 

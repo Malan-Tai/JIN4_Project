@@ -99,7 +99,7 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 
 void Actor::hits(Actor* other)
 {
-	if (handler.hits(other->handler))
+	if (other->seen() && handler.hits(other->handler))
 	{
 		if (machine.state() == States::TryGrabbing)
 		{
@@ -114,6 +114,13 @@ void Actor::hits(Actor* other)
 		machine.execute(Triggers::DoHit);
 		other->getHit(strength);
 	}
+}
+
+bool Actor::seen() const
+{
+	auto const& lens = Lens::instance();
+	return (lensColor == LensColors::None && lens.getLeftLens() == lensColor && lens.getRightLens() == lensColor)
+		|| (lensColor != LensColors::None && (lens.getLeftLens() == lensColor || lens.getRightLens() == lensColor));
 }
 
 #if TESTS
@@ -260,11 +267,9 @@ void Actor::updateMoveControl()
 	}
 }
 
-void Actor::draw(sf::RenderWindow& window, bool force) const
+void Actor::draw(sf::RenderWindow& window) const
 {
-	auto const& lens = Lens::instance();
-	if (force || (lensColor == LensColors::None && lens.getLeftLens() == lensColor && lens.getRightLens() == lensColor)) handler.draw(window, hp, maxHP);
-	else if (lensColor != LensColors::None && (lens.getLeftLens() == lensColor || lens.getRightLens() == lensColor)) handler.draw(window, hp, maxHP);
+	if (seen()) handler.draw(window, hp, maxHP);
 }
 
 void Actor::changeAnim(animation::ID id)
