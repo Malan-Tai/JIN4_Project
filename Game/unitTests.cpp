@@ -2,6 +2,7 @@
 #include "Actor.h"
 #include "Command.h"
 
+#if TESTS
 TEST(AnimInit, AnimFrames)
 {
     AnimHolder animHolder;
@@ -156,3 +157,4 @@ TEST(StatesTest, ChainAnims)
     a.update(sf::milliseconds(101), Level{});
     EXPECT_EQ(machine.state(), States::RollLightAttack);
 }
+#endif
