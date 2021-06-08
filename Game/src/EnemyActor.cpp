@@ -15,7 +15,7 @@ EnemyActor::EnemyActor(AnimHolder const& holder, animation::ID id, animation::ID
 		{ States::GotHit, States::Ground, Triggers::Recover, [this] { return hp > 0; }, [this] { handler.changeAnim(idleAnim); }},
 		{ States::GotHit, States::ToBeRemoved, Triggers::Recover, [this] { return hp <= 0; }, [this] { handler.changeAnim(idleAnim); }},
 		{ States::Ground, States::Staggered, Triggers::Stagger, nullptr, [this] { handler.changeAnim(walkAnim); }},
-		{ States::Staggered, States::Ground, Triggers::Recover, nullptr, [this] { handler.changeAnim(idleAnim); }},
+		{ States::Staggered, States::Ground, Triggers::Recover, [this] { return hp > 0; }, [this] { handler.changeAnim(idleAnim); }},
 		{ States::Staggered, States::ToBeRemoved, Triggers::GetHit, [this] { return hp <= 0; }, nullptr },
 
 		// grabs
