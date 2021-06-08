@@ -75,10 +75,12 @@ int myMain()
     };
     float prevZ = 0;
 
+    // game loop
     while (window.isOpen())
     {
         sf::Time elapsed = gameClock.restart();
 
+        // button inputs
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -104,6 +106,7 @@ int myMain()
             }
         }
 
+        // directional inputs
         if (sf::Joystick::isConnected(0))
         {
             int dx = 0;
@@ -132,6 +135,7 @@ int myMain()
             prevZ = z;
         }
 
+        // add created actors
         std::unique_ptr<Actor> added = ActorPipe::instance().readActor();
         while (added != nullptr)
         {
@@ -146,6 +150,7 @@ int myMain()
             controlled = newControlled;
         }
 
+        // update
         auto n = actors.size();
         for (int i = 0; i < n; i++)
         {
@@ -153,6 +158,7 @@ int myMain()
             actor->update(elapsed, level);
         }
 
+        // check hitboxes collisions
         for (int i = 0; i < n; i++)
         {
             auto actor = actors[i].get();
@@ -166,6 +172,7 @@ int myMain()
 
         actors.erase(std::remove_if(actors.begin(), actors.end(), actorToBeRemoved), actors.end());
 
+        // AIs choose targets
         lastCheckedTarget -= elapsed;
         if (lastCheckedTarget.asSeconds() <= 0)
         {
@@ -183,7 +190,7 @@ int myMain()
             }
         }
 
-
+        // draw
         window.clear(sf::Color::White);
 
         level.draw(window);

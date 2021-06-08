@@ -3,11 +3,16 @@
 #include <queue>
 #include <unordered_map>
 
+// IDs mapped to prototypes in order to clone them easily
 enum class PrototypesID
 {
 	PlayerProjectile
 };
 
+// a singleton pipe to communicate between actors and the game loop
+// it is used to create actors by writing in it new instaces
+// and the game loop reads them and add them to its vector of actors
+// it is also used cycle through player character clones
 class ActorPipe
 {
 public:

@@ -4,8 +4,9 @@
 #include "ResourceHolder.h"
 #include "ActorHitbox.h"
 
-#define TESTS 1
+#define TESTS 0
 
+// a data class : gets loaded from a spritesheet and an xml data file
 class Animation
 {
 public:

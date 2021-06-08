@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "ActorHitbox.h"
 
+// a simple platform
 class Platform
 {
 public:

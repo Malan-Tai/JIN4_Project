@@ -31,6 +31,7 @@ animation::ID Projectile::update(sf::Time const& elapsed, Level const& level)
 	return Actor::update(elapsed, level);
 }
 
+// porjectiles don't have any AI
 void Projectile::takeDecision()
 {
 	return;

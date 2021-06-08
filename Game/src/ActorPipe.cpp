@@ -2,18 +2,21 @@
 #include "Projectile.h"
 #include <iostream>
 
+// singleton instance
 ActorPipe& ActorPipe::instance()
 {
 	static auto instance = new ActorPipe();
 	return *instance;
 }
 
+// initializes the singleton instance's prototypes map
 void ActorPipe::init(AnimHolder const& holder)
 {
 	prototypes.emplace(PrototypesID::PlayerProjectile, std::make_unique<Projectile>(holder, animation::ID::fireball, 600.f));
 
 }
 
+// add an actor into the pipes
 void ActorPipe::writeActor(PrototypesID id, sf::Vector2f coords, sf::Vector2f velocity)
 {
 	auto found = prototypes.find(id);
@@ -26,6 +29,7 @@ void ActorPipe::writeActor(PrototypesID id, sf::Vector2f coords, sf::Vector2f ve
 	pipe.push(std::move(clone));
 }
 
+// read an actor from the pipe
 std::unique_ptr<Actor> ActorPipe::readActor()
 {
 	if (pipe.size() <= 0) return nullptr;
@@ -35,6 +39,8 @@ std::unique_ptr<Actor> ActorPipe::readActor()
 	return res;
 }
 
+// add a player character clone to the pipe
+// also updates the chained list of controllables
 void ActorPipe::clonePlayer(ControllableActor* player, sf::Vector2f coords)
 {
 	auto clone = player->clone();
@@ -45,11 +51,14 @@ void ActorPipe::clonePlayer(ControllableActor* player, sf::Vector2f coords)
 	pipe.push(std::move(clone));
 }
 
+// cycle through the controllable actors
 void ActorPipe::switchControlled(ControllableActor* player)
 {
 	newControlled = player->getNextControllable();
 }
 
+// returns the new controlled actor, or nullptr
+// also sets the new controlled's controlled
 ControllableActor* ActorPipe::getNewControlled()
 {
 	auto ptr = newControlled;

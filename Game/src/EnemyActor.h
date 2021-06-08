@@ -1,6 +1,7 @@
 #pragma once
 #include "Actor.h"
 
+// a base enemy
 class EnemyActor : public Actor
 {
 public:

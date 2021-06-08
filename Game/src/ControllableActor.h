@@ -1,6 +1,8 @@
 #pragma once
 #include "Actor.h"
 
+// the class the player controls :
+// either the player's character or their clones
 class ControllableActor : public Actor
 {
 public:
@@ -38,6 +40,7 @@ private:
 	bool meleeWeapon = true;
 	bool bigWeapon = false;
 
+	// double chained list : used to cycle through controllable clones
 	// have to be updated on death : prev.next = next ; next.prev = prev;
 	ControllableActor* prev = nullptr;
 	ControllableActor* next = nullptr;

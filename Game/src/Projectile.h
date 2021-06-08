@@ -1,6 +1,10 @@
 #pragma once
 #include "Actor.h"
 
+// a projectile which travels in a given direction until
+// it hits something if it isn't piercing,
+// it reaches its max travel distance
+// or it reaches its animation end
 class Projectile : public Actor
 {
 public:

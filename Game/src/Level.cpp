@@ -6,6 +6,7 @@ Level::Level()
 	platforms.emplace_back(0, 700, 300, 10);
 }
 
+// returns the biggest offset (positive or negative) returned by the level's platforms
 float Level::collides(ActorHitbox const* hitbox, bool isOnGround) const
 {
 	float maxAbs = 0;

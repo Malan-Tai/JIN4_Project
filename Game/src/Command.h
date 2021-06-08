@@ -2,6 +2,9 @@
 #include "ControllableActor.h"
 #include "myMain.h"
 
+// command interface for the Command deisgn patter
+// lower are all the different commands used for input
+// (for now, only the user inputs use commands, but more complex AIs might too)
 class Command
 {
 public:

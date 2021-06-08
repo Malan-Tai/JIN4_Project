@@ -80,6 +80,7 @@ std::unique_ptr<Actor> ControllableActor::clone() const
 
 animation::ID ControllableActor::update(sf::Time const& elapsed, Level const& level)
 {
+	// button held
 	if (holdingRoll) holdRoll += elapsed;
 	if (holdingClone) holdClone += elapsed;
 
@@ -91,6 +92,9 @@ animation::ID ControllableActor::update(sf::Time const& elapsed, Level const& le
 		if (machine.state() == States::Ground) ActorPipe::instance().clonePlayer(this, coords);
 	}
 
+	// retrieve the animation that ended in the mother class update method
+	// and changes the animation to fall if said anim was jumping
+	// needed because jumping is not a state and therefore there cannot be a transition from jumping to falling
 	auto animEnd = Actor::update(elapsed, level);
 	if (animEnd == animation::ID::MC_jump) handler.changeAnim(animation::ID::MC_fall);
 	return animEnd;
@@ -170,12 +174,14 @@ ControllableActor* ControllableActor::getNextControllable()
 	return next;
 }
 
+// if the actor is currently controlled by the player, do not take into account the AI's decision
 void ControllableActor::takeDecision()
 {
 	if (controlled) return;
 	Actor::takeDecision();
 }
 
+// returns the attack anim ID depending on the type of attack and weapon
 animation::ID ControllableActor::getAttackAnim(bool heavy) const
 {
 	if (meleeWeapon && bigWeapon && heavy) return animation::ID::MC_heavy_attack;

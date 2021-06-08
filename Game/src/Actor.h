@@ -3,6 +3,7 @@
 #include "AnimHandler.h"
 #include "fsm.h"
 
+// states allies or enemies can be in
 enum class States
 {
 	Ground,
@@ -24,6 +25,9 @@ enum class States
 	ToBeRemoved
 };
 
+// triggers to go from one state to another
+// some may mean something different depending on the current state
+// eg Throw means either do throw or get thrown
 enum class Triggers
 {
 	None,
@@ -54,12 +58,14 @@ enum class Triggers
 };
 
 // ----------- AI ------------------
+// strcuture given to an actor by the AI after it makes a decision
 struct AI_decision
 {
 	Triggers trigger;
 	float xDir;
 };
 
+// a generic AI
 class ArtificialIntelligence
 {
 public:
@@ -80,6 +86,7 @@ private:
 
 using M = FSM::Fsm<States, States::Ground, Triggers>;
 
+// any "living" actor ie allies or enemies
 class Actor : public Prototype
 {
 public:

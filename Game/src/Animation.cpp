@@ -59,6 +59,8 @@ bool Animation::loadFromFile(std::string const& basename)
 	return true;
 }
 
+// sets the referenced sprite to the correct frame of the spritesheet,
+// taking into account the direction the actor is looking
 void Animation::setSprite(sf::Sprite& sprite, int frame, bool inv) const
 {
 	int x = frame * frameWidth;

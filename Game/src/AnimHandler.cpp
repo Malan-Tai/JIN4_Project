@@ -14,6 +14,7 @@ AnimHolder const& AnimHandler::getHolder() const
 	return holder;
 }
 
+// get the direction the sprite is looking
 float AnimHandler::getXDir() const
 {
 	return prevXDir;
@@ -22,29 +23,30 @@ float AnimHandler::getXDir() const
 animation::ID AnimHandler::update(sf::Time const& elapsed, float xDir)
 {
 	frameTime += elapsed;
-	if (xDir == 0) xDir = prevXDir; // xDir cannot be 0 anymore
-	bool changed = xDir != prevXDir;
+	if (xDir == 0) xDir = prevXDir;		// xDir cannot be 0 anymore
+	bool changed = xDir != prevXDir;	// true if the looking direction has changed
 	bool inv = xDir < 0;
 	prevXDir = xDir;
+
 	if (frameTime.asMilliseconds() >= anim->timePerFrame)
 	{
-		if (!reverseLoop)
+		if (!reverseLoop) // cycle through frames forwards
 		{
 			frame++;
-			if (frame == anim->nbFrames)
+			if (frame == anim->nbFrames) // anim ended
 			{
 				if (!anim->looping && !anim->reverseLoop) return animID;
 				frame = 0;
 			}
-			else if (anim->reverseLoop && frame == anim->nbFrames - 1)
+			else if (anim->reverseLoop && frame == anim->nbFrames - 1) // last frame, needs to reverse
 			{
 				reverseLoop = true;
 			}
 		}
-		else
+		else // cycle through frames backwards
 		{
 			frame--;
-			if (frame == 0)
+			if (frame == 0) // reverse anim ended
 			{
 				reverseLoop = false;
 			}
@@ -54,7 +56,7 @@ animation::ID AnimHandler::update(sf::Time const& elapsed, float xDir)
 		anim->setSprite(sprite, frame, inv);
 		updateHitboxes();
 	}
-	else if (changed)
+	else if (changed) // changed direction but didn't do this already because of a new frame
 	{
 		anim->setSprite(sprite, frame, inv);
 		updateHitboxes();
@@ -73,6 +75,7 @@ void AnimHandler::updateHitboxes()
 	}
 }
 
+// checks whether this animation hits the other one
 bool AnimHandler::hits(AnimHandler& other)
 {
 	auto n = hitboxes.size();
@@ -104,6 +107,7 @@ bool AnimHandler::hits(AnimHandler& other)
 	return false;
 }
 
+// checks whether the animation collides with the level
 float AnimHandler::collides(Level const& level, bool isOnGround) const
 {
 	float maxAbs = 0;
@@ -169,6 +173,7 @@ void AnimHandler::draw(sf::RenderWindow& window, int hp, int maxHP) const
 
 	window.draw(sprite);
 
+	// hp bar
 	if (maxHP != 0 && hp < maxHP)
 	{
 		auto size = sprite.getLocalBounds();

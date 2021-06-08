@@ -2,6 +2,7 @@
 #include "Animation.h"
 #include "Level.h"
 
+// class handling animation : updates its frames, its hitboxes, etc
 class AnimHandler
 {
 public:

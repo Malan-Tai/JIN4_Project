@@ -6,6 +6,8 @@ void JumpCmd::execute(Actor* actor)
 	actor->jump();
 }
 
+// this kind of commands, useful only to the player because related to user inputs
+// might be incorrectly programmed, but shouldn't be called on anything else than a ControllableActor anyway
 void PressRollCmd::execute(Actor* actor)
 {
 	auto cast = (ControllableActor*)actor;

@@ -5,6 +5,7 @@ ArtificialIntelligence::ArtificialIntelligence(hitboxes::Layers l) : layer(l)
 {
 }
 
+// chooses the closest actor with a different layer than the AI's
 void ArtificialIntelligence::chooseTarget(std::vector<Actor const*>& actors, sf::Vector2f coords)
 {
 	float minDist = 1000000000;
@@ -23,6 +24,7 @@ void ArtificialIntelligence::chooseTarget(std::vector<Actor const*>& actors, sf:
 	}
 }
 
+// if close enough, attack, else, move towards the target
 AI_decision ArtificialIntelligence::makeDecision(sf::Vector2f coords) const
 {
 	AI_decision decision{ Triggers::None, 0 };

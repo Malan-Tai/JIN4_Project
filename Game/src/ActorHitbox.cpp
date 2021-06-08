@@ -8,6 +8,7 @@ ActorHitbox::ActorHitbox(Hitbox const* hitbox, sf::Vector2f pos, bool inv, float
 	else rect = sf::FloatRect(pos.x + width - rect.left - rect.width, pos.y + rect.top, rect.width, rect.height);
 }
 
+// returns whether thiss hitbox intersects the other one
 bool ActorHitbox::intersect(ActorHitbox const* other) const
 {
 	bool canIntersect = other->type != type &&
@@ -19,6 +20,7 @@ bool ActorHitbox::intersect(ActorHitbox const* other) const
 	return canIntersect && rect.intersects(other->rect);
 }
 
+// returns whether this hitbox collides with the platform's rectangle
 float ActorHitbox::collides(sf::FloatRect const& _rect) const
 {
 	if (!rect.intersects(_rect)) return 0;											// if doesn't collide, do not move actor

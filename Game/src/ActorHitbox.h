@@ -1,6 +1,7 @@
 #pragma once
 #include "Hitbox.h"
 
+// an instanciated hitbox, which exists in the game world
 class ActorHitbox : public Hitbox
 {
 public:
