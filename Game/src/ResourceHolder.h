@@ -63,7 +63,7 @@ Resource const& ResourceHolder<Identifier, Resource>::get(Identifier id) const
 {
 	auto found = resourceMap.find(id);
 	if (found == resourceMap.end())
-		throw std::runtime_error("ResourceHolder::get - Failed");
+		throw std::runtime_error("ResourceHolder::get - Failed to get id " + std::to_string((int)id));
 
 	return *found->second.get();
 }

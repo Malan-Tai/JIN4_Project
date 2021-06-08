@@ -4,6 +4,8 @@
 #include "ResourceHolder.h"
 #include "ActorHitbox.h"
 
+#define TESTS 1
+
 class Animation
 {
 public:
@@ -14,12 +16,14 @@ public:
 	void setSprite(sf::Sprite& sprite, int frame, bool inv = false) const;
 	std::vector<Hitbox const*> getHitboxes(int frame) const;
 
-	//void addHitboxes(int frame, std::vector<Hitbox>& _hitboxes, std::vector<Hitbox>& _hurtboxes) const;
-
 	int nbFrames;
 	float timePerFrame = 500;
 	bool looping = true;
 	bool reverseLoop = false; // loop from 0 to n then n to 0 etc
+
+#if TESTS
+	int hitboxesLength() const;
+#endif
 
 private:
 	sf::Texture spritesheet;

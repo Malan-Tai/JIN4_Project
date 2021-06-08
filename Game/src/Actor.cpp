@@ -1,4 +1,5 @@
 #include "Actor.h"
+#include "Actor.h"
 #include <iostream>
 #include "ActorPipe.h"
 
@@ -114,6 +115,23 @@ void Actor::hits(Actor* other)
 		other->getHit(strength);
 	}
 }
+
+#if TESTS
+M const& Actor::getMachine() const
+{
+	return machine;
+}
+
+sf::Vector2f Actor::getVelocity() const
+{
+	return velocity;
+}
+
+Triggers Actor::getBuffer() const
+{
+	return bufferedTrigger;
+}
+#endif
 
 void Actor::execute(Triggers trigger)
 {

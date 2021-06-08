@@ -78,6 +78,8 @@ private:
 };
 // ------------------------------------
 
+using M = FSM::Fsm<States, States::Ground, Triggers>;
+
 class Actor : public Prototype
 {
 public:
@@ -113,6 +115,12 @@ public:
 	void chooseTarget(std::vector<Actor const*>& actors);
 	virtual void takeDecision();
 	hitboxes::Layers getLayer() const;
+
+#if TESTS
+	M const& getMachine() const;
+	sf::Vector2f getVelocity() const;
+	Triggers getBuffer() const;
+#endif
 
 protected:
 	void execute(Triggers trigger); // use this if you want the trigger to be buffered in case it is not triggered
@@ -151,5 +159,3 @@ protected:
 	sf::Time grabTime = sf::Time::Zero;
 	Actor* grabbed = nullptr;
 };
-
-using M = FSM::Fsm<States, States::Ground, Triggers>;

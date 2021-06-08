@@ -85,12 +85,9 @@ std::vector<Hitbox const*> Animation::getHitboxes(int frame) const
 	return res;
 }
 
-//void Animation::addHitboxes(int frame, std::vector<Hitbox>& _hitboxes, std::vector<Hitbox>& _hurtboxes) const
-//{
-//	for (auto const& box : hitboxes[frame])
-//	{
-//		auto type = box.getType();
-//		if (type == hitboxes::Type::Hit) _hitboxes.push_back(box);
-//		else if (type == hitboxes::Type::Hurt) _hurtboxes.push_back(box);
-//	}
-//}
+#if TESTS
+int Animation::hitboxesLength() const
+{
+	return hitboxes.size();
+}
+#endif
