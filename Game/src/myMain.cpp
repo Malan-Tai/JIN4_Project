@@ -74,6 +74,10 @@ int myMain()
         nullptr, &rrcmd,  &rccmd, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
     };
     float prevZ = 0;
+    /*float prevX = 0;
+    float prevY = 0;
+    float prevU = 0;
+    float prevV = 0;*/
 
     // game loop
     while (window.isOpen())
@@ -133,6 +137,42 @@ int myMain()
                 if (cmd != nullptr) cmd->execute(controlled);
             }
             prevZ = z;
+
+            //float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X); // left joystick
+            //if (prevX < 50 && x > 50)
+            //{
+            //}
+            //if (prevX > -50 && x < -50)
+            //{
+            //}
+            //prevX = x;
+
+            //float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Y); // left joystick
+            //if (prevY < 50 && y > 50)
+            //{
+            //}
+            //if (prevY > -50 && y < -50)
+            //{
+            //}
+            //prevY = y;
+
+            //float u = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::U); // right joystick
+            //if (prevU < 50 && u > 50)
+            //{
+            //}
+            //if (prevU > -50 && u < -50)
+            //{
+            //}
+            //prevU = u;
+
+            //float v = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::V); // right joystick
+            //if (prevV < 50 && v > 50)
+            //{
+            //}
+            //if (prevV > -50 && v < -50)
+            //{
+            //}
+            //prevV = v;
         }
 
         // add created actors
