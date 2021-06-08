@@ -13,7 +13,7 @@ void ArtificialIntelligence::chooseTarget(std::vector<Actor const*>& actors, sf:
 
 	for (auto a : actors)
 	{
-		if (a->getLayer() == layer) continue;
+		if (a->getLayer() == layer || !a->seen()) continue;
 
 		float d = a->distanceTo(coords);
 		if (d < minDist)
