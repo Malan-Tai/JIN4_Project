@@ -6,6 +6,7 @@
 #include "Command.h"
 #include "ActorPipe.h"
 #include "EnemyActor.h"
+#include "Lens.h"
 
 int myMain()
 {
@@ -31,6 +32,7 @@ int myMain()
     animHolder.load(animation::ID::fireball, "resources/fireball");
 
     ActorPipe::instance().init(animHolder);
+    Lens::instance().init(1000, 1000);
 
     Level level{};
 
@@ -72,11 +74,12 @@ int myMain()
     {
         nullptr, &rrcmd,  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
     };
+
     float prevZ = 0;
-    /*float prevX = 0;
+    //float prevX = 0;
     float prevY = 0;
-    float prevU = 0;
-    float prevV = 0;*/
+    //float prevU = 0;
+    float prevV = 0;
 
     // game loop
     while (window.isOpen())
@@ -146,14 +149,9 @@ int myMain()
             //}
             //prevX = x;
 
-            //float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Y); // left joystick
-            //if (prevY < 50 && y > 50)
-            //{
-            //}
-            //if (prevY > -50 && y < -50)
-            //{
-            //}
-            //prevY = y;
+            float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Y); // left joystick
+            if (prevY < 50 && y > 50 || prevY > -50 && y < -50) Lens::instance().switchCurrentLens(1, 0);
+            prevY = y;
 
             //float u = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::U); // right joystick
             //if (prevU < 50 && u > 50)
@@ -164,14 +162,9 @@ int myMain()
             //}
             //prevU = u;
 
-            //float v = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::V); // right joystick
-            //if (prevV < 50 && v > 50)
-            //{
-            //}
-            //if (prevV > -50 && v < -50)
-            //{
-            //}
-            //prevV = v;
+            float v = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::V); // right joystick
+            if (prevV < 50 && v > 50 || prevV > -50 && v < -50) Lens::instance().switchCurrentLens(0, 1);
+            prevV = v;
         }
 
         // add created actors
@@ -237,8 +230,11 @@ int myMain()
         for (int i = 0; i < actors.size(); i++)
         {
             auto actor = actors[i].get();
-            actor->draw(window);
+            if (actor != controlled) actor->draw(window);
         }
+
+        controlled->draw(window);
+        Lens::instance().draw(window);
 
         window.display();
     }
