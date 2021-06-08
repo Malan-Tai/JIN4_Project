@@ -55,6 +55,7 @@ void ActorPipe::clonePlayer(ControllableActor* player, sf::Vector2f coords)
 void ActorPipe::switchControlled(ControllableActor* player)
 {
 	newControlled = player->getNextControllable();
+	if (newControlled == player) newControlled = nullptr;
 }
 
 // returns the new controlled actor, or nullptr

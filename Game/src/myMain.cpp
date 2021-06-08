@@ -55,8 +55,7 @@ int myMain()
     GrabCmd grabcmd{};
     SwitchWeaponRangeCmd rangecmd{};
     SwitchWeaponSizeCmd sizecmd{};
-    PressCloneCmd pccmd{};
-    ReleaseCloneCmd rccmd{};
+    CloneCmd clonecmd{};
 
     // keyboard
     std::unordered_map<sf::Keyboard::Key, Command*> keyboardCmds{};
@@ -67,11 +66,11 @@ int myMain()
     // controller : A, B, X, Y, LB, RB, Select, Start, LJ, RJ + artificial LT, RT
     std::vector<Command*> controllerPressCmds
     {
-        &jcmd, &prcmd,  &pccmd, &sizecmd, &rangecmd, &lacmd, nullptr, nullptr, nullptr, nullptr, &grabcmd, &hacmd
+        &jcmd, &prcmd, &clonecmd, &sizecmd, &rangecmd, &lacmd, nullptr, nullptr, nullptr, nullptr, &grabcmd, &hacmd
     };
     std::vector<Command*> controllerReleaseCmds
     {
-        nullptr, &rrcmd,  &rccmd, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
+        nullptr, &rrcmd,  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
     };
     float prevZ = 0;
     /*float prevX = 0;

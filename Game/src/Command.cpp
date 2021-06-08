@@ -37,16 +37,10 @@ void SwitchWeaponRangeCmd::execute(Actor* actor)
 	if (cast != nullptr) cast->switchWeaponRange();
 }
 
-void PressCloneCmd::execute(Actor* actor)
+void CloneCmd::execute(Actor* actor)
 {
 	auto cast = (ControllableActor*)actor;
 	if (cast != nullptr) cast->pressClone();
-}
-
-void ReleaseCloneCmd::execute(Actor* actor)
-{
-	auto cast = (ControllableActor*)actor;
-	if (cast != nullptr) cast->releaseClone();
 }
 
 void HeavyAttackCmd::execute(Actor* actor)

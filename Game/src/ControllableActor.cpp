@@ -82,15 +82,8 @@ animation::ID ControllableActor::update(sf::Time const& elapsed, Level const& le
 {
 	// button held
 	if (holdingRoll) holdRoll += elapsed;
-	if (holdingClone) holdClone += elapsed;
 
 	if (holdingRoll && holdRoll.asMilliseconds() > rollTime) machine.execute(Triggers::HoldSprint);
-	if (holdClone.asMilliseconds() > cloneTime)
-	{
-		holdClone = sf::Time::Zero;
-		holdingClone = false;
-		if (machine.state() == States::Ground) ActorPipe::instance().clonePlayer(this, coords);
-	}
 
 	// retrieve the animation that ended in the mother class update method
 	// and changes the animation to fall if said anim was jumping
@@ -141,20 +134,14 @@ void ControllableActor::switchWeaponRange()
 
 void ControllableActor::pressClone()
 {
-	if (machine.state() != States::Ground) return;
-	holdClone = sf::Time::Zero;
-	holdingClone = true;
-}
-
-void ControllableActor::releaseClone()
-{
-	if (holdingClone && holdClone.asMilliseconds() < switchCloneTime)
+	if (machine.state() == States::Grabbing && grabbed != nullptr)
+	{
+		ActorPipe::instance().clonePlayer(this, coords);
+	}
+	else
 	{
 		ActorPipe::instance().switchControlled(this);
 	}
-
-	holdingClone = false;
-	holdClone = sf::Time::Zero;
 }
 
 void ControllableActor::setControlled(bool c)
