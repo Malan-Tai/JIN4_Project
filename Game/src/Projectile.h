@@ -8,7 +8,7 @@
 class Projectile : public Actor
 {
 public:
-	explicit Projectile(AnimHolder const& holder, animation::ID moveAnim, float speed, float maxDistance = 300, bool piercing = false);
+	explicit Projectile(ActorPipe* pipe, AnimHolder const& holder, animation::ID moveAnim, float speed, float maxDistance = 300, bool piercing = false);
 	std::unique_ptr<Actor> clone() const override;
 
 	animation::ID update(sf::Time const& elapsed, Level const& level) override;

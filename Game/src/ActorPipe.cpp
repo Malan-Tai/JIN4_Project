@@ -2,18 +2,9 @@
 #include "Projectile.h"
 #include <iostream>
 
-// singleton instance
-ActorPipe& ActorPipe::instance()
+ActorPipe::ActorPipe(AnimHolder const& holder)
 {
-	static auto instance = new ActorPipe();
-	return *instance;
-}
-
-// initializes the singleton instance's prototypes map
-void ActorPipe::init(AnimHolder const& holder)
-{
-	prototypes.emplace(PrototypesID::PlayerProjectile, std::make_unique<Projectile>(holder, animation::ID::fireball, 600.f));
-
+	prototypes.emplace(PrototypesID::PlayerProjectile, std::make_unique<Projectile>(this, holder, animation::ID::fireball, 600.f));
 }
 
 // add an actor into the pipes

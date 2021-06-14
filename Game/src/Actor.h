@@ -4,6 +4,8 @@
 #include "fsm.h"
 #include "Lens.h"
 
+class ActorPipe;
+
 // states allies or enemies can be in
 enum class States
 {
@@ -91,9 +93,9 @@ using M = FSM::Fsm<States, States::Ground, Triggers>;
 class Actor : public Prototype
 {
 public:
-	explicit Actor(AnimHolder const& holder);
-	explicit Actor(AnimHolder const& holder, animation::ID id, animation::ID walk);
-	explicit Actor(AnimHolder const& holder, animation::ID id, animation::ID walk, float speed);
+	explicit Actor(ActorPipe* pipe, AnimHolder const& holder);
+	explicit Actor(ActorPipe* pipe, AnimHolder const& holder, animation::ID id, animation::ID walk);
+	explicit Actor(ActorPipe* pipe, AnimHolder const& holder, animation::ID id, animation::ID walk, float speed);
 	std::unique_ptr<Actor> clone() const override;
 
 	virtual animation::ID update(sf::Time const& elapsed, Level const& level);
@@ -170,4 +172,6 @@ protected:
 	Actor* grabbed = nullptr;
 
 	LensColors lensColor = LensColors::None;
+
+	ActorPipe* pipe = nullptr;
 };

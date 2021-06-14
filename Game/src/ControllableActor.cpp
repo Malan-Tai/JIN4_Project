@@ -2,7 +2,7 @@
 #include "ActorPipe.h"
 #include <iostream>
 
-ControllableActor::ControllableActor(AnimHolder const& holder, bool init_lens) : Actor(holder), prev(this), next(this)
+ControllableActor::ControllableActor(ActorPipe* pipe, AnimHolder const& holder, bool init_lens) : Actor(pipe, holder), prev(this), next(this)
 {
 	std::vector<M::Trans> transitions
 	{
@@ -47,7 +47,7 @@ ControllableActor::ControllableActor(AnimHolder const& holder, bool init_lens) :
 		// hits
 		{ States::Ground, States::GotHit, Triggers::GetHit, nullptr, [this] { velocity = sf::Vector2f{ 0, 0 }; handler.changeAnim(animation::ID::MC_hurt); }},
 		{ States::GotHit, States::Ground, Triggers::Recover, [this] { return hp > 0; }, [this] { handler.changeAnim(idleAnim); }},
-		{ States::GotHit, States::ToBeRemoved, Triggers::Recover, [this] { return hp <= 0 && next != this; }, [this] { handler.changeAnim(idleAnim); ActorPipe::instance().switchControlled(this); std::cout << "dead, switch clone\n"; }},
+		{ States::GotHit, States::ToBeRemoved, Triggers::Recover, [this] { return hp <= 0 && next != this; }, [this] { handler.changeAnim(idleAnim); this->pipe->switchControlled(this); std::cout << "dead, switch clone\n"; }},
 		{ States::GotHit, States::Ground, Triggers::Recover, [this] { return hp <= 0 && next == this; }, [this] { handler.changeAnim(idleAnim); std::cout << "dead, game over, not implemented yet\n"; }},
 
 		// grab
@@ -75,14 +75,14 @@ ControllableActor::ControllableActor(AnimHolder const& holder, bool init_lens) :
 	if (init_lens) lens = std::make_shared<Lens>(1000, 1000);
 }
 
-ControllableActor::ControllableActor(AnimHolder const& holder, std::shared_ptr<Lens> lens) : ControllableActor(holder, false)
+ControllableActor::ControllableActor(ActorPipe* pipe, AnimHolder const& holder, std::shared_ptr<Lens> lens) : ControllableActor(pipe, holder, false)
 {
 	this->lens = lens;
 }
 
 std::unique_ptr<Actor> ControllableActor::clone() const
 {
-	return std::make_unique<ControllableActor>(handler.getHolder());
+	return std::make_unique<ControllableActor>(pipe, handler.getHolder());
 }
 
 animation::ID ControllableActor::update(sf::Time const& elapsed, Level const& level)
@@ -146,11 +146,11 @@ void ControllableActor::pressClone()
 {
 	if (machine.state() == States::Grabbing && grabbed != nullptr)
 	{
-		ActorPipe::instance().clonePlayer(this, coords);
+		pipe->clonePlayer(this, coords);
 	}
 	else
 	{
-		ActorPipe::instance().switchControlled(this);
+		pipe->switchControlled(this);
 	}
 }
 
@@ -221,5 +221,5 @@ animation::ID ControllableActor::getAttackAnim(bool heavy) const
 void ControllableActor::shoot(bool heavy) const
 {
 	float xDir = handler.getXDir();
-	ActorPipe::instance().writeActor(PrototypesID::PlayerProjectile, coords, xDir * sf::Vector2f{ 1, 0 });
+	pipe->writeActor(PrototypesID::PlayerProjectile, coords, xDir * sf::Vector2f{ 1, 0 });
 }

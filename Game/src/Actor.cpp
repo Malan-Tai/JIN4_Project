@@ -1,17 +1,20 @@
 #include "Actor.h"
 #include <iostream>
-#include "ActorPipe.h"
 #include "Lens.h"
+#include "ActorPipe.h"
 
-Actor::Actor(AnimHolder const& holder) : handler(holder, animation::ID::MC_idle), idleAnim(animation::ID::MC_idle), walkAnim(animation::ID::MC_walk), AI(ArtificialIntelligence{ hitboxes::Layers::Enemy })
+Actor::Actor(ActorPipe* pipe, AnimHolder const& holder) : handler(holder, animation::ID::MC_idle), idleAnim(animation::ID::MC_idle), walkAnim(animation::ID::MC_walk),
+														  AI(ArtificialIntelligence{ hitboxes::Layers::Enemy }), pipe(pipe)
 {
 }
 
-Actor::Actor(AnimHolder const& holder, animation::ID id, animation::ID walk) : handler(holder, id), idleAnim(id), walkAnim(walk), AI(ArtificialIntelligence{ hitboxes::Layers::Enemy })
+Actor::Actor(ActorPipe* pipe, AnimHolder const& holder, animation::ID id, animation::ID walk) : handler(holder, id), idleAnim(id), walkAnim(walk),
+																								AI(ArtificialIntelligence{ hitboxes::Layers::Enemy }), pipe(pipe)
 {
 }
 
-Actor::Actor(AnimHolder const& holder, animation::ID id, animation::ID walk, float speed) : handler(holder, id), idleAnim(id), walkAnim(walk), speed(speed), AI(ArtificialIntelligence{ hitboxes::Layers::Enemy })
+Actor::Actor(ActorPipe* pipe, AnimHolder const& holder, animation::ID id, animation::ID walk, float speed) : handler(holder, id), idleAnim(id), walkAnim(walk), speed(speed),
+																											 AI(ArtificialIntelligence{ hitboxes::Layers::Enemy }), pipe(pipe)
 {
 }
 
@@ -322,5 +325,5 @@ void Actor::takeDecision()
 
 std::unique_ptr<Actor> Actor::clone() const
 {
-	return std::make_unique<Actor>(handler.getHolder(), idleAnim, walkAnim, speed);
+	return std::make_unique<Actor>(pipe, handler.getHolder(), idleAnim, walkAnim, speed);
 }

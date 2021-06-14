@@ -1,7 +1,7 @@
 #include "Projectile.h"
 #include <iostream>
 
-Projectile::Projectile(AnimHolder const& holder, animation::ID moveAnim, float speed, float maxDistance, bool piercing) : Actor(holder, moveAnim, moveAnim, speed), maxDist(maxDistance), piercing(piercing)
+Projectile::Projectile(ActorPipe* pipe, AnimHolder const& holder, animation::ID moveAnim, float speed, float maxDistance, bool piercing) : Actor(pipe, holder, moveAnim, moveAnim, speed), maxDist(maxDistance), piercing(piercing)
 {
 	std::vector<M::Trans> transitions
 	{
@@ -20,7 +20,7 @@ Projectile::Projectile(AnimHolder const& holder, animation::ID moveAnim, float s
 
 std::unique_ptr<Actor> Projectile::clone() const
 {
-	return std::make_unique<Projectile>(handler.getHolder(), walkAnim, speed, maxDist, piercing);
+	return std::make_unique<Projectile>(pipe, handler.getHolder(), walkAnim, speed, maxDist, piercing);
 }
 
 animation::ID Projectile::update(sf::Time const& elapsed, Level const& level)

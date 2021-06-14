@@ -5,6 +5,6 @@
 class EnemyActor : public Actor
 {
 public:
-	explicit EnemyActor(AnimHolder const& holder, animation::ID id, animation::ID walk, animation::ID hurt, float speed);
+	explicit EnemyActor(ActorPipe* pipe, AnimHolder const& holder, animation::ID id, animation::ID walk, animation::ID hurt, float speed);
 
 };

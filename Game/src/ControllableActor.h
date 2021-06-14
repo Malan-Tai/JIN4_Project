@@ -6,8 +6,8 @@
 class ControllableActor : public Actor
 {
 public:
-	explicit ControllableActor(AnimHolder const& holder, bool init_lens = true);
-	explicit ControllableActor(AnimHolder const& holder, std::shared_ptr<Lens> lens);
+	explicit ControllableActor(ActorPipe* pipe, AnimHolder const& holder, bool init_lens = true);
+	explicit ControllableActor(ActorPipe* pipe, AnimHolder const& holder, std::shared_ptr<Lens> lens);
 	std::unique_ptr<Actor> clone() const override;
 
 	animation::ID update(sf::Time const& elapsed, Level const& level) override;

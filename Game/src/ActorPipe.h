@@ -16,9 +16,7 @@ enum class PrototypesID
 class ActorPipe
 {
 public:
-	static ActorPipe& instance();
-
-	void init(AnimHolder const& holder);
+	explicit ActorPipe(AnimHolder const& holder);
 
 	void writeActor(PrototypesID id, sf::Vector2f coords = sf::Vector2f{ 0, 0 }, sf::Vector2f velocity = sf::Vector2f{ 0, 0 });
 	std::unique_ptr<Actor> readActor();
@@ -28,8 +26,6 @@ public:
 	ControllableActor* getNewControlled();
 
 private:
-	explicit ActorPipe() = default;
-
 	sf::Vector2f normalize(sf::Vector2f v) const;
 
 	std::unordered_map<PrototypesID, std::unique_ptr<Actor>> prototypes;

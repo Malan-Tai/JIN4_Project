@@ -30,16 +30,16 @@ int myMain()
     animHolder.load(animation::ID::monster_hurt, "resources/monster_hurt");
     animHolder.load(animation::ID::monster_walk, "resources/monster_walk");
     animHolder.load(animation::ID::fireball, "resources/fireball");
-
-    ActorPipe::instance().init(animHolder);
+    
+    auto pipe = std::make_unique<ActorPipe>(animHolder);
 
     Level level{};
 
     auto actors = std::vector<std::unique_ptr<Actor>>{};
-    actors.push_back(std::make_unique<ControllableActor>(animHolder));
+    actors.push_back(std::make_unique<ControllableActor>(pipe.get(), animHolder));
     auto controlled = (ControllableActor*)actors[0].get();
 
-    actors.push_back(std::make_unique<EnemyActor>(animHolder, animation::ID::monster_idle, animation::ID::monster_walk, animation::ID::monster_hurt, 100));
+    actors.push_back(std::make_unique<EnemyActor>(pipe.get(), animHolder, animation::ID::monster_idle, animation::ID::monster_walk, animation::ID::monster_hurt, 100));
 
     auto actorToBeRemoved = [](const std::unique_ptr<Actor>& a) { return a->toRemove(); };
 
@@ -145,14 +145,14 @@ int myMain()
         }
 
         // add created actors
-        std::unique_ptr<Actor> added = ActorPipe::instance().readActor();
+        std::unique_ptr<Actor> added = pipe->readActor();
         while (added != nullptr)
         {
             actors.push_back(std::move(added));
-            added = ActorPipe::instance().readActor();
+            added = pipe->readActor();
         }
 
-        auto newControlled = ActorPipe::instance().getNewControlled();
+        auto newControlled = pipe->getNewControlled();
         if (newControlled != nullptr)
         {
             controlled->setControlled(false);
