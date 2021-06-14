@@ -1,9 +1,7 @@
 #include "ActorHitbox.h"
 
-ActorHitbox::ActorHitbox(Hitbox const* hitbox, sf::Vector2f pos, bool inv, float width) : Hitbox(hitbox->getRect(), hitbox->getLayer(), hitbox->getType()), frameWidth(width)
+ActorHitbox::ActorHitbox(Hitbox const* hitbox, sf::Vector2f pos, bool inv, float width) : original(hitbox), frameWidth(width)
 {
-	original = hitbox;
-
 	if (!inv) rect = sf::FloatRect(pos.x + rect.left, pos.y + rect.top, rect.width, rect.height);
 	else rect = sf::FloatRect(pos.x + width - rect.left - rect.width, pos.y + rect.top, rect.width, rect.height);
 }
@@ -11,11 +9,11 @@ ActorHitbox::ActorHitbox(Hitbox const* hitbox, sf::Vector2f pos, bool inv, float
 // returns whether thiss hitbox intersects the other one
 bool ActorHitbox::intersect(ActorHitbox const* other) const
 {
-	bool canIntersect = other->type != type &&
-		other->type != hitboxes::Type::None && type != hitboxes::Type::None &&
-		other->layer != hitboxes::Layers::None && layer != hitboxes::Layers::None &&
-		(layer == hitboxes::Layers::All || other->layer == hitboxes::Layers::All ||
-			layer != other->layer);
+	bool canIntersect = other->getType() != original->getType() &&
+		other->getType() != hitboxes::Type::None && original->getType() != hitboxes::Type::None &&
+		other->getLayer() != hitboxes::Layers::None && original->getLayer() != hitboxes::Layers::None &&
+		(original->getLayer() == hitboxes::Layers::All || other->getLayer() == hitboxes::Layers::All ||
+			original->getLayer() != other->getLayer());
 
 	return canIntersect && rect.intersects(other->rect);
 }
@@ -34,4 +32,14 @@ void ActorHitbox::setPosition(sf::Vector2f pos, bool inv)
 	auto ogRect = original->getRect();
 	if (!inv) rect = sf::FloatRect(pos.x + ogRect.left, pos.y + ogRect.top, ogRect.width, ogRect.height);
 	else rect = sf::FloatRect(pos.x + frameWidth - ogRect.left - ogRect.width, pos.y + ogRect.top, ogRect.width, ogRect.height);
+}
+
+hitboxes::Type ActorHitbox::getType() const
+{
+	return original->getType();
+}
+
+hitboxes::Layers ActorHitbox::getLayer() const
+{
+	return original->getLayer();
 }

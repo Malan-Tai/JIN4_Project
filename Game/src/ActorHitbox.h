@@ -2,7 +2,7 @@
 #include "Hitbox.h"
 
 // an instanciated hitbox, which exists in the game world
-class ActorHitbox : public Hitbox
+class ActorHitbox
 {
 public:
 	explicit ActorHitbox(Hitbox const* hitbox, sf::Vector2f pos, bool inv, float width);
@@ -12,7 +12,12 @@ public:
 
 	void setPosition(sf::Vector2f pos, bool inv);
 
+	hitboxes::Type getType() const;
+	hitboxes::Layers getLayer() const;
+
 private:
 	Hitbox const* original;
 	float frameWidth;
+
+	sf::FloatRect rect;
 };
