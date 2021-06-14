@@ -12,8 +12,7 @@ enum class LensColors
 class Lens
 {
 public:
-	static Lens& instance();
-	void init(int w, int h);
+	explicit Lens(int w, int h);
 
 	void draw(sf::RenderWindow& window) const;
 

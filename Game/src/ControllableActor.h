@@ -6,25 +6,32 @@
 class ControllableActor : public Actor
 {
 public:
-	explicit ControllableActor(AnimHolder const& holder);
+	explicit ControllableActor(AnimHolder const& holder, bool init_lens = true);
+	explicit ControllableActor(AnimHolder const& holder, std::shared_ptr<Lens> lens);
 	std::unique_ptr<Actor> clone() const override;
 
 	animation::ID update(sf::Time const& elapsed, Level const& level) override;
 
 	void pressRoll();
 	void releaseRoll();
-	void directionalInput(int dx, int dy);
+	void horizontalInput(float dx);
+	void verticalInput(float dy);
 	void switchWeaponSize();
 	void switchWeaponRange();
 	void pressClone();
 	void setControlled(bool c);
+	void switchCurrentLens(float left, float right);
 
 	void updateControllableChain(ControllableActor* newActor);
 	ControllableActor* getNextControllable();
 
 	void takeDecision() override;
 
-	bool seen() const override;
+	bool seen(LensColors leftLens, LensColors rightLens) const override;
+	LensColors getLeftLens() const;
+	LensColors getRightLens() const;
+
+	void draw(sf::RenderWindow& window, LensColors leftLens, LensColors rightLens) const override;
 
 private:
 	animation::ID getAttackAnim(bool heavy) const;
@@ -47,4 +54,6 @@ private:
 	ControllableActor* next = nullptr;
 
 	bool controlled = true;
+
+	std::shared_ptr<Lens> lens = nullptr;
 };

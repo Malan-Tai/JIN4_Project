@@ -52,3 +52,45 @@ void GrabCmd::execute(Actor* actor)
 {
 	actor->grab();
 }
+
+void LeftLensCmd::execute(Actor* actor, float value)
+{
+	if (prevValue < 50 && value > 50 || prevValue > -50 && value < -50)
+	{
+		auto cast = (ControllableActor*)actor;
+		if (cast != nullptr) cast->switchCurrentLens(1, 0);
+	}
+	prevValue = value;
+}
+
+void RightLensCmd::execute(Actor* actor, float value)
+{
+	if (prevValue < 50 && value > 50 || prevValue > -50 && value < -50)
+	{
+		auto cast = (ControllableActor*)actor;
+		if (cast != nullptr) cast->switchCurrentLens(0, 1);
+	}
+	prevValue = value;
+}
+
+void HorizontalMoveCmd::execute(Actor* actor, float value)
+{
+	if (value >= 50) value = 1;
+	else if (value <= -50) value = -1;
+	else value = 0;
+
+	auto cast = (ControllableActor*)actor;
+	if (cast != nullptr) cast->horizontalInput(value);
+	prevValue = value;
+}
+
+void VerticalMoveCmd::execute(Actor* actor, float value)
+{
+	if (value >= 50) value = 1;
+	else if (value <= -50) value = -1;
+	else value = 0;
+
+	auto cast = (ControllableActor*)actor;
+	if (cast != nullptr) cast->verticalInput(value);
+	prevValue = value;
+}

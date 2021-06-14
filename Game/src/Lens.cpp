@@ -1,12 +1,6 @@
 #include "Lens.h"
 
-Lens& Lens::instance()
-{
-	static auto instance = new Lens();
-	return *instance;
-}
-
-void Lens::init(int w, int h)
+Lens::Lens(int w, int h)
 {
 	fillScreen.setSize(sf::Vector2f(w, h));
 	fillScreen.setFillColor(sf::Color::Transparent);

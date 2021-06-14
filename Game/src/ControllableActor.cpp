@@ -2,7 +2,7 @@
 #include "ActorPipe.h"
 #include <iostream>
 
-ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), prev(this), next(this)
+ControllableActor::ControllableActor(AnimHolder const& holder, bool init_lens) : Actor(holder), prev(this), next(this)
 {
 	std::vector<M::Trans> transitions
 	{
@@ -71,6 +71,13 @@ ControllableActor::ControllableActor(AnimHolder const& holder) : Actor(holder), 
 
 	coords = sf::Vector2f(0, 0);
 	AI = ArtificialIntelligence{ hitboxes::Layers::Ally };
+
+	if (init_lens) lens = std::make_shared<Lens>(1000, 1000);
+}
+
+ControllableActor::ControllableActor(AnimHolder const& holder, std::shared_ptr<Lens> lens) : ControllableActor(holder, false)
+{
+	this->lens = lens;
 }
 
 std::unique_ptr<Actor> ControllableActor::clone() const
@@ -113,11 +120,14 @@ void ControllableActor::releaseRoll()
 	execute(Triggers::PressRoll);
 }
 
-void ControllableActor::directionalInput(int dx, int dy)
+void ControllableActor::horizontalInput(float dx)
 {
-	if (machine.state() == States::Grabbing) doThrow(dx, dy);
+	if (machine.state() == States::Grabbing) doThrow(dx, 0);
 	else setHorizontalVelocity(dx);
+}
 
+void ControllableActor::verticalInput(float dy)
+{
 	if (dy < 0) machine.execute(Triggers::PressDown);
 	else machine.execute(Triggers::ReleaseDown);
 }
@@ -149,6 +159,11 @@ void ControllableActor::setControlled(bool c)
 	controlled = c;
 }
 
+void ControllableActor::switchCurrentLens(float left, float right)
+{
+	lens->switchCurrentLens(left, right);
+}
+
 void ControllableActor::updateControllableChain(ControllableActor* newActor)
 {
 	newActor->next = next;
@@ -168,9 +183,25 @@ void ControllableActor::takeDecision()
 	Actor::takeDecision();
 }
 
-bool ControllableActor::seen() const
+bool ControllableActor::seen(LensColors leftLens, LensColors rightLens) const
 {
 	return true;
+}
+
+LensColors ControllableActor::getLeftLens() const
+{
+	return lens->getLeftLens();
+}
+
+LensColors ControllableActor::getRightLens() const
+{
+	return lens->getRightLens();
+}
+
+void ControllableActor::draw(sf::RenderWindow& window, LensColors leftLens, LensColors rightLens) const
+{
+	Actor::draw(window, leftLens, rightLens);
+	lens->draw(window);
 }
 
 // returns the attack anim ID depending on the type of attack and weapon

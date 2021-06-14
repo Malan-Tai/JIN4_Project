@@ -6,14 +6,14 @@ ArtificialIntelligence::ArtificialIntelligence(hitboxes::Layers l) : layer(l)
 }
 
 // chooses the closest actor with a different layer than the AI's
-void ArtificialIntelligence::chooseTarget(std::vector<Actor const*>& actors, sf::Vector2f coords)
+void ArtificialIntelligence::chooseTarget(std::vector<Actor const*>& actors, sf::Vector2f coords, LensColors leftLens, LensColors rightLens)
 {
 	float minDist = 1000000000;
 	target = nullptr;
 
 	for (auto a : actors)
 	{
-		if (a->getLayer() == layer || !a->seen()) continue;
+		if (a->getLayer() == layer || !a->seen(leftLens, rightLens)) continue;
 
 		float d = a->distanceTo(coords);
 		if (d < minDist)

@@ -97,9 +97,9 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 	return animEnd;
 }
 
-void Actor::hits(Actor* other)
+void Actor::hits(Actor* other, LensColors leftLens, LensColors rightLens)
 {
-	if (other->seen() && handler.hits(other->handler))
+	if (other->seen(leftLens, rightLens) && handler.hits(other->handler))
 	{
 		if (machine.state() == States::TryGrabbing)
 		{
@@ -116,11 +116,10 @@ void Actor::hits(Actor* other)
 	}
 }
 
-bool Actor::seen() const
+bool Actor::seen(LensColors leftLens, LensColors rightLens) const
 {
-	auto const& lens = Lens::instance();
-	return (lensColor == LensColors::None && lens.getLeftLens() == lensColor && lens.getRightLens() == lensColor)
-		|| (lensColor != LensColors::None && (lens.getLeftLens() == lensColor || lens.getRightLens() == lensColor));
+	return (lensColor == LensColors::None && leftLens == lensColor && rightLens == lensColor)
+		|| (lensColor != LensColors::None && (leftLens == lensColor ||rightLens == lensColor));
 }
 
 #if TESTS
@@ -267,9 +266,9 @@ void Actor::updateMoveControl()
 	}
 }
 
-void Actor::draw(sf::RenderWindow& window) const
+void Actor::draw(sf::RenderWindow& window, LensColors leftLens, LensColors rightLens) const
 {
-	if (seen()) handler.draw(window, hp, maxHP);
+	if (seen(leftLens, rightLens)) handler.draw(window, hp, maxHP);
 }
 
 void Actor::changeAnim(animation::ID id)
@@ -309,9 +308,9 @@ void Actor::doThrow(int dx, int dy)
 	machine.execute(Triggers::Throw);
 }
 
-void Actor::chooseTarget(std::vector<Actor const*>& actors)
+void Actor::chooseTarget(std::vector<Actor const*>& actors, LensColors leftLens, LensColors rightLens)
 {
-	AI.chooseTarget(actors, coords);
+	AI.chooseTarget(actors, coords, leftLens, rightLens);
 }
 
 void Actor::takeDecision()

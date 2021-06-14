@@ -32,7 +32,6 @@ int myMain()
     animHolder.load(animation::ID::fireball, "resources/fireball");
 
     ActorPipe::instance().init(animHolder);
-    Lens::instance().init(1000, 1000);
 
     Level level{};
 
@@ -58,6 +57,10 @@ int myMain()
     SwitchWeaponRangeCmd rangecmd{};
     SwitchWeaponSizeCmd sizecmd{};
     CloneCmd clonecmd{};
+    LeftLensCmd llenscmd{};
+    RightLensCmd rlenscmd{};
+    HorizontalMoveCmd horizcmd{};
+    VerticalMoveCmd vertcmd{};
 
     // keyboard
     std::unordered_map<sf::Keyboard::Key, Command*> keyboardCmds{};
@@ -75,11 +78,16 @@ int myMain()
         nullptr, &rrcmd,  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
     };
 
+    // controller axes : Left Stick = (X, Y), Right Sitck = (U, V), Directional cross = (PovX, PovY)
+    std::vector<sf::Joystick::Axis> controllerAxes = { sf::Joystick::Axis::X, sf::Joystick::Axis::Y, sf::Joystick::Axis::U, sf::Joystick::Axis::V, sf::Joystick::Axis::PovX, sf::Joystick::Axis::PovY };
+    std::unordered_map<sf::Joystick::Axis, AxisCommand*> controllerAxesCmds{};
+
+    controllerAxesCmds.insert(std::make_pair<sf::Joystick::Axis, AxisCommand*>(sf::Joystick::Axis::PovX, &horizcmd));
+    controllerAxesCmds.insert(std::make_pair<sf::Joystick::Axis, AxisCommand*>(sf::Joystick::Axis::PovY, &vertcmd));
+    controllerAxesCmds.insert(std::make_pair<sf::Joystick::Axis, AxisCommand*>(sf::Joystick::Axis::Y, &llenscmd));
+    controllerAxesCmds.insert(std::make_pair<sf::Joystick::Axis, AxisCommand*>(sf::Joystick::Axis::V, &rlenscmd));
+
     float prevZ = 0;
-    //float prevX = 0;
-    float prevY = 0;
-    //float prevU = 0;
-    float prevV = 0;
 
     // game loop
     while (window.isOpen())
@@ -115,18 +123,13 @@ int myMain()
         // directional inputs
         if (sf::Joystick::isConnected(0))
         {
-            int dx = 0;
-            int dy = 0;
-            float controllerDx = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX);
-            float controllerDy = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY);
+            for (auto axis : controllerAxes)
+            {
+                auto found = controllerAxesCmds.find(axis);
+                if (found != controllerAxesCmds.end()) found->second->execute(controlled, sf::Joystick::getAxisPosition(0, axis));
+            }
 
-            if (controllerDx >= 50) dx = 1;
-            if (controllerDx <= -50) dx = -1;
-            if (controllerDy >= 50) dy = 1;
-            if (controllerDy <= -50) dy = -1;
-
-            controlled->directionalInput(dx, dy);
-
+            // triggers are directional input in essence but button input in game
             float z = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z); // triggers ( + for left, - for right)
             if (prevZ < 50 && z > 50) // left trigger
             {
@@ -139,32 +142,6 @@ int myMain()
                 if (cmd != nullptr) cmd->execute(controlled);
             }
             prevZ = z;
-
-            //float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X); // left joystick
-            //if (prevX < 50 && x > 50)
-            //{
-            //}
-            //if (prevX > -50 && x < -50)
-            //{
-            //}
-            //prevX = x;
-
-            float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Y); // left joystick
-            if (prevY < 50 && y > 50 || prevY > -50 && y < -50) Lens::instance().switchCurrentLens(1, 0);
-            prevY = y;
-
-            //float u = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::U); // right joystick
-            //if (prevU < 50 && u > 50)
-            //{
-            //}
-            //if (prevU > -50 && u < -50)
-            //{
-            //}
-            //prevU = u;
-
-            float v = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::V); // right joystick
-            if (prevV < 50 && v > 50 || prevV > -50 && v < -50) Lens::instance().switchCurrentLens(0, 1);
-            prevV = v;
         }
 
         // add created actors
@@ -182,6 +159,9 @@ int myMain()
             controlled = newControlled;
         }
 
+        LensColors leftLens = controlled->getLeftLens();
+        LensColors rightLens = controlled->getRightLens();
+
         // update
         auto n = actors.size();
         for (int i = 0; i < n; i++)
@@ -198,7 +178,7 @@ int myMain()
             {
                 if (i == j) continue;
                 auto other = actors[j].get();
-                actor->hits(other);
+                actor->hits(other, leftLens, rightLens);
             }
         }
 
@@ -218,7 +198,7 @@ int myMain()
 
             for (int i = 0; i < n; i++)
             {
-                actors[i]->chooseTarget(actorsPtr);
+                actors[i]->chooseTarget(actorsPtr, leftLens, rightLens);
             }
         }
 
@@ -230,11 +210,10 @@ int myMain()
         for (int i = 0; i < actors.size(); i++)
         {
             auto actor = actors[i].get();
-            if (actor != controlled) actor->draw(window);
+            if (actor != controlled) actor->draw(window, leftLens, rightLens);
         }
 
-        controlled->draw(window);
-        Lens::instance().draw(window);
+        controlled->draw(window, leftLens, rightLens);
 
         window.display();
     }

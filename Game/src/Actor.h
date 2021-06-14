@@ -73,7 +73,7 @@ public:
 	explicit ArtificialIntelligence(hitboxes::Layers l);
 	virtual ~ArtificialIntelligence() = default;
 
-	virtual void chooseTarget(std::vector<Actor const*>& actors, sf::Vector2f coords);
+	virtual void chooseTarget(std::vector<Actor const*>& actors, sf::Vector2f coords, LensColors leftLens, LensColors rightLens);
 
 	virtual AI_decision makeDecision(sf::Vector2f coords) const;
 
@@ -97,7 +97,7 @@ public:
 	std::unique_ptr<Actor> clone() const override;
 
 	virtual animation::ID update(sf::Time const& elapsed, Level const& level);
-	virtual void hits(Actor* other);
+	virtual void hits(Actor* other, LensColors leftLens, LensColors rightLens);
 
 	void jump();
 	void lightAttack();
@@ -112,17 +112,17 @@ public:
 	void setHorizontalVelocity(float dx);
 	virtual void updateMoveControl();
 
-	void draw(sf::RenderWindow& window) const;
+	virtual void draw(sf::RenderWindow& window, LensColors leftLens, LensColors rightLens) const;
 	void changeAnim(animation::ID id);
 
-	virtual bool seen() const;
+	virtual bool seen(LensColors leftLens, LensColors rightLens) const;
 
 	bool toRemove() const;
 
 	float distanceTo(sf::Vector2f point) const;
 	sf::Vector2f const& getCoords() const;
 
-	void chooseTarget(std::vector<Actor const*>& actors);
+	void chooseTarget(std::vector<Actor const*>& actors, LensColors leftLens, LensColors rightLens);
 	virtual void takeDecision();
 	hitboxes::Layers getLayer() const;
 
