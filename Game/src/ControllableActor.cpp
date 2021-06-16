@@ -128,6 +128,7 @@ void ControllableActor::horizontalInput(float dx)
 
 void ControllableActor::verticalInput(float dy)
 {
+	if (machine.state() == States::Grabbing) doThrow(0, dy);
 	if (dy < 0) machine.execute(Triggers::PressDown);
 	else machine.execute(Triggers::ReleaseDown);
 }
