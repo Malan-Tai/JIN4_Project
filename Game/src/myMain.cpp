@@ -1,15 +1,17 @@
 #include "myMain.h"
-#include <iostream>
-#include <unordered_map>
-#include "Level.h"
-#include "ControllableActor.h"
-#include "Command.h"
-#include "ActorPipe.h"
-#include "EnemyActor.h"
-#include "Lens.h"
+//#include <iostream>
+//#include <unordered_map>
+//#include "Level.h"
+//#include "ControllableActor.h"
+//#include "Command.h"
+//#include "ActorPipe.h"
+//#include "EnemyActor.h"
+//#include "Lens.h"
+#include "Application.h"
 
 int myMain()
 {
+    /*
     sf::RenderWindow window { sf::VideoMode(1000, 1000), "Hollow Lens" };
 
     sf::Clock gameClock;
@@ -216,7 +218,10 @@ int myMain()
         controlled->draw(window, leftLens, rightLens);
 
         window.display();
-    }
+    }*/
+
+    Application app;
+    app.run();
 
     return 0;
 }
