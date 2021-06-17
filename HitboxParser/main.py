@@ -77,6 +77,9 @@ def main():
                     rectangles.append(Rect(x, y, w, h, t))
 
     data = ElementTree.tostring(root, encoding='unicode', method='xml')
+    splitted = data.split('>')
+    data = '>\n'.join(splitted)
+    print(data)
     path = sys.argv[1].split(".")[-2]
     file = open(path + ".xml", "w")
     file.write(data)
