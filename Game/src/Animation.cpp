@@ -19,9 +19,6 @@ bool Animation::loadFromFile(std::string const& basename)
 	auto attr_reverseLoop = root.attribute("reverseLoop");
 	if (!attr_reverseLoop.empty()) reverseLoop = attr_reverseLoop.as_bool();
 
-	auto attr_timePerFrame = root.attribute("timePerFrame");
-	if (!attr_timePerFrame.empty()) timePerFrame = attr_timePerFrame.as_float();
-
 	auto attr_takesPoiseDmg = root.attribute("takesPoiseDmg");
 	if (!attr_takesPoiseDmg.empty()) takesPoiseDmg = attr_takesPoiseDmg.as_bool();
 
@@ -30,6 +27,10 @@ bool Animation::loadFromFile(std::string const& basename)
 
 	auto attr_poiseDmg = root.attribute("poiseDmg");
 	if (!attr_poiseDmg.empty()) poiseDamage = attr_poiseDmg.as_int();
+
+	float baseTPF = 500;
+	auto attr_timePerFrame = root.attribute("timePerFrame");
+	if (!attr_timePerFrame.empty()) baseTPF = attr_timePerFrame.as_int();
 
 	hitboxes::Layers layer = hitboxes::strToLayer(root.attribute("layer").value());
 
@@ -44,6 +45,16 @@ bool Animation::loadFromFile(std::string const& basename)
 	{
 		std::string f = "frame_" + std::to_string(i);
 		auto frame = root.child(f.c_str());
+
+		float time = baseTPF;
+		auto attr_time = frame.attribute("time");
+		if (!attr_time.empty()) time = attr_time.as_float();
+		timePerFrames.push_back(time);
+
+		float dmg = 1;
+		auto attr_dmg = frame.attribute("dmg");
+		if (!attr_dmg.empty()) dmg = attr_dmg.as_float();
+		damageMultipliers.push_back(dmg);
 
 		auto frameChildren = frame.children();
 		int n = std::distance(frameChildren.begin(), frameChildren.end());
@@ -96,6 +107,11 @@ std::vector<Hitbox const*> Animation::getHitboxes(int frame) const
 		res.push_back(hitboxes[frame][i]);
 	}
 	return res;
+}
+
+float Animation::getTimeForFrame(int frame) const
+{
+	return timePerFrames[frame];
 }
 
 #if TESTS

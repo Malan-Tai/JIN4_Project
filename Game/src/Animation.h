@@ -16,9 +16,9 @@ public:
 
 	void setSprite(sf::Sprite& sprite, int frame, bool inv = false) const;
 	std::vector<Hitbox const*> getHitboxes(int frame) const;
+	float getTimeForFrame(int frame) const;
 
 	int nbFrames;
-	float timePerFrame = 500;
 	bool looping = true;
 	bool reverseLoop = false; // loop from 0 to n then n to 0 etc
 
@@ -36,4 +36,7 @@ private:
 
 	int frameWidth;
 	int height;
+
+	std::vector<float> timePerFrames;
+	std::vector<float> damageMultipliers;
 };

@@ -30,7 +30,7 @@ animation::ID AnimHandler::update(sf::Time const& elapsed, float xDir)
 	bool inv = xDir < 0;
 	prevXDir = xDir;
 
-	if (frameTime.asMilliseconds() >= anim->timePerFrame)
+	if (frameTime.asMilliseconds() >= anim->getTimeForFrame(frame))
 	{
 		if (!reverseLoop) // cycle through frames forwards
 		{
