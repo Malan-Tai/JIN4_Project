@@ -83,6 +83,16 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 		}
 	}
 
+	spendStamina(handler.getContinuousStaminaCost() * elapsed.asSeconds());
+	if (noStamRegen.asMilliseconds() > 0)
+	{
+		noStamRegen -= elapsed;
+	}
+	if (noStamRegen.asMilliseconds() <= 0 && stamina < maxStamina)
+	{
+		stamina = std::min(stamina + staminaRegen * elapsed.asSeconds(), (float)maxStamina);
+	}
+
 	auto animEnd = handler.update(elapsed, velocity.x);
 	if (animEnd != animation::ID::None)
 	{
@@ -147,6 +157,16 @@ void Actor::execute(Triggers trigger)
 hitboxes::Layers Actor::getLayer() const
 {
 	return AI.getLayer();
+}
+
+void Actor::spendStamina(float cost)
+{
+	if (cost <= 0) return;
+
+	stamina = std::max(0.f, stamina - cost);
+	noStamRegen = sf::milliseconds(noStamRegenTime);
+
+	std::cout << "spent stamina, left = " << stamina << std::endl;
 }
 
 void Actor::jump()
@@ -273,7 +293,7 @@ void Actor::draw(sf::RenderWindow& window, LensColors leftLens, LensColors right
 
 void Actor::changeAnim(animation::ID id)
 {
-	handler.changeAnim(id);
+	spendStamina(handler.changeAnim(id));
 }
 
 bool Actor::toRemove() const

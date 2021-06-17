@@ -17,12 +17,14 @@ public:
 	float collides(Level const& level, bool isOnGround = false) const;
 
 	void setPosition(sf::Vector2f const pos);
-	void changeAnim(animation::ID id);
+	int changeAnim(animation::ID id);
 
 	void draw(sf::RenderWindow& window, int hp = 0, int maxHP = 0) const;
 
 	bool takePoiseDamage(int poiseDmg);
 	int getPoiseDamage() const;
+
+	float getContinuousStaminaCost() const;
 
 private:
 	int frame = 0;
@@ -31,8 +33,8 @@ private:
 
 	float prevXDir = 1;
 
-	int poiseHP = 0;
-	int poiseHeal = 10;
+	float poiseHP = 0;
+	float const poiseHeal = 10;
 	
 	Animation const* anim;
 	animation::ID animID;

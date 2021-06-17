@@ -13,12 +13,15 @@ bool Animation::loadFromFile(std::string const& basename)
 	if (!result) return false;
 	
 	auto root = doc.child("root");
+
+	// anim loops
 	auto attr_looping = root.attribute("looping");
 	if (!attr_looping.empty()) looping = attr_looping.as_bool();
 
 	auto attr_reverseLoop = root.attribute("reverseLoop");
 	if (!attr_reverseLoop.empty()) reverseLoop = attr_reverseLoop.as_bool();
 
+	// poise
 	auto attr_takesPoiseDmg = root.attribute("takesPoiseDmg");
 	if (!attr_takesPoiseDmg.empty()) takesPoiseDmg = attr_takesPoiseDmg.as_bool();
 
@@ -28,9 +31,17 @@ bool Animation::loadFromFile(std::string const& basename)
 	auto attr_poiseDmg = root.attribute("poiseDmg");
 	if (!attr_poiseDmg.empty()) poiseDamage = attr_poiseDmg.as_int();
 
+	// stamina
+	auto attr_continuousStam = root.attribute("continuousStamina");
+	if (!attr_continuousStam.empty()) continuousStamCost = attr_continuousStam.as_bool();
+
+	auto attr_stamina = root.attribute("stamina");
+	if (!attr_stamina.empty()) staminaCost = attr_stamina.as_int();
+
+	// base time per frame (if a specific frame's duration is not given)
 	float baseTPF = 500;
 	auto attr_timePerFrame = root.attribute("timePerFrame");
-	if (!attr_timePerFrame.empty()) baseTPF = attr_timePerFrame.as_int();
+	if (!attr_timePerFrame.empty()) baseTPF = attr_timePerFrame.as_float();
 
 	hitboxes::Layers layer = hitboxes::strToLayer(root.attribute("layer").value());
 

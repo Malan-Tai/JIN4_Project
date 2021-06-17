@@ -8,17 +8,17 @@ ControllableActor::ControllableActor(ActorPipe* pipe, AnimHolder const& holder, 
 	{
 		// from state     , to state      , trigger,    guard   , action
 		// air
-		{ States::Ground, States::Fall, Triggers::Jump, nullptr, [this] { velocity = sf::Vector2f{ 0, -300 }; handler.changeAnim(animation::ID::MC_jump); jumps++;  coords += sf::Vector2f{0, -20}; airRolls = 0; }},
+		{ States::Ground, States::Fall, Triggers::Jump, [this] { return stamina > 0; }, [this] { velocity = sf::Vector2f{ 0, -300 }; handler.changeAnim(animation::ID::MC_jump); jumps++;  coords += sf::Vector2f{0, -20}; airRolls = 0; }},
 		{ States::Ground, States::Fall, Triggers::Fall, nullptr, [this] { handler.changeAnim(animation::ID::MC_fall); jumps++; }},
-		{ States::Fall, States::Fall, Triggers::Jump, [this] {return jumps < 2; }, [this] { velocity = sf::Vector2f{ 0, -300 }; handler.changeAnim(animation::ID::MC_jump); jumps++; airRolls = 0; }},
+		{ States::Fall, States::Fall, Triggers::Jump, [this] { return jumps < 2 && stamina > 0; }, [this] { velocity = sf::Vector2f{ 0, -300 }; handler.changeAnim(animation::ID::MC_jump); jumps++; airRolls = 0; }},
 		{ States::Fall, States::Ground, Triggers::Land, nullptr, [this] { velocity = sf::Vector2f{ 0, 0 }; handler.changeAnim(animation::ID::MC_idle); jumps = 0; airRolls = 0; }},
 		{ States::Fall, States::FastFall, Triggers::PressDown, nullptr, nullptr },
 		{ States::FastFall, States::Fall, Triggers::ReleaseDown, nullptr, nullptr },
 		{ States::FastFall, States::Ground, Triggers::Land, nullptr, [this] { velocity = sf::Vector2f{ 0, 0 }; handler.changeAnim(animation::ID::MC_idle); jumps = 0; }},
 
 		// roll
-		{ States::Ground, States::Roll, Triggers::PressRoll, nullptr, [this] { changeAnim(animation::ID::MC_roll); }},
-		{ States::Fall, States::Roll, Triggers::PressRoll, [this] { return airRolls < 1; }, [this] { changeAnim(animation::ID::MC_roll); airRolls++; }},
+		{ States::Ground, States::Roll, Triggers::PressRoll, [this] { return stamina > 0; }, [this] { changeAnim(animation::ID::MC_roll); }},
+		{ States::Fall, States::Roll, Triggers::PressRoll, [this] { return airRolls < 1 && stamina > 0; }, [this] { changeAnim(animation::ID::MC_roll); airRolls++; }},
 		{ States::Roll, States::Ground, Triggers::EndRoll, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
 
 		// sprint
@@ -27,17 +27,17 @@ ControllableActor::ControllableActor(ActorPipe* pipe, AnimHolder const& holder, 
 		{ States::Sprint, States::Fall, Triggers::Fall, nullptr, [this] { handler.changeAnim(animation::ID::MC_fall); jumps++; }},
 
 		// attacks
-		{ States::Ground, States::LightAttack, Triggers::LightAttack, [this] { return previousState != States::Roll; }, [this] { changeAnim(getAttackAnim(false)); if (!meleeWeapon) shoot(false); }},
-		{ States::Ground, States::RollLightAttack, Triggers::LightAttack, [this] { return previousState == States::Roll; }, [this] { changeAnim(animation::ID::MC_roll_attack); }},
+		{ States::Ground, States::LightAttack, Triggers::LightAttack, [this] { return previousState != States::Roll && stamina > 0; }, [this] { changeAnim(getAttackAnim(false)); if (!meleeWeapon) shoot(false); }},
+		{ States::Ground, States::RollLightAttack, Triggers::LightAttack, [this] { return previousState == States::Roll && stamina > 0; }, [this] { changeAnim(animation::ID::MC_roll_attack); }},
 		{ States::LightAttack, States::Ground, Triggers::EndLightAttack, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
 		{ States::RollLightAttack, States::Ground, Triggers::EndLightAttack, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
 
-		{ States::Ground, States::HeavyAttack, Triggers::HeavyAttack, nullptr, [this] { changeAnim(getAttackAnim(true)); if (!meleeWeapon) shoot(true); }},
+		{ States::Ground, States::HeavyAttack, Triggers::HeavyAttack, [this] { return stamina > 0; }, [this] { changeAnim(getAttackAnim(true)); if (!meleeWeapon) shoot(true); }},
 		{ States::HeavyAttack, States::Ground, Triggers::EndHeavyAttack, nullptr, [this] { changeAnim(animation::ID::MC_idle); }},
 
 		// weapons (useful because of buffer)
 		{ States::Ground, States::Ground, Triggers::SwitchWeaponRange, [this] { return previousState != States::LightAttack; }, [this] { meleeWeapon = !meleeWeapon; }},
-		{ States::Ground, States::LightAttack, Triggers::SwitchWeaponRange, [this] { return previousState == States::LightAttack; }, [this] { meleeWeapon = !meleeWeapon; changeAnim(getAttackAnim(false)); if (!meleeWeapon) shoot(false); }},
+		{ States::Ground, States::LightAttack, Triggers::SwitchWeaponRange, [this] { return previousState == States::LightAttack && stamina > 0; }, [this] { meleeWeapon = !meleeWeapon; changeAnim(getAttackAnim(false)); if (!meleeWeapon) shoot(false); }},
 		{ States::Ground, States::Ground, Triggers::SwitchWeaponSize, nullptr, [this] { bigWeapon = !bigWeapon; }},
 		{ States::Fall, States::Fall, Triggers::SwitchWeaponRange, nullptr, [this] { meleeWeapon = !meleeWeapon; }},
 		{ States::Fall, States::Fall, Triggers::SwitchWeaponSize, nullptr, [this] { bigWeapon = !bigWeapon; }},

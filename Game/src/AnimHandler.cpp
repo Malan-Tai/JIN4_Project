@@ -22,7 +22,7 @@ float AnimHandler::getXDir() const
 
 animation::ID AnimHandler::update(sf::Time const& elapsed, float xDir)
 {
-	if (poiseHP < anim->poiseHP) poiseHP = std::min(anim->poiseHP, poiseHP + (int)(poiseHeal * elapsed.asSeconds()));
+	if (poiseHP < anim->poiseHP) poiseHP = std::min((float)anim->poiseHP, poiseHP + poiseHeal * elapsed.asSeconds());
 
 	frameTime += elapsed;
 	if (xDir == 0) xDir = prevXDir;		// xDir cannot be 0 anymore
@@ -143,9 +143,9 @@ void AnimHandler::setPosition(sf::Vector2f const pos)
 	}
 }
 
-void AnimHandler::changeAnim(animation::ID id)
+int AnimHandler::changeAnim(animation::ID id)
 {
-	if (id == animID) return;
+	if (id == animID) return 0;
 
 	anim = &holder.get(id);
 	animID = id;
@@ -157,6 +157,9 @@ void AnimHandler::changeAnim(animation::ID id)
 	hitEnemies.clear();
 
 	poiseHP = anim->poiseHP;
+
+	if (anim->continuousStamCost) return 0;
+	return anim->staminaCost;
 }
 
 void AnimHandler::draw(sf::RenderWindow& window, int hp, int maxHP) const
@@ -214,4 +217,10 @@ bool AnimHandler::takePoiseDamage(int poiseDmg)
 int AnimHandler::getPoiseDamage() const
 {
 	return anim->poiseDamage;
+}
+
+float AnimHandler::getContinuousStaminaCost() const
+{
+	if (anim->continuousStamCost) return anim->staminaCost;
+	return 0;
 }

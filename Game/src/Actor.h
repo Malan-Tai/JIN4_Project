@@ -101,6 +101,8 @@ public:
 	virtual animation::ID update(sf::Time const& elapsed, Level const& level);
 	virtual void hits(Actor* other, LensColors leftLens, LensColors rightLens);
 
+	void spendStamina(float cost);
+
 	void jump();
 	void lightAttack();
 	void heavyAttack();
@@ -158,11 +160,18 @@ protected:
 
 	int maxHP = 50;
 	int hp = maxHP;
+
 	int strength = 3;
 
 	int stabilityMaxHP = 100;
-	int stabilityHP = stabilityMaxHP;
-	int const cancelledStabilityDamage = 50;
+	float stabilityHP = stabilityMaxHP;
+	float const cancelledStabilityDamage = 50;
+
+	int maxStamina = 50;
+	float stamina = maxStamina;
+	float const staminaRegen = 10;
+	int const noStamRegenTime = 1500;
+	sf::Time noStamRegen = sf::Time::Zero;
 
 	/*int const forgetComboTime = 1000;
 	sf::Time forgetCombo = sf::Time::Zero;

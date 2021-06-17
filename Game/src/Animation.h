@@ -26,6 +26,9 @@ public:
 	int poiseHP = 0;
 	int poiseDamage = 0;
 
+	bool continuousStamCost = false;
+	int staminaCost = 0;
+
 #if TESTS
 	int hitboxesLength() const;
 #endif
