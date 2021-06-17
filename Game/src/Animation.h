@@ -22,6 +22,10 @@ public:
 	bool looping = true;
 	bool reverseLoop = false; // loop from 0 to n then n to 0 etc
 
+	bool takesPoiseDmg = false;
+	int poiseHP = 0;
+	int poiseDamage = 0;
+
 #if TESTS
 	int hitboxesLength() const;
 #endif

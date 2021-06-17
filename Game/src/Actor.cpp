@@ -61,12 +61,6 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 		forgetPrevState = sf::Time::Zero;
 	}
 
-	forgetCombo += elapsed;
-	if (forgetCombo.asMilliseconds() > forgetComboTime)
-	{
-		comboDamage = 0;
-	}
-
 	if (state == States::Staggered)
 	{
 		staggerTime += elapsed;
@@ -74,7 +68,6 @@ animation::ID Actor::update(sf::Time const& elapsed, Level const& level)
 		{
 			staggerTime = sf::Time::Zero;
 			machine.execute(Triggers::Recover);
-			comboDamage = 0;
 		}
 	}
 
@@ -115,7 +108,7 @@ void Actor::hits(Actor* other, LensColors leftLens, LensColors rightLens)
 		}
 
 		machine.execute(Triggers::DoHit);
-		other->getHit(strength);
+		other->getHit(strength, handler.getPoiseDamage());
 	}
 }
 
@@ -181,14 +174,18 @@ void Actor::setVelocity(sf::Vector2f unitVelocity)
 	velocity = speed * unitVelocity;
 }
 
-void Actor::getHit(int dmg)
+void Actor::getHit(int dmg, int poiseDmg)
 {
-	forgetCombo = sf::Time::Zero;
-	comboDamage += dmg;
 	hp -= dmg;
 	std::cout << "oofed : " << dmg << "\n";
 
-	if (comboDamage >= maxHP / 3 && hp > 0) machine.execute(Triggers::Stagger);
+	if (handler.takePoiseDamage(poiseDmg)) stabilityHP -= cancelledStabilityDamage;
+
+	if (stabilityHP <= 0)
+	{
+		stabilityHP = stabilityMaxHP;
+		machine.execute(Triggers::Stagger);
+	}
 	else machine.execute(Triggers::GetHit);
 }
 

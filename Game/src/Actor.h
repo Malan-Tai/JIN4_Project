@@ -107,7 +107,7 @@ public:
 	void grab();
 	void doThrow(int dx, int dy);
 	void getThrown(int dx, int dy);
-	void getHit(int dmg);
+	void getHit(int dmg, int poiseDmg);
 
 	void setCoords(sf::Vector2f c);
 	void setVelocity(sf::Vector2f unitVelocity);
@@ -156,13 +156,17 @@ protected:
 
 	ArtificialIntelligence AI;
 
-	int maxHP = 21;
+	int maxHP = 50;
 	int hp = maxHP;
 	int strength = 3;
 
-	int const forgetComboTime = 1000;
+	int stabilityMaxHP = 100;
+	int stabilityHP = stabilityMaxHP;
+	int const cancelledStabilityDamage = 50;
+
+	/*int const forgetComboTime = 1000;
 	sf::Time forgetCombo = sf::Time::Zero;
-	int comboDamage = 0;
+	int comboDamage = 0;*/
 
 	int const staggerMaxTime = 5000;
 	sf::Time staggerTime = sf::Time::Zero;

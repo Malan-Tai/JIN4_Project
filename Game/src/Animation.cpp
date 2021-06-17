@@ -13,12 +13,23 @@ bool Animation::loadFromFile(std::string const& basename)
 	if (!result) return false;
 	
 	auto root = doc.child("root");
-	auto l = root.attribute("looping");
-	if (!l.empty()) looping = l.as_bool();
-	auto rl = root.attribute("reverseLoop");
-	if (!rl.empty()) reverseLoop = rl.as_bool();
-	auto tpf = root.attribute("timePerFrame");
-	if (!tpf.empty()) timePerFrame = tpf.as_float();
+	auto attr_looping = root.attribute("looping");
+	if (!attr_looping.empty()) looping = attr_looping.as_bool();
+
+	auto attr_reverseLoop = root.attribute("reverseLoop");
+	if (!attr_reverseLoop.empty()) reverseLoop = attr_reverseLoop.as_bool();
+
+	auto attr_timePerFrame = root.attribute("timePerFrame");
+	if (!attr_timePerFrame.empty()) timePerFrame = attr_timePerFrame.as_float();
+
+	auto attr_takesPoiseDmg = root.attribute("takesPoiseDmg");
+	if (!attr_takesPoiseDmg.empty()) takesPoiseDmg = attr_takesPoiseDmg.as_bool();
+
+	auto attr_poiseHP = root.attribute("poiseHP");
+	if (!attr_poiseHP.empty()) poiseHP = attr_poiseHP.as_int();
+
+	auto attr_poiseDmg = root.attribute("poiseDmg");
+	if (!attr_poiseDmg.empty()) poiseDamage = attr_poiseDmg.as_int();
 
 	hitboxes::Layers layer = hitboxes::strToLayer(root.attribute("layer").value());
 

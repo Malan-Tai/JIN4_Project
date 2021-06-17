@@ -21,12 +21,18 @@ public:
 
 	void draw(sf::RenderWindow& window, int hp = 0, int maxHP = 0) const;
 
+	bool takePoiseDamage(int poiseDmg);
+	int getPoiseDamage() const;
+
 private:
 	int frame = 0;
 	bool reverseLoop = false;
 	sf::Time frameTime = sf::Time::Zero;
 
 	float prevXDir = 1;
+
+	int poiseHP = 0;
+	int poiseHeal = 10;
 	
 	Animation const* anim;
 	animation::ID animID;

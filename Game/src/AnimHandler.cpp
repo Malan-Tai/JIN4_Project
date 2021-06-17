@@ -22,6 +22,8 @@ float AnimHandler::getXDir() const
 
 animation::ID AnimHandler::update(sf::Time const& elapsed, float xDir)
 {
+	if (poiseHP < anim->poiseHP) poiseHP = std::min(anim->poiseHP, poiseHP + (int)(poiseHeal * elapsed.asSeconds()));
+
 	frameTime += elapsed;
 	if (xDir == 0) xDir = prevXDir;		// xDir cannot be 0 anymore
 	bool changed = xDir != prevXDir;	// true if the looking direction has changed
@@ -153,6 +155,8 @@ void AnimHandler::changeAnim(animation::ID id)
 	anim->setSprite(sprite, 0, (prevXDir < 0));
 	updateHitboxes();
 	hitEnemies.clear();
+
+	poiseHP = anim->poiseHP;
 }
 
 void AnimHandler::draw(sf::RenderWindow& window, int hp, int maxHP) const
@@ -194,4 +198,20 @@ void AnimHandler::draw(sf::RenderWindow& window, int hp, int maxHP) const
 		hpBar.setFillColor(sf::Color::Red);
 		window.draw(hpBar);
 	}
+}
+
+// returns true if the anim is cancelled
+bool AnimHandler::takePoiseDamage(int poiseDmg)
+{
+	if (anim->takesPoiseDmg)
+	{
+		poiseHP -= poiseDmg;
+		return poiseHP <= 0;
+	}
+	return false;
+}
+
+int AnimHandler::getPoiseDamage() const
+{
+	return anim->poiseDamage;
 }
