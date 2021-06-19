@@ -264,6 +264,11 @@ bool AnimHandler::takePoiseDamage(float poiseDmg)
 	return false;
 }
 
+bool AnimHandler::takesStabilityDamage() const
+{
+	return !anim->takesPoiseDmg;
+}
+
 float AnimHandler::getPoiseDamage() const
 {
 	return anim->poiseDamage;

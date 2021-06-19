@@ -223,6 +223,7 @@ void Actor::getHit(float dmg, float poiseDmg)
 	std::cout << "oofed : " << dmg << "\n";
 
 	if (handler.takePoiseDamage(poiseDmg)) stabilityHP -= cancelledStabilityDamage;
+	else if (handler.takesStabilityDamage()) stabilityHP -= poiseDmg;
 
 	if (stabilityHP <= 0)
 	{
