@@ -31,7 +31,7 @@ public:
 	LensColors getLeftLens() const;
 	LensColors getRightLens() const;
 
-	void draw(sf::RenderWindow& window, LensColors leftLens, LensColors rightLens) const override;
+	void draw(sf::RenderWindow& window, LensColors leftLens, LensColors rightLens, bool showBar = true) const override;
 
 private:
 	animation::ID getAttackAnim(bool heavy) const;

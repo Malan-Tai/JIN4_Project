@@ -121,6 +121,9 @@ void Actor::updateRegen(sf::Time const& elapsed)
 	}
 
 	if (fantomHP > hp) fantomHP = std::max(hp, fantomHP - fantomDecay * elapsed.asSeconds());
+	else fantomHP = hp;
+	if (fantomStamina > stamina) fantomStamina = std::max(stamina, fantomStamina - fantomDecay * elapsed.asSeconds());
+	else fantomStamina = stamina;
 
 	stabilityHP = std::min(stabilityMaxHP, stabilityHP + stabilityRegen * elapsed.asSeconds());
 }
@@ -306,18 +309,18 @@ void Actor::updateMoveControl()
 	}
 }
 
-void Actor::draw(sf::RenderWindow& window, LensColors leftLens, LensColors rightLens) const
+void Actor::draw(sf::RenderWindow& window, LensColors leftLens, LensColors rightLens, bool showBar) const
 {
 	if (seen(leftLens, rightLens))
 	{
 		handler.draw(window);
-		if (hp > 0 && hp < maxHP) handler.drawBar(window, hp, fantomHP, maxHP);
+		if (showBar && hp > 0 && hp < maxHP) handler.drawBar(window, hp, fantomHP, maxHP);
 	}
 }
 
 void Actor::changeAnim(animation::ID id)
 {
-	spendStamina((float)handler.changeAnim(id));
+	spendStamina(handler.changeAnim(id));
 }
 
 bool Actor::toRemove() const

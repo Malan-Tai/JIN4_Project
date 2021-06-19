@@ -22,6 +22,7 @@ public:
 	void draw(sf::RenderWindow& window) const;
 	void drawBar(sf::RenderWindow& window, float value = 0, float maxValue = 0, sf::Color color = sf::Color::Red) const;
 	void drawBar(sf::RenderWindow& window, float value = 0, float fantomValue = 0, float maxValue = 0, sf::Color color = sf::Color::Red, sf::Color fantomColor = sf::Color::Yellow) const;
+	void drawBar(sf::RenderWindow& window, float x, float y, float w, float h, float value = 0, float fantomValue = 0, float maxValue = 0, sf::Color color = sf::Color::Red, sf::Color fantomColor = sf::Color::Yellow) const;
 
 	bool takePoiseDamage(float poiseDmg);
 	float getPoiseDamage() const;

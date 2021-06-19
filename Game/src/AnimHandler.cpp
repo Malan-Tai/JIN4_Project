@@ -229,6 +229,30 @@ void AnimHandler::drawBar(sf::RenderWindow& window, float value, float fantomVal
 	window.draw(valueBar);
 }
 
+void AnimHandler::drawBar(sf::RenderWindow& window, float x, float y, float w, float h, float value, float fantomValue, float maxValue, sf::Color color, sf::Color fantomColor) const
+{
+	float valueWidth = (value / maxValue) * w;
+	float fantomWidth = (fantomValue / maxValue) * w;
+
+	sf::RectangleShape fullBar;
+	fullBar.setSize(sf::Vector2f{ w, h });
+	fullBar.setPosition(sf::Vector2f{ x, y });
+	fullBar.setFillColor(sf::Color{ 127, 127, 127 });
+	window.draw(fullBar);
+
+	sf::RectangleShape fantomBar;
+	fantomBar.setSize(sf::Vector2f{ fantomWidth, h });
+	fantomBar.setPosition(sf::Vector2f{ x, y });
+	fantomBar.setFillColor(fantomColor);
+	window.draw(fantomBar);
+
+	sf::RectangleShape valueBar;
+	valueBar.setSize(sf::Vector2f{ valueWidth, h });
+	valueBar.setPosition(sf::Vector2f{ x, y });
+	valueBar.setFillColor(color);
+	window.draw(valueBar);
+}
+
 // returns true if the anim is cancelled
 bool AnimHandler::takePoiseDamage(float poiseDmg)
 {

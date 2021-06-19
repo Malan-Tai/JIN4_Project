@@ -199,10 +199,13 @@ LensColors ControllableActor::getRightLens() const
 	return lens->getRightLens();
 }
 
-void ControllableActor::draw(sf::RenderWindow& window, LensColors leftLens, LensColors rightLens) const
+void ControllableActor::draw(sf::RenderWindow& window, LensColors leftLens, LensColors rightLens, bool showBar) const
 {
-	Actor::draw(window, leftLens, rightLens);
+	Actor::draw(window, leftLens, rightLens, false);
 	lens->draw(window);
+
+	handler.drawBar(window, 20, 20, 300, 15, hp, fantomHP, maxHP);
+	handler.drawBar(window, 20, 50, 180, 15, stamina, fantomStamina, maxStamina, sf::Color::Green);
 }
 
 // returns the attack anim ID depending on the type of attack and weapon

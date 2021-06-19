@@ -119,7 +119,7 @@ public:
 	void setHorizontalVelocity(float dx);
 	virtual void updateMoveControl();
 
-	virtual void draw(sf::RenderWindow& window, LensColors leftLens, LensColors rightLens) const;
+	virtual void draw(sf::RenderWindow& window, LensColors leftLens, LensColors rightLens, bool showBar = true) const;
 	void changeAnim(animation::ID id);
 
 	virtual bool seen(LensColors leftLens, LensColors rightLens) const;
@@ -173,6 +173,7 @@ protected:
 	float const staminaRegen = 10;
 	int const noStamRegenTime = 1500;
 	sf::Time noStamRegen = sf::Time::Zero;
+	float fantomStamina = stamina;
 
 	float stabilityMaxHP = 100;
 	float stabilityHP = stabilityMaxHP;
