@@ -16,18 +16,19 @@ public:
 
 	void setSprite(sf::Sprite& sprite, int frame, bool inv = false) const;
 	std::vector<Hitbox const*> getHitboxes(int frame) const;
-	float getTimeForFrame(int frame) const;
+	int getTimeForFrame(int frame) const;
+	float getDamageMultiplier(int frame) const;
 
 	int nbFrames;
 	bool looping = true;
 	bool reverseLoop = false; // loop from 0 to n then n to 0 etc
 
 	bool takesPoiseDmg = false;
-	int poiseHP = 0;
-	int poiseDamage = 0;
+	float poiseHP = 0;
+	float poiseDamage = 0;
 
 	bool continuousStamCost = false;
-	int staminaCost = 0;
+	float staminaCost = 0;
 
 #if TESTS
 	int hitboxesLength() const;
@@ -40,6 +41,6 @@ private:
 	int frameWidth;
 	int height;
 
-	std::vector<float> timePerFrames;
+	std::vector<int> timePerFrames;
 	std::vector<float> damageMultipliers;
 };

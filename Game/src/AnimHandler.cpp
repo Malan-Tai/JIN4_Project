@@ -7,6 +7,7 @@ AnimHandler::AnimHandler(AnimHolder const& holder, animation::ID id) : holder(ho
 {
 	anim->setSprite(sprite, frame);
 	updateHitboxes();
+	barWidth = sprite.getLocalBounds().width;
 }
 
 AnimHolder const& AnimHandler::getHolder() const
@@ -22,7 +23,7 @@ float AnimHandler::getXDir() const
 
 animation::ID AnimHandler::update(sf::Time const& elapsed, float xDir)
 {
-	if (poiseHP < anim->poiseHP) poiseHP = std::min((float)anim->poiseHP, poiseHP + poiseHeal * elapsed.asSeconds());
+	//if (poiseHP < anim->poiseHP) poiseHP = std::min((float)anim->poiseHP, poiseHP + poiseHeal * elapsed.asSeconds());
 
 	frameTime += elapsed;
 	if (xDir == 0) xDir = prevXDir;		// xDir cannot be 0 anymore
@@ -84,7 +85,7 @@ bool AnimHandler::hits(AnimHandler& other)
 	auto m = other.hitboxes.size();
 	for (int i = 0; i < n; i++)
 	{
-		auto box = hitboxes[i];
+		auto const& box = hitboxes[i];
 		for (int j = 0; j < m; j++)
 		{
 			auto const& otherBox = other.hitboxes[j];
@@ -143,7 +144,7 @@ void AnimHandler::setPosition(sf::Vector2f const pos)
 	}
 }
 
-int AnimHandler::changeAnim(animation::ID id)
+float AnimHandler::changeAnim(animation::ID id)
 {
 	if (id == animID) return 0;
 
@@ -162,7 +163,7 @@ int AnimHandler::changeAnim(animation::ID id)
 	return anim->staminaCost;
 }
 
-void AnimHandler::draw(sf::RenderWindow& window, int hp, int maxHP) const
+void AnimHandler::draw(sf::RenderWindow& window) const
 {
 #if DEBUG
 	sf::RectangleShape s;
@@ -179,32 +180,57 @@ void AnimHandler::draw(sf::RenderWindow& window, int hp, int maxHP) const
 #endif
 
 	window.draw(sprite);
+}
 
-	// hp bar
-	if (maxHP != 0 && hp < maxHP)
-	{
-		auto size = sprite.getLocalBounds();
-		auto global = sprite.getGlobalBounds();
+void AnimHandler::drawBar(sf::RenderWindow& window, float value, float maxValue, sf::Color color) const
+{
+	auto size = sprite.getLocalBounds();
+	auto global = sprite.getGlobalBounds();
 
-		float totalWidth = size.width;
-		float hpWidth = (hp / (float)maxHP) * totalWidth;
+	float valueWidth = (value / maxValue) * barWidth;
 
-		sf::RectangleShape fullBar;
-		fullBar.setSize(sf::Vector2f{ totalWidth, 10 });
-		fullBar.setPosition(sf::Vector2f{ global.left, global.top + size.height + 20 });
-		fullBar.setFillColor(sf::Color{ 127, 127, 127 });
-		window.draw(fullBar);
+	sf::RectangleShape fullBar;
+	fullBar.setSize(sf::Vector2f{ barWidth, 10 });
+	fullBar.setPosition(sf::Vector2f{ global.left, global.top + size.height + 20 });
+	fullBar.setFillColor(sf::Color{ 127, 127, 127 });
+	window.draw(fullBar);
 
-		sf::RectangleShape hpBar;
-		hpBar.setSize(sf::Vector2f{ hpWidth, 10 });
-		hpBar.setPosition(sf::Vector2f{ global.left, global.top + size.height + 20 });
-		hpBar.setFillColor(sf::Color::Red);
-		window.draw(hpBar);
-	}
+	sf::RectangleShape valueBar;
+	valueBar.setSize(sf::Vector2f{ valueWidth, 10 });
+	valueBar.setPosition(sf::Vector2f{ global.left, global.top + size.height + 20 });
+	valueBar.setFillColor(color);
+	window.draw(valueBar);
+}
+
+void AnimHandler::drawBar(sf::RenderWindow& window, float value, float fantomValue, float maxValue, sf::Color color, sf::Color fantomColor) const
+{
+	auto size = sprite.getLocalBounds();
+	auto global = sprite.getGlobalBounds();
+
+	float valueWidth = (value / maxValue) * barWidth;
+	float fantomWidth = (fantomValue / maxValue) * barWidth;
+
+	sf::RectangleShape fullBar;
+	fullBar.setSize(sf::Vector2f{ barWidth, 10 });
+	fullBar.setPosition(sf::Vector2f{ global.left, global.top + size.height + 20 });
+	fullBar.setFillColor(sf::Color{ 127, 127, 127 });
+	window.draw(fullBar);
+
+	sf::RectangleShape fantomBar;
+	fantomBar.setSize(sf::Vector2f{ fantomWidth, 10 });
+	fantomBar.setPosition(sf::Vector2f{ global.left, global.top + size.height + 20 });
+	fantomBar.setFillColor(fantomColor);
+	window.draw(fantomBar);
+
+	sf::RectangleShape valueBar;
+	valueBar.setSize(sf::Vector2f{ valueWidth, 10 });
+	valueBar.setPosition(sf::Vector2f{ global.left, global.top + size.height + 20 });
+	valueBar.setFillColor(color);
+	window.draw(valueBar);
 }
 
 // returns true if the anim is cancelled
-bool AnimHandler::takePoiseDamage(int poiseDmg)
+bool AnimHandler::takePoiseDamage(float poiseDmg)
 {
 	if (anim->takesPoiseDmg)
 	{
@@ -214,9 +240,14 @@ bool AnimHandler::takePoiseDamage(int poiseDmg)
 	return false;
 }
 
-int AnimHandler::getPoiseDamage() const
+float AnimHandler::getPoiseDamage() const
 {
 	return anim->poiseDamage;
+}
+
+float AnimHandler::getDamageMultiplier() const
+{
+	return anim->getDamageMultiplier(frame);
 }
 
 float AnimHandler::getContinuousStaminaCost() const

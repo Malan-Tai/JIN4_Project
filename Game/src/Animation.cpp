@@ -26,22 +26,22 @@ bool Animation::loadFromFile(std::string const& basename)
 	if (!attr_takesPoiseDmg.empty()) takesPoiseDmg = attr_takesPoiseDmg.as_bool();
 
 	auto attr_poiseHP = root.attribute("poiseHP");
-	if (!attr_poiseHP.empty()) poiseHP = attr_poiseHP.as_int();
+	if (!attr_poiseHP.empty()) poiseHP = attr_poiseHP.as_float();
 
 	auto attr_poiseDmg = root.attribute("poiseDmg");
-	if (!attr_poiseDmg.empty()) poiseDamage = attr_poiseDmg.as_int();
+	if (!attr_poiseDmg.empty()) poiseDamage = attr_poiseDmg.as_float();
 
 	// stamina
 	auto attr_continuousStam = root.attribute("continuousStamina");
 	if (!attr_continuousStam.empty()) continuousStamCost = attr_continuousStam.as_bool();
 
 	auto attr_stamina = root.attribute("stamina");
-	if (!attr_stamina.empty()) staminaCost = attr_stamina.as_int();
+	if (!attr_stamina.empty()) staminaCost = attr_stamina.as_float();
 
 	// base time per frame (if a specific frame's duration is not given)
-	float baseTPF = 500;
+	int baseTPF = 500;
 	auto attr_timePerFrame = root.attribute("timePerFrame");
-	if (!attr_timePerFrame.empty()) baseTPF = attr_timePerFrame.as_float();
+	if (!attr_timePerFrame.empty()) baseTPF = attr_timePerFrame.as_int();
 
 	hitboxes::Layers layer = hitboxes::strToLayer(root.attribute("layer").value());
 
@@ -57,9 +57,9 @@ bool Animation::loadFromFile(std::string const& basename)
 		std::string f = "frame_" + std::to_string(i);
 		auto frame = root.child(f.c_str());
 
-		float time = baseTPF;
+		int time = baseTPF;
 		auto attr_time = frame.attribute("time");
-		if (!attr_time.empty()) time = attr_time.as_float();
+		if (!attr_time.empty()) time = attr_time.as_int();
 		timePerFrames.push_back(time);
 
 		float dmg = 1;
@@ -120,9 +120,14 @@ std::vector<Hitbox const*> Animation::getHitboxes(int frame) const
 	return res;
 }
 
-float Animation::getTimeForFrame(int frame) const
+int Animation::getTimeForFrame(int frame) const
 {
 	return timePerFrames[frame];
+}
+
+float Animation::getDamageMultiplier(int frame) const
+{
+	return damageMultipliers[frame];
 }
 
 #if TESTS

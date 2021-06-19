@@ -99,6 +99,9 @@ public:
 	std::unique_ptr<Actor> clone() const override;
 
 	virtual animation::ID update(sf::Time const& elapsed, Level const& level);
+	void updateFall(sf::Time const& elapsed, Level const& level);
+	void updateTimers(sf::Time const& elapsed);
+	void updateRegen(sf::Time const& elapsed);
 	virtual void hits(Actor* other, LensColors leftLens, LensColors rightLens);
 
 	void spendStamina(float cost);
@@ -107,9 +110,9 @@ public:
 	void lightAttack();
 	void heavyAttack();
 	void grab();
-	void doThrow(int dx, int dy);
-	void getThrown(int dx, int dy);
-	void getHit(int dmg, int poiseDmg);
+	void doThrow(float dx, float dy);
+	void getThrown(float dx, float dy);
+	void getHit(float dmg, float poiseDmg);
 
 	void setCoords(sf::Vector2f c);
 	void setVelocity(sf::Vector2f unitVelocity);
@@ -158,24 +161,23 @@ protected:
 
 	ArtificialIntelligence AI;
 
-	int maxHP = 50;
-	int hp = maxHP;
+	float maxHP = 50;
+	float hp = maxHP;
+	float fantomHP = hp;
+	float const fantomDecay = 5;
 
-	int strength = 3;
+	float strength = 3;
 
-	int stabilityMaxHP = 100;
-	float stabilityHP = stabilityMaxHP;
-	float const cancelledStabilityDamage = 50;
-
-	int maxStamina = 50;
+	float maxStamina = 50;
 	float stamina = maxStamina;
 	float const staminaRegen = 10;
 	int const noStamRegenTime = 1500;
 	sf::Time noStamRegen = sf::Time::Zero;
 
-	/*int const forgetComboTime = 1000;
-	sf::Time forgetCombo = sf::Time::Zero;
-	int comboDamage = 0;*/
+	float stabilityMaxHP = 100;
+	float stabilityHP = stabilityMaxHP;
+	float const stabilityRegen = 3;
+	float const cancelledStabilityDamage = 50;
 
 	int const staggerMaxTime = 5000;
 	sf::Time staggerTime = sf::Time::Zero;
