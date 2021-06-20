@@ -276,7 +276,10 @@ float AnimHandler::getPoiseDamage() const
 
 float AnimHandler::getDamageMultiplier() const
 {
-	return anim->getDamageMultiplier(frame);
+	// compensate for the replay anim
+	int offset = 1;
+	if (reverseLoop) offset = -1;
+	return anim->getDamageMultiplier(frame + offset);
 }
 
 float AnimHandler::getContinuousStaminaCost() const
