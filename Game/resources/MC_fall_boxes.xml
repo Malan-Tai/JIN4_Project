@@ -1,1 +1,8 @@
-<root timePerFrame="600" layer="ally"><frame_0><Rect_0 x="2" y="3" width="28" height="29" type="hit" /></frame_0><frame_1><Rect_0 x="2" y="10" width="33" height="31" type="hit" /></frame_1></root>
+<root timePerFrame="600" layer="ally">
+<frame_0>
+<Rect_0 x="2" y="3" width="28" height="29" type="hit" />
+</frame_0>
+<frame_1>
+<Rect_0 x="2" y="10" width="33" height="31" type="hit" />
+</frame_1>
+</root>

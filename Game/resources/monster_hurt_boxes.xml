@@ -1,1 +1,4 @@
-<root looping="false" layer="enemy" timePerFrame="100"><frame_0 /><frame_1 /></root>
+<root looping="false" layer="enemy" timePerFrame="100">
+<frame_0 />
+<frame_1 />
+</root>

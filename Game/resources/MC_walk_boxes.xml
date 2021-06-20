@@ -1,1 +1,28 @@
-<root layer="ally" timePerFrame="100"><frame_0><Rect_0 x="9" y="3" width="32" height="41" type="hit" /></frame_0><frame_1><Rect_0 x="8" y="3" width="34" height="41" type="hit" /></frame_1><frame_2><Rect_0 x="16" y="7" width="28" height="37" type="hit" /></frame_2><frame_3><Rect_0 x="13" y="5" width="30" height="39" type="hit" /></frame_3><frame_4><Rect_0 x="14" y="3" width="30" height="41" type="hit" /></frame_4><frame_5><Rect_0 x="18" y="5" width="27" height="39" type="hit" /></frame_5><frame_6><Rect_0 x="0" y="5" width="1" height="39" type="hit" /><Rect_1 x="23" y="5" width="22" height="39" type="hit" /></frame_6><frame_7><Rect_0 x="17" y="4" width="26" height="40" type="hit" /><Rect_1 x="0" y="5" width="4" height="39" type="hit" /></frame_7></root>
+<root layer="ally" timePerFrame="100">
+<frame_0>
+<Rect_0 x="9" y="3" width="32" height="41" type="hit" />
+</frame_0>
+<frame_1>
+<Rect_0 x="8" y="3" width="34" height="41" type="hit" />
+</frame_1>
+<frame_2>
+<Rect_0 x="16" y="7" width="28" height="37" type="hit" />
+</frame_2>
+<frame_3>
+<Rect_0 x="13" y="5" width="30" height="39" type="hit" />
+</frame_3>
+<frame_4>
+<Rect_0 x="14" y="3" width="30" height="41" type="hit" />
+</frame_4>
+<frame_5>
+<Rect_0 x="18" y="5" width="27" height="39" type="hit" />
+</frame_5>
+<frame_6>
+<Rect_0 x="0" y="5" width="1" height="39" type="hit" />
+<Rect_1 x="23" y="5" width="22" height="39" type="hit" />
+</frame_6>
+<frame_7>
+<Rect_0 x="17" y="4" width="26" height="40" type="hit" />
+<Rect_1 x="0" y="5" width="4" height="39" type="hit" />
+</frame_7>
+</root>

@@ -1,1 +1,9 @@
-<root looping="false" layer="ally" timePerFrame="300" stamina="20"><frame_0><Rect_0 x="5" y="4" width="33" height="41" type="hit" /></frame_0><frame_1><Rect_0 x="10" y="8" width="24" height="37" type="hit" /><Rect_1 x="35" y="16" width="14" height="12" type="hurt" /></frame_1></root>
+<root looping="false" layer="ally" timePerFrame="300" stamina="20">
+<frame_0>
+<Rect_0 x="5" y="4" width="33" height="41" type="hit" />
+</frame_0>
+<frame_1>
+<Rect_0 x="10" y="8" width="24" height="37" type="hit" />
+<Rect_1 x="35" y="16" width="14" height="12" type="hurt" />
+</frame_1>
+</root>

@@ -1,1 +1,8 @@
-<root><frame_0><Rect_0 x="3" y="13" width="31" height="37" type="hit" /></frame_0><frame_1><Rect_0 x="7" y="3" width="24" height="29" type="hit" /></frame_1></root>
+<root looping="false" layer="ally">
+<frame_0>
+<Rect_0 x="3" y="13" width="31" height="37" type="hit" />
+</frame_0>
+<frame_1>
+<Rect_0 x="7" y="3" width="24" height="29" type="hit" />
+</frame_1>
+</root>

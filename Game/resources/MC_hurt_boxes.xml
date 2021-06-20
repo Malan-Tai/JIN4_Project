@@ -1,1 +1,6 @@
-<root looping="false" layer="ally" timePerFrame="100"><frame_0/><frame_1 /><frame_2 /><frame_3 /></root>
+<root looping="false" layer="ally" timePerFrame="100">
+<frame_0 />
+<frame_1 />
+<frame_2 />
+<frame_3 />
+</root>
